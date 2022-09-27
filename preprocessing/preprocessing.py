@@ -32,6 +32,8 @@ if __name__ == '__main__':
 
     # convert InvoiceDate to datetime:
     df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%d/%m/%Y %H:%M')
+    # adding timestamp column, not sure which one we wanna use
+    df['ts'] = df['InvoiceDate'].values.astype(np.int64) // 10 ** 9
 
     # check the dataset size:
     size = df.shape[0]
@@ -64,16 +66,3 @@ if __name__ == '__main__':
     df.sort_values(by='StockCode', inplace=True)
     df['Description'].fillna(method='ffill', inplace=True)
     df.to_csv(Path('../data/online_sales_dataset_description_imputed.csv'), index=False)
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -65,4 +65,5 @@ if __name__ == '__main__':
     # replace missing description with the description of other invoices if StockCode is the same:
     df.sort_values(by='StockCode', inplace=True)
     df['Description'].fillna(method='ffill', inplace=True)
+
     df.to_csv(Path('../data/online_sales_dataset_description_imputed.csv'), index=False)

@@ -1,3 +1,5 @@
+# 1st method is to drop the null rows so this .py is not useful for the moment
+
 # Libraries:
 from pathlib import Path
 import pandas as pd

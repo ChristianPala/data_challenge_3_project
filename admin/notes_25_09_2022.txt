@@ -1,2 +1,17 @@
 - Letters at the end of the stock code, is there a pattern?
-- 
+-
+
+* trasformare tutti stock code con le lettere a integers (semplicemente togliere la lettera dallo stock code
+
+* se abbiamo lo stesso stock code ma con descrizioni diverse, prendiamo la descrizione piu frequente (moda)
+* se ci sono stock code che non hanno mai nessuna descrizione:
+    - droppiamo direttamente la row,
+    oppure
+    - lasciamo la descrizione vuota se decidiamo che non è importante
+
+* fare la funzione per cercare dei matching negli invoice codes (se un ordine con la C (ordine stornato) non ha un matching "true" ordine,
+droppiamo solo l'ordine con la C, altrimenti si droppano sia l'ordine originale che quello stornato)
+* droppare tutti i customer id NULL
+
+
+*** fare feature extraction per time series

@@ -1,7 +1,4 @@
-# 1st method is to drop the null rows so this .py is not useful for the moment
-
 # Libraries:
-from pathlib import Path
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
@@ -54,6 +51,4 @@ if __name__ == '__main__':
     print(df_knn.info())
     print(df_knn.head())
     print(df_knn.isnull().sum())
-
-    df_knn.to_csv(Path('../data/online_sales_dataset_description_KNN.csv'), index=False)
 

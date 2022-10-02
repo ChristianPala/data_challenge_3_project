@@ -1,11 +1,11 @@
 # Libraries:
 import pandas as pd
-import numpy as np
 from pathlib import Path
-from datetime import datetime
 
 
 if __name__ == '__main__':
+
+    # very rough cleaning:
     # data file_paths
     f_09 = Path('../data/online_sales_2009_2010_dataset.csv')
     f_10 = Path('../data/online_sales_2010_2011_dataset.csv')
@@ -15,55 +15,69 @@ if __name__ == '__main__':
     # merge the two datasets for preprocessing:
     pd.concat([df_09, df_10], axis=0).to_csv('../data/online_sales_dataset.csv', index=False)
     df = pd.read_csv('../data/online_sales_dataset.csv')
-    # First look
-    print("First look at the data:")
-    print(df.head())
-    print(df.info())
-    # check the columns types:
-    print(df.dtypes)
-    # need to change the dates to timestamps
-    # drop the cancelled invoices (for now, then we may want to use them later in our analysis)
-    # check unique values in each column:
-    for col in df.columns:
-        print(col, df[col].unique().size)
-    # check the number of missing values in each column:
-    print(df.isnull().sum())
-    # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    # we should impute some values, especially in the descriptions' column.
+    df.dropna()
+    df.drop_duplicates()
 
-    # convert InvoiceDate to datetime:
+    # drop all rows with missing costumer id:
+    df = df[df['Customer ID'].notna()]
+
+    # fix the date
     df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%d/%m/%Y %H:%M')
-    # adding timestamp column, not sure which one we wanna use
-    df['ts'] = df['InvoiceDate'].values.astype(np.int64) // 10 ** 9
 
-    # check the dataset size:
-    size = df.shape[0]
+    # sort the dataset by customer ID and date:
+    df.sort_values(by=['Customer ID', 'InvoiceDate'], inplace=True)
 
-    # check for duplicates after the merge of the two csv files:
-    df = df.drop_duplicates(keep='first')
+    # add a column with the last purchase date for each customer:
+    df['last_purchase'] = df.groupby('Customer ID')['InvoiceDate'].transform('max')
+    df['last_purchase'] = pd.to_datetime(df['last_purchase'], format='%Y-%m-%d %H:%M')
 
-    # check if duplicates were removed:
-    print(f'Number of duplicates removed: {df.shape[0] - size}')
+    # delete all bad debt, carriage, manual, postage, sample and test stock ids:
+    df = df[~df['StockCode'].str.contains('B|C2|DOT|M|POST|S|TEST', case=False)]
 
-    # drop all missing values, for now while CB is working on imputing:
-    # df.dropna(inplace=True)
+    # create a list of invoices starting with C, removing the C from the invoice number:
+    cancelled_invoices = df[df['Invoice'].str.startswith('C')]['Invoice'].str[1:].tolist()
 
-    # print unique Customer ID's:
-    print(f"We have: {df['Customer ID'].unique().size} unique customers")
+    # delete all rows with invoices matching cancelled_invoices:
+    df = df[~df['Invoice'].isin(cancelled_invoices)]
 
-    # find the maximum time elapsed between invoices from the same customer:
-    print(f"The longest repurchase in the dataset happened after: "
-          f"{df.groupby('Customer ID')['InvoiceDate'].diff().max()} ")
-    # not very promising, we need to check how many "false positives" for a given time window there are then,
-    # to decide on the churn threshold.
+    # delete all rows with invoices starting with C:
+    df = df[~df['Invoice'].str.startswith('C')]
 
-    thresholds = {31, 62, 93, 186, 365}
+    # Now that we have only integers in the invoice column, we can convert it to int:
+    df['Invoice'] = df['Invoice'].astype(int)
 
-    for t in thresholds:
-        print(f"False positives after {t} days:"
-              f"{(df.groupby('Customer ID')['InvoiceDate'].max() - df.groupby('Customer ID')['InvoiceDate'].min() > pd.Timedelta(days=t)).sum()}")
+    # check if the last character of the stock code is a letter, if so remove the letter since we noticed they are just
+    # different versions of the same product:
+    df['StockCode'] = df['StockCode'].str.replace(r'[a-zA-Z]+$', '', regex=True)
 
-    # replace missing description with the description of other invoices if StockCode is the same:
-    df.sort_values(by='StockCode', inplace=True)
-    df['Description'].fillna(method='ffill', inplace=True)
+    # drop stock empty stock codes:
+    df = df[df['StockCode'] != '']
 
-    df.to_csv(Path('../data/online_sales_dataset_description_imputed.csv'), index=False)
+    # We still have some literal characters (like the gift vouchers, so we will treat stock codes as strings):
+    df['StockCode'] = df['StockCode'].astype(str)
+
+    # Descriptions should be strings, we will try to feature engineer them later:
+    df['Description'] = df['Description'].astype(str)
+
+    # Replace the comma with a dot in the price column:
+    df['Price'] = df['Price'].str.replace(',', '.')
+    # Cast the price column to float:
+    df['Price'] = df['Price'].astype(float)
+
+    # Create an enum for the countries:
+    df['Country'] = df['Country'].astype('category')
+    df['Country'] = df['Country'].cat.codes
+
+    # check the size of the dataset:
+    print(f"Number of rows in the dataset: {df.shape[0]}")
+    print(f"Number of unique customers: {df['Customer ID'].unique().size}")
+    print(f"Number of unique invoices: {df['Invoice'].unique().size}")
+    print(f"Number of unique products: {df['StockCode'].unique().size}")
+    print(f"Number of unique descriptions: {df['Description'].unique().size}")
+
+    # create a churned column for customers that have not purchased in the last year:
+    df['churned'] = df['last_purchase'] < pd.to_datetime('2011-12-01')
+
+    # save the vanilla dataset:
+    df.to_csv("../data/online_sales_dataset_cleaned.csv", index=False)

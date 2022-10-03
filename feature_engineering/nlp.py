@@ -8,7 +8,7 @@ import pandas as pd
 
 if __name__ == '__main__':
     # import the cleaned dataset:
-    df = pd.read_csv(Path('../data/online_sales_dataset_cleaned.csv'))
+    df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_cleaned.csv'))
 
     # create a standard tokenizer and see what we get from the descriptions:
     tokenizer = Tokenizer()

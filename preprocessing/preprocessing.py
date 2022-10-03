@@ -7,14 +7,14 @@ if __name__ == '__main__':
 
     # very rough cleaning:
     # data file_paths
-    f_09 = Path('../data/online_sales_2009_2010_dataset.csv')
-    f_10 = Path('../data/online_sales_2010_2011_dataset.csv')
+    f_09 = Path('..', 'data', 'online_sales_2009_2010_dataset.csv')
+    f_10 = Path('..', 'data', 'online_sales_2010_2011_dataset.csv')
     # Load data
     df_09 = pd.read_csv(f_09, sep=';')
     df_10 = pd.read_csv(f_10, sep=';')
     # merge the two datasets for preprocessing:
-    pd.concat([df_09, df_10], axis=0).to_csv('../data/online_sales_dataset.csv', index=False)
-    df = pd.read_csv('../data/online_sales_dataset.csv')
+    pd.concat([df_09, df_10], axis=0).to_csv(Path('..', 'data', 'online_sales_dataset.csv'), index=False)
+    df = pd.read_csv(Path('..', 'data', 'online_sales_dataset.csv'))
     # we should impute some values, especially in the descriptions' column.
     df.dropna()
     df.drop_duplicates()
@@ -82,6 +82,4 @@ if __name__ == '__main__':
     df.rename(columns={'Customer ID': 'CustomerId'}, inplace=True)
 
     # save the dataset:
-    df.to_csv("../data/online_sales_dataset_cleaned.csv", index=False)
-
-    print(df.dtypes)
+    df.to_csv(Path("..", "data", "online_sales_dataset_cleaned.csv"), index=False)

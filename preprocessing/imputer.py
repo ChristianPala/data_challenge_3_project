@@ -14,11 +14,11 @@ class MultiColumnLabelEncoder:
         return self  # not relevant here
 
     def transform(self, X):
-        '''
+        """
         Transforms columns of X specified in self.columns using
         LabelEncoder(). If no columns specified, transforms all
         columns in X.
-        '''
+        """
         output = X.copy()
         if self.columns is not None:
             for col in self.columns:

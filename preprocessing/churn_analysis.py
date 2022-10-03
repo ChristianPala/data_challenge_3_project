@@ -8,7 +8,7 @@ from datetime import datetime
 if __name__ == '__main__':
 
     # import the cleaned dataset:
-    df = pd.read_csv(Path('../data/online_sales_dataset_cleaned.csv'))
+    df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_cleaned.csv'))
 
     # set some thresholds:
     thresholds = np.arange(0, 730, 30)

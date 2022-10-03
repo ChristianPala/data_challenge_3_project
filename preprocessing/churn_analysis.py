@@ -11,14 +11,16 @@ if __name__ == '__main__':
     df = pd.read_csv(Path('../data/online_sales_dataset_cleaned.csv'))
 
     # set some thresholds:
-    thresholds = [31, 62, 93, 186, 365]
+    thresholds = np.arange(0, 730, 30)
 
-    # cast last_purchase to datetime:
-    df['last_purchase'] = pd.to_datetime(df['last_purchase'], format='%Y-%m-%d %H:%M')
+    # cast LastPurchase to datetime:
+    df['LastPurchase'] = pd.to_datetime(df['LastPurchase'], format='%Y-%m-%d %H:%M')
 
     # check how many customers would have churned for each threshold:
     for threshold in thresholds:
-        churned = df[df['last_purchase'] < (pd.to_datetime('2011-12-31') - pd.Timedelta(days=threshold))]['Customer ID'].nunique()
+        churned = df[df['LastPurchase'] < (pd.to_datetime('2011-12-31') - pd.Timedelta(days=threshold))]['CustomerId'].nunique()
         print(f'For a hard threshold of {threshold} days from the end of the dataset, '
               f'{churned} customers would have churned.')
-    
+
+    # starting with considering churning costumers those that did not purchase anything in
+    # the last year seems reasonable.

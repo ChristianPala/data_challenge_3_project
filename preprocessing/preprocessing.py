@@ -24,13 +24,12 @@ if __name__ == '__main__':
 
     # fix the date
     df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%d/%m/%Y %H:%M')
-
     # sort the dataset by customer ID and date:
     df.sort_values(by=['Customer ID', 'InvoiceDate'], inplace=True)
 
     # add a column with the last purchase date for each customer:
-    df['last_purchase'] = df.groupby('Customer ID')['InvoiceDate'].transform('max')
-    df['last_purchase'] = pd.to_datetime(df['last_purchase'], format='%Y-%m-%d %H:%M')
+    df['LastPurchase'] = df.groupby('Customer ID')['InvoiceDate'].transform('max')
+    df['LastPurchase'] = pd.to_datetime(df['LastPurchase'], format='%Y-%m-%d %H:%M')
 
     # delete all bad debt, carriage, manual, postage, sample and test stock ids:
     df = df[~df['StockCode'].str.contains('B|C2|DOT|M|POST|S|TEST', case=False)]
@@ -77,7 +76,12 @@ if __name__ == '__main__':
     print(f"Number of unique descriptions: {df['Description'].unique().size}")
 
     # create a churned column for customers that have not purchased in the last year:
-    df['churned'] = df['last_purchase'] < pd.to_datetime('2011-12-01')
+    df['ChurnedLastYear'] = df['LastPurchase'] < pd.to_datetime('2011-12-01')
 
-    # save the vanilla dataset:
+    # rename Customer ID to CustomerId:
+    df.rename(columns={'Customer ID': 'CustomerId'}, inplace=True)
+
+    # save the dataset:
     df.to_csv("../data/online_sales_dataset_cleaned.csv", index=False)
+
+    print(df.dtypes)

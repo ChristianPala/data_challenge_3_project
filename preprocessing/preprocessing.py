@@ -43,22 +43,19 @@ if __name__ == '__main__':
     #     c += 1
     # print('')
     # descriptions = pd.DataFrame(descriptions, columns=['s', 'Description'])  # this is the dataframe containing every duplicate stock code and its corresponding most frequent description
-    # # man i dont get it... how to substitute all the descriptions??
+    # # man i don't get it... how to substitute all the descriptions??
 
     for i in df[df['Description'].isna()].index:
-        if df[df['StockCode'] == df.loc[i, 'StockCode']]['Description'].notna().sum() >= 1:
-            # take the first non-empty description and replace the missing one, we noticed articles with the same
-            # stock code have the same basic description with small variations:
-            df.loc[i, 'Description'] = df[df['StockCode'] == df.loc[i, 'StockCode']]['Description'].values[0]
-        else:
+        if df[df['StockCode'] == df.loc[i, 'StockCode']]['Description'].notna().sum() == 0:
             df.drop(i, axis=0, inplace=True)
+            continue
+        df.loc[i, 'Description'] = df[df['StockCode'] == df.loc[i, 'StockCode']]['Description'].values[0]
 
-    # we drop the rest
-    df.dropna()
+    # we drop possible duplicate rows:
     df.drop_duplicates()
 
     # drop all rows with missing costumer id:
-    # can we recover something?
+    # From CB's analysis we cannot recover them.
     df = df[df['Customer ID'].notna()]
 
     # fix the date
@@ -114,4 +111,4 @@ if __name__ == '__main__':
     df.rename(columns={'Customer ID': 'CustomerId'}, inplace=True)
 
     # save the dataset:
-    df.to_csv(Path("..", "data", "online_sales_dataset_cleaned.csv"), index=False)
+    df.to_csv(Path("..", "data", "online_sales_dataset_cleaned_2nd_attempt.csv"), index=False)

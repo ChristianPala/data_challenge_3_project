@@ -15,21 +15,42 @@ if __name__ == '__main__':
     # merge the two datasets for preprocessing:
     pd.concat([df_09, df_10], axis=0).to_csv(Path('..', 'data', 'online_sales_dataset.csv'), index=False)
     df = pd.read_csv(Path('..', 'data', 'online_sales_dataset.csv'))
-    # we should impute some values, especially in the descriptions' column.
+
+    # try to recover the missing descriptions:
+
+    # create indices for the missing descriptions:
+    missing_descriptions_pure = df[df['Description'].isna()].index
+
+    print(len(missing_descriptions_pure))
+
+    # filter the missing descriptions, keep only those which have a matching stock code with a non empty description
+    # in the dataset:
+    # missing_descriptions_filtered = df[df['Description'].isna() & df['StockCode'].isin(df[df['Description']
+    #                                                                                   .notna()]['StockCode'])].index
+    # print(len(missing_descriptions_filtered))
+
+    # We can recover 4019 descriptions, so we'll do the matching even if it's slow:
+
+    for i in df[df['Description'].isna()].index:
+        if df[df['StockCode'] == df.loc[i, 'StockCode']]['Description'].notna().sum() >= 1:
+            # take the first non-empty description and replace the missing one, we noticed articles with the same
+            # stock code have the same basic description with small variations:
+            df.loc[i, 'Description'] = df[df['StockCode'] == df.loc[i, 'StockCode']]['Description'].values[0]
+        else:
+            df.drop(i, axis=0, inplace=True)
+
+    # we drop the rest
     df.dropna()
     df.drop_duplicates()
 
     # drop all rows with missing costumer id:
+    # can we recover something?
     df = df[df['Customer ID'].notna()]
 
     # fix the date
     df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%d/%m/%Y %H:%M')
     # sort the dataset by customer ID and date:
     df.sort_values(by=['Customer ID', 'InvoiceDate'], inplace=True)
-
-    # add a column with the last purchase date for each customer:
-    df['LastPurchase'] = df.groupby('Customer ID')['InvoiceDate'].transform('max')
-    df['LastPurchase'] = pd.to_datetime(df['LastPurchase'], format='%Y-%m-%d %H:%M')
 
     # delete all bad debt, carriage, manual, postage, sample and test stock ids:
     df = df[~df['StockCode'].str.contains('B|C2|DOT|M|POST|S|TEST', case=False)]
@@ -74,9 +95,6 @@ if __name__ == '__main__':
     print(f"Number of unique invoices: {df['Invoice'].unique().size}")
     print(f"Number of unique products: {df['StockCode'].unique().size}")
     print(f"Number of unique descriptions: {df['Description'].unique().size}")
-
-    # create a churned column for customers that have not purchased in the last year:
-    df['ChurnedLastYear'] = df['LastPurchase'] < pd.to_datetime('2011-12-01')
 
     # rename Customer ID to CustomerId:
     df.rename(columns={'Customer ID': 'CustomerId'}, inplace=True)

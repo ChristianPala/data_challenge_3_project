@@ -46,12 +46,10 @@ if __name__ == '__main__':
     # # man i dont get it... how to substitute all the descriptions??
 
     for i in df[df['Description'].isna()].index:
-        if df[df['StockCode'] == df.loc[i, 'StockCode']]['Description'].notna().sum() >= 1:
-            # take the first non-empty description and replace the missing one, we noticed articles with the same
-            # stock code have the same basic description with small variations:
-            df.loc[i, 'Description'] = df[df['StockCode'] == df.loc[i, 'StockCode']]['Description'].values[0]
-        else:
+        if df[df['StockCode'] == df.loc[i, 'StockCode']]['Description'].notna().sum() == 0:
             df.drop(i, axis=0, inplace=True)
+            continue
+        df.loc[i, 'Description'] = df[df['StockCode'] == df.loc[i, 'StockCode']]['Description'].values[0]
 
     # we drop the rest
     df.dropna()

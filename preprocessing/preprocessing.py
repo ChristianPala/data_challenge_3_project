@@ -20,10 +20,8 @@ if __name__ == '__main__':
     # try to recover the missing descriptions:
 
     # create indices for the missing descriptions:
-    missing_descriptions_pure = df[df['Description'].isna()].index
-
-    print(len(missing_descriptions_pure))
-
+    # missing_descriptions_pure = df[df['Description'].isna()].index
+    # print(len(missing_descriptions_pure))
     # filter the missing descriptions, keep only those which have a matching stock code with a non empty description
     # in the dataset:
     # missing_descriptions_filtered = df[df['Description'].isna() & df['StockCode'].isin(df[df['Description']
@@ -31,6 +29,21 @@ if __name__ == '__main__':
     # print(len(missing_descriptions_filtered))
 
     # We can recover 4019 descriptions, so we'll do the matching even if it's slow:
+
+    # Codice Chri B.
+    # # if there are same stock codes with different descriptions, keep the most frequent one
+    # sc = df['StockCode']
+    # equal_stockCodes = set(sc[sc.duplicated()].tolist())  # set to keep just one number per occurrence
+    # # get descriptions corresponding to each stock code
+    # descriptions = {}
+    # c = 0
+    # for s in equal_stockCodes:
+    #     descriptions[s] = str(df.loc[df['StockCode'] == s]['Description'].str.strip().mode().tolist())
+    #     print(f'\r{round(c/len(equal_stockCodes)*100)}% completed', end='', flush=True)
+    #     c += 1
+    # print('')
+    # descriptions = pd.DataFrame(descriptions, columns=['s', 'Description'])  # this is the dataframe containing every duplicate stock code and its corresponding most frequent description
+    # # man i dont get it... how to substitute all the descriptions??
 
     for i in df[df['Description'].isna()].index:
         if df[df['StockCode'] == df.loc[i, 'StockCode']]['Description'].notna().sum() >= 1:
@@ -80,20 +93,6 @@ if __name__ == '__main__':
 
     # Descriptions should be strings, we will try to feature engineer them later:
     df['Description'] = df['Description'].astype(str)
-
-    # if there are same stock codes with different descriptions, keep the most frequent one
-    sc = df['StockCode']
-    equal_stockCodes = set(sc[sc.duplicated()].tolist())  # set to keep just one number per occurrence
-    # get descriptions corresponding to each stock code
-    descriptions = {}
-    c = 0
-    for s in equal_stockCodes:
-        descriptions[s] = str(df.loc[df['StockCode'] == s]['Description'].str.strip().mode().tolist())
-        print(f'\r{round(c/len(equal_stockCodes)*100)}% completed', end='', flush=True)
-        c += 1
-    print('')
-    descriptions = pd.DataFrame(descriptions, columns=['s', 'Description'])  # this is the dataframe containing every duplicate stock code and its corresponding most frequent description
-    # man i dont get it... how to substitute all the descriptions??
 
     # Replace the comma with a dot in the price column:
     df['Price'] = df['Price'].str.replace(',', '.')

@@ -17,18 +17,16 @@ if __name__ == '__main__':
     pd.concat([df_09, df_10], axis=0).to_csv(Path('..', 'data', 'online_sales_dataset.csv'), index=False)
     df = pd.read_csv(Path('..', 'data', 'online_sales_dataset.csv'))
 
-    # try to recover the missing descriptions:
-
-    # create indices for the missing descriptions:
-    # missing_descriptions_pure = df[df['Description'].isna()].index
-    # print(len(missing_descriptions_pure))
-    # filter the missing descriptions, keep only those which have a matching stock code with a non empty description
-    # in the dataset:
-    # missing_descriptions_filtered = df[df['Description'].isna() & df['StockCode'].isin(df[df['Description']
-    #                                                                                   .notna()]['StockCode'])].index
-    # print(len(missing_descriptions_filtered))
-
-    # We can recover 4019 descriptions, so we'll do the matching even if it's slow:
+    # recovering most of the missing descriptions:
+    # get the rows with missing descriptions but with a matching stock code with a non-missing description:
+    missing_descriptions_with_matching_stock_code_in_db = df[df['Description'].isna()
+                                                             & df['StockCode'].isin(df[df['Description']
+                                                                                    .notna()]['StockCode'])].index
+    # Fill the missing descriptions with the description of the first matching stock code:
+    for i in missing_descriptions_with_matching_stock_code_in_db:
+        df.loc[i, 'Description'] = df[df['StockCode'] == df.loc[i, 'StockCode']]['Description'].values[0]
+    # Drop the remaining missing descriptions which cannot be recovered:
+    df.dropna(subset=['Description'], inplace=True)
 
     # Codice Chri B.
     # # if there are same stock codes with different descriptions, keep the most frequent one
@@ -44,19 +42,12 @@ if __name__ == '__main__':
     # print('')
     # descriptions = pd.DataFrame(descriptions, columns=['s', 'Description'])  # this is the dataframe containing every duplicate stock code and its corresponding most frequent description
     # # man i don't get it... how to substitute all the descriptions??
-
-    for i in df[df['Description'].isna()].index:
-        if df[df['StockCode'] == df.loc[i, 'StockCode']]['Description'].notna().sum() == 0:
-            df.drop(i, axis=0, inplace=True)
-            continue
-        df.loc[i, 'Description'] = df[df['StockCode'] == df.loc[i, 'StockCode']]['Description'].values[0]
-
     # we drop possible duplicate rows:
     df.drop_duplicates()
 
     # drop all rows with missing costumer id:
-    # From CB's analysis we cannot recover them.
-    df = df[df['Customer ID'].notna()]
+    # From Chri B.'s analysis we cannot recover them.
+    df.dropna(subset=['Customer ID'], inplace=True)
 
     # fix the date
     df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%d/%m/%Y %H:%M')

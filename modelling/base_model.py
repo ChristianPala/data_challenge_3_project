@@ -4,6 +4,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 from pathlib import Path
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('TkAgg')
 
 if __name__ == '__main__':
     # read the aggregated dataset:
@@ -27,3 +30,14 @@ if __name__ == '__main__':
     print(classification_report(y_test, y_pred))
     print(confusion_matrix(y_test, y_pred))
     print(accuracy_score(y_test, y_pred))
+
+    # visualize initial features importance:
+    importance = pd.DataFrame({'feature': X_train.columns, 'importance': model.feature_importances_})
+    # sort by importance:
+    importance.sort_values(by='importance', ascending=False, inplace=True)
+    plt.figure(figsize=(10, 6))
+    plt.bar(importance['feature'], importance['importance'])
+    plt.title('Random Forest Feature Importance')
+    plt.xlabel('Feature')
+    plt.ylabel('Importance')
+    plt.show()

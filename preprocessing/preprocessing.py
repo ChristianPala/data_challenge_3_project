@@ -21,8 +21,7 @@ if __name__ == '__main__':
     # get the rows with missing descriptions but with a matching stock code with a non-missing description:
     missing_descriptions_with_matching_stock_code_in_db = df[df['Description'].isna()
                                                              & df['StockCode'].isin(df[df['Description']
-                                                                                    .notna()]['StockCode'])].index
-    # Fill the missing descriptions with the description of the first matching stock code:
+                                                                                    .notna()]['StockCode'])].indez
     for i in missing_descriptions_with_matching_stock_code_in_db:
         df.loc[i, 'Description'] = df[df['StockCode'] == df.loc[i, 'StockCode']]['Description'].values[0]
     # Drop the remaining missing descriptions which cannot be recovered:
@@ -102,4 +101,4 @@ if __name__ == '__main__':
     df.rename(columns={'Customer ID': 'CustomerId'}, inplace=True)
 
     # save the dataset:
-    df.to_csv(Path("..", "data", "online_sales_dataset_cleaned_2nd_attempt.csv"), index=False)
+    df.to_csv(Path("..", "data", "online_sales_dataset_cleaned.csv"), index=False)

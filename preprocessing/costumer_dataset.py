@@ -5,10 +5,13 @@ from pathlib import Path
 
 if __name__ == '__main__':
     # import the cleaned dataset:
-    df = pd.read_csv('../data/online_sales_dataset_cleaned.csv')
+    df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_cleaned.csv'))
 
     # create the aggregated costumer dataset:
-    df_agg = df.groupby('CustomerId').agg({'Quantity': 'sum', 'Price': 'sum', 'Country': 'max'})
+    df_agg = df.groupby('CustomerId').agg({'Invoice': 'count', 'Quantity': 'sum', 'Price': 'sum',
+                                           'Description': ' '.join, 'Country': lambda x: set(x)})
+    df_agg.rename(columns={'Invoice': 'NumPurchases', 'Quantity': 'TotalQuantity', 'Price': 'TotalPrice'},
+                  inplace=True)
 
     # create a new column with the last purchase date for each costumer and convert it to datetime:
     df_agg['LastPurchase'] = df.groupby('CustomerId')['InvoiceDate'].max()

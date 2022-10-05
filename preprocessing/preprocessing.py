@@ -21,27 +21,13 @@ if __name__ == '__main__':
     # get the rows with missing descriptions but with a matching stock code with a non-missing description:
     missing_descriptions_with_matching_stock_code_in_db = df[df['Description'].isna()
                                                              & df['StockCode'].isin(df[df['Description']
-                                                                                    .notna()]['StockCode'])].indez
+                                                                                    .notna()]['StockCode'])].index
     for i in missing_descriptions_with_matching_stock_code_in_db:
         df.loc[i, 'Description'] = df[df['StockCode'] == df.loc[i, 'StockCode']]['Description'].values[0]
     # Drop the remaining missing descriptions which cannot be recovered:
     df.dropna(subset=['Description'], inplace=True)
 
-    # Codice Chri B.
-    # # if there are same stock codes with different descriptions, keep the most frequent one
-    # sc = df['StockCode']
-    # equal_stockCodes = set(sc[sc.duplicated()].tolist())  # set to keep just one number per occurrence
-    # # get descriptions corresponding to each stock code
-    # descriptions = {}
-    # c = 0
-    # for s in equal_stockCodes:
-    #     descriptions[s] = str(df.loc[df['StockCode'] == s]['Description'].str.strip().mode().tolist())
-    #     print(f'\r{round(c/len(equal_stockCodes)*100)}% completed', end='', flush=True)
-    #     c += 1
-    # print('')
-    # descriptions = pd.DataFrame(descriptions, columns=['s', 'Description'])  # this is the dataframe containing every duplicate stock code and its corresponding most frequent description
-    # # man i don't get it... how to substitute all the descriptions??
-    # we drop possible duplicate rows:
+    # remove duplicates:
     df.drop_duplicates()
 
     # drop all rows with missing costumer id:
@@ -59,11 +45,15 @@ if __name__ == '__main__':
     # create a list of invoices starting with C, removing the C from the invoice number:
     cancelled_invoices = df[df['Invoice'].str.startswith('C')]['Invoice'].str[1:].tolist()
 
+    # look for partial cancellations
+
     # delete all rows with invoices matching cancelled_invoices:
     df = df[~df['Invoice'].isin(cancelled_invoices)]
 
     # delete all rows with invoices starting with C:
     df = df[~df['Invoice'].str.startswith('C')]
+
+    # if you see a product in the cancelled with product P with price Y, you can have another transaction with anothe
 
     # Now that we have only integers in the invoice column, we can convert it to int:
     df['Invoice'] = df['Invoice'].astype(int)
@@ -89,6 +79,10 @@ if __name__ == '__main__':
     # Create an enum for the countries:
     df['Country'] = df['Country'].astype('category')
     df['Country'] = df['Country'].cat.codes
+
+    # create a new column with the last purchase date for each costumer and convert it to datetime:
+    df['LastPurchase'] = df.groupby('Customer ID')['InvoiceDate'].max()
+    df['LastPurchase'] = pd.to_datetime(df['LastPurchase'], format='%Y-%m-%d %H:%M')
 
     # check the size of the dataset:
     print(f"Number of rows in the dataset: {df.shape[0]}")

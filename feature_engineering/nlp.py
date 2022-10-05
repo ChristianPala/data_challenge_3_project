@@ -1,33 +1,39 @@
 # Libraries:
-import tensorflow as tf
-from tensorflow import keras
-from keras.preprocessing.text import Tokenizer
 from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk import FreqDist
 from pathlib import Path
 import pandas as pd
+from sklearn.metrics import jaccard_score
 
 if __name__ == '__main__':
 
     # import the aggregated dataset:
     df_agg = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg.csv'))
 
-    # create a standard tokenizer:
-    # the relevant words are arbitrarily set to the top 1000 most frequent words:
-    tokenizer = Tokenizer(num_words=10000, oov_token='<OOV>')
-    # out of vocabulary should be irrelevant here, but it is good practice to set it anyway.
-    tokenizer.fit_on_texts(df_agg['Description'])
-    word_index = tokenizer.word_index
-    removable = stopwords.words('english')
+    # create a standard tokens
+    tokens = word_tokenize(df_agg['Description'].str.cat(sep=' '), language='english')
 
-    # I first added and not k.isnumeric(), but maybe we want to keep the numbers?
-    word_index = {k: v for k, v in word_index.items() if k not in removable}
+    # filter them:
+    removable = stopwords.words('english') + ['.', ',', '!', '?', '(', ')', '[', ']', '{', '}',
+                                              ':', ';', "'", '"', '``', "''"] + ['£', '€', '$']
+    cleaned_tokens = [token for token in tokens if token not in removable]
 
-    word_index_list = list(word_index.keys())
+    # add the word frequency:
+    f_dist = FreqDist(cleaned_tokens)
+
+    # compact into a dictionary the key is the word position by frequency and the value is the word:
+    word_index = {i: word for i, word in enumerate(f_dist.keys())}
+
+    word_index_list = list(word_index.values())
 
     # filter the aggregated descriptions leaving words in the word index list:
     df_agg['Description'] = df_agg['Description'].apply(lambda x: set(''.join([word for word in x.split()
                                                         if word in word_index_list])))
-    # save the dataset:a
+    print(word_index_list)
+
+    # save the dataset:
     df_agg.to_csv(Path('..', 'data', 'online_sales_dataset_agg_nlp.csv'), index=False)
 
-    print(word_index)
+    # use jaccard to calculate similarity between descriptions:
+

@@ -18,7 +18,8 @@ if __name__ == '__main__':
 
     # check how many customers would have churned for each threshold:
     for threshold in thresholds:
-        churned = df[df['LastPurchase'] < (pd.to_datetime('2011-12-31') - pd.Timedelta(days=threshold))]['CustomerId'].nunique()
+        churned = df[df['LastPurchase'] < (pd.to_datetime('2011-12-31') - pd.Timedelta(days=threshold))]['CustomerId']\
+            .nunique()
         print(f'For a hard threshold of {threshold} days from the end of the dataset, '
               f'{churned} customers would have churned.')
 

@@ -80,10 +80,6 @@ if __name__ == '__main__':
     df['Country'] = df['Country'].astype('category')
     df['Country'] = df['Country'].cat.codes
 
-    # create a new column with the last purchase date for each costumer and convert it to datetime:
-    df['LastPurchase'] = df.groupby('Customer ID')['InvoiceDate'].max()
-    df['LastPurchase'] = pd.to_datetime(df['LastPurchase'], format='%Y-%m-%d %H:%M')
-
     # check the size of the dataset:
     print(f"Number of rows in the dataset: {df.shape[0]}")
     print(f"Number of unique customers: {df['Customer ID'].unique().size}")

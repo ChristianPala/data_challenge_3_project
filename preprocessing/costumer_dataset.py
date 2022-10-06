@@ -11,7 +11,7 @@ if __name__ == '__main__':
     # create the aggregated costumer dataset:
     df_agg = df.groupby('CustomerId').agg({'Invoice': 'count', 'Quantity': 'sum', 'Price': 'sum',
                                            'Description': ' '.join, 'Country': lambda x: x.value_counts().index[0],
-                                           'InvoiceDate': 'max'})
+                                           'InvoiceDate': 'max',})
     df_agg.rename(columns={'Invoice': 'NumberOfPurchases', 'Quantity': 'TotalQuantity', 'Price': 'TotalSpent',
                            'InvoiceDate': 'LastPurchase'}, inplace=True)
 

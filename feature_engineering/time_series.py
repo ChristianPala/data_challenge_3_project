@@ -6,14 +6,15 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib
 import tsfel
-
-matplotlib.use('qtagg') # just comment it if it works for you in pycharm, dunno why doesnt want to show in the sciview like b4
+matplotlib.use('tkagg')
 
 if __name__ == '__main__':
 
-    # import the cleaned dataset:
-    df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_cleaned.csv'))
-    df = df.loc[:, df.columns != 'Description']
+    # import the aggregated dataset:
+    df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg.csv'))
+    # remove the description column:
+    df.drop('Description', axis=1, inplace=True)
+    # convert the invoice date column to datetime:
     df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'])
     df['InvoiceDate'] = (df['InvoiceDate'] - df['InvoiceDate'].min()) / np.timedelta64(1, 'D')
 
@@ -23,7 +24,8 @@ if __name__ == '__main__':
     cfg = tsfel.get_features_by_domain()
 
     # Extract features
-    X = tsfel.time_series_features_extractor(cfg, df[:10000])  # doing it on a small set so its faster...
+    X = tsfel.time_series_features_extractor(cfg, df)
+    # doing it on a small set, so it's faster...
     # not sure if we can use this stuff...
     X.to_csv(Path('..', 'data', 'online_sales_dataset_ts_fe.csv'), index=False)
 

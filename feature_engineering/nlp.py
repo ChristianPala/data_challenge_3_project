@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
     # cluster:
     df_clusters = pd.DataFrame(columns=['CustomerId', 'ClusterId'])
-    similarity_threshold = 0.5
+    similarity_threshold = 0.8
 
     for index, row in df_agg.iterrows():
         similarity = []
@@ -54,4 +54,3 @@ if __name__ == '__main__':
     # save the dataset:
     df_agg.to_csv(Path('..', 'data', 'online_sales_dataset_agg_nlp.csv'), index=False)
     df_clusters.to_csv(Path('..', 'data', f'online_sales_dataset_clusters_{similarity_threshold}.csv'), index=False)
-

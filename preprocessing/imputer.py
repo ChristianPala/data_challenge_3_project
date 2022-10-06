@@ -1,54 +1,57 @@
 # Libraries:
 import pandas as pd
-import numpy as np
-from sklearn.preprocessing import LabelEncoder
-from sklearn.impute import KNNImputer
 
 
-# sponsored by stackoverflow:
-class MultiColumnLabelEncoder:
-    def __init__(self, columns=None):
-        self.columns = columns  # array of column names to encode
+# Functions:
+def cancelling_order_imputer(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Imputes the cancelled orders in the dataset.
+    @param df: dataframe with the cancelled orders.
+    :return: dataframe with the cancelled orders imputed.
+    """
+    # create a list of cancelled invoices, removing the C from the invoice number:
+    cancelled_invoices = df[df['Invoice'].str.startswith('C')]['Invoice'].str[1:].tolist()
+    # filter out the unmatched cancelled invoices:
+    invoices = df['Invoice'].tolist()
+    unmatched_invoices = [i for i in cancelled_invoices if i not in invoices]
+    # delete the unmatched cancelling invoices adding back the C:
+    df.drop(df[df['Invoice'].isin([f'C{i}' for i in unmatched_invoices])].index, inplace=True)
+    # filter out the matched cancelling invoices:
+    matched_invoices = [i for i in cancelled_invoices if i not in unmatched_invoices]
 
-    def fit(self, X, y=None):
-        return self  # not relevant here
-
-    def transform(self, X):
-        """
-        Transforms columns of X specified in self.columns using
-        LabelEncoder(). If no columns specified, transforms all
-        columns in X.
-        """
-        output = X.copy()
-        if self.columns is not None:
-            for col in self.columns:
-                output[col] = LabelEncoder().fit_transform(output[col])
+    # look for partial cancellations:
+    for i in matched_invoices:
+        if df[df['Invoice'] == i]['Quantity'].sum() >= df[df['Invoice'] == f'C{i}']['Quantity'].sum() and \
+                df[df['Invoice'] == i]['StockCode'].tolist() == df[df['Invoice'] == f'C{i}']['StockCode'].tolist():
+            # if the quantity in the cancelled invoice is greater or equal to the quantity in the original invoice
+            # and the stock code matches, then delete the original invoice:
+            df.drop(df[df['Invoice'] == i].index, inplace=True)
         else:
-            for colname, col in output.iteritems():
-                output[colname] = LabelEncoder().fit_transform(col)
-        return output
+            # if the quantity in the cancelled invoice is less than the quantity in the original invoice, then
+            # subtract the quantity in the cancelled invoice from the quantity in the original invoice:
+            df[df['Invoice'] == i]['Quantity'] = df[df['Invoice'] == i]['Quantity'] - \
+                                                 df[df['Invoice'] == f'C{i}']['Quantity']
+            # delete all rows with cancelling invoices:
+            df.drop(df[df['Invoice'] == f'C{i}'].index, inplace=True)
 
-    def fit_transform(self, X, y=None):
-        return self.fit(X, y).transform(X)
+        df = df[~df['Invoice'].str.startswith('C')]
+
+    return df
 
 
-if __name__ == '__main__':
-    df = pd.read_csv('../data/online_sales_dataset_description_imputed.csv', dtype={'StockCode': str})
-    df = df.iloc[:10000, :]  # for testing the KNNImputer I sliced a tiny part, the complete df might be too large
+def missing_descriptions_imputer(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Imputes the missing descriptions in the dataset that can be recovered with the stock code, removes the rest.
+    @param df: dataframe with the missing descriptions.
+    :return: dataframe with the missing descriptions imputed.
+    """
+    # get the rows with missing descriptions but with a matching stock code with a non-missing description:
+    missing_descriptions_with_matching_stock_code = df[df['Description'].isna()
+                                                       & df['StockCode'].isin(df[df['Description']
+                                                                              .notna()]['StockCode'])].index
+    for i in missing_descriptions_with_matching_stock_code:
+        df.loc[i, 'Description'] = df[df['StockCode'] == df.loc[i, 'StockCode']]['Description'].values[0]
+    # Drop the remaining missing descriptions which cannot be recovered:
+    df.dropna(subset=['Description'], inplace=True)
 
-    # encode the df and dropping columns that will not be used (also StockCode since gives problems with mixed dtypes)
-    df_enc = MultiColumnLabelEncoder(columns=['Invoice', 'Description', 'Country'])\
-        .fit_transform(df.drop(['InvoiceDate', 'StockCode', 'Price'], axis=1))
-    print(df_enc.info())
-    print(df_enc.head())
-    print(df_enc.isnull().sum())
-
-    imp = KNNImputer(n_neighbors=3)
-    df_ft = imp.fit_transform(df_enc)
-    df_knn = pd.DataFrame(df_ft, columns=imp.get_feature_names_out())
-
-    print('\nFitted transformed dataframe:')
-    print(df_knn.info())
-    print(df_knn.head())
-    print(df_knn.isnull().sum())
-
+    return df

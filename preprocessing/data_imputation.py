@@ -3,24 +3,19 @@ import pandas as pd
 
 
 # Functions:
-def cancelling_order_remover(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Removes cancelled orders from the dataset.
-    @param df: dataframe with the cancelled orders.
-    :return: dataframe with the cancelled orders removed.
-    """
-    # remove the cancelled orders:
-    df.drop(df[df['Invoice'].str.startswith('C', na=False)].index, inplace=True)
-    # na=false does not select empty invoices, not necessary here but good practice.
-    return df
-
-
 def missing_description_imputer(df: pd.DataFrame) -> pd.DataFrame:
     """
     Imputes the missing descriptions in the dataset, which can be recovered with the stock code.
     @param df: dataframe with the missing descriptions.
     :return: dataframe with the missing descriptions imputed.
     """
+    # remove "this is a test product" from the dataset:
+    df.drop(df[df['Description'] == 'This is a test product.'].index, inplace=True)
+    # remove "adjustment by" from the dataset:
+    df.drop(df[df['Description'].str.startswith('Adjustment by', na=False)].index, inplace=True)
+    # remove "POSTAGE" from the dataset:
+    df.drop(df[df['Description'] == 'POSTAGE'].index, inplace=True)
+
     # impute the missing values in the description column:
     df['Description'] = df['Description'].fillna(df['StockCode'])
     return df
@@ -34,8 +29,26 @@ def customer_remover(df: pd.DataFrame) -> pd.DataFrame:
     """
     # delete the missing customer ids:
     df.drop(df[df['Customer ID'].isna()].index, inplace=True)
+    return df
 
-    # drop the rows with customer id 12346.0, which is a test customer:
-    df.drop(df[df['Customer ID'] == 12346.0].index, inplace=True)
-    
+
+def stock_code_remover(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Removes the stock codes of postage, sample, test and other non product stock items.
+    :param df: dataframe with the stock codes.
+    :return: dataframe with the irrelevant stock codes removed.
+    """
+    # delete all bad debt, carriage, manual, postage, sample and test stock ids:
+    df = df[~df['StockCode'].str.startswith('B|C2|DOT|M|POST|S|TEST')]
+    return df
+
+
+def cancelling_order_remover(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    removes all cancelling orders from the dataset.
+    :param df: dataframe with the cancelling orders.
+    :return: dataframe with the cancelling orders removed.
+    """
+    # remove all the cancelling orders:
+    df = df[~df['Invoice'].str.startswith('C')]
     return df

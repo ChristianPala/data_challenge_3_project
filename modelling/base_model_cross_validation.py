@@ -30,7 +30,7 @@ if __name__ == '__main__':
     scores = cross_val_score(model, X, y, scoring=metric, cv=cv, n_jobs=-1)
 
     # print the score means and standard deviations:
-    print('Accuracy: %.3f (%.3f)' % (scores.mean(), scores.std()))
+    print(f"Accuracy: {scores.mean():.3f}, standard deviation: {scores.std():.3f}")
 
     # the base model already has a decent accuracy score.
 

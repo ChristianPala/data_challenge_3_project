@@ -6,12 +6,12 @@ from datetime import datetime, timedelta
 
 if __name__ == '__main__':
     # import the cleaned dataset:
-    df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_cleaned.csv'))
+    df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_cleaned_v2.csv'))
 
     # create the aggregated costumer dataset:
     df_agg = df.groupby('CustomerId').agg({'Invoice': 'count', 'Quantity': 'sum', 'Price': 'sum',
                                            'Description': ' '.join, 'Country': lambda x: x.value_counts().index[0],
-                                           'InvoiceDate': 'max',})
+                                           'InvoiceDate': 'max'})
     df_agg.rename(columns={'Invoice': 'NumberOfPurchases', 'Quantity': 'TotalQuantity', 'Price': 'TotalSpent',
                            'InvoiceDate': 'LastPurchase'}, inplace=True)
 

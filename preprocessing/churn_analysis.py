@@ -15,6 +15,7 @@ if __name__ == '__main__':
 
     # cast LastPurchase to datetime:
     df['LastPurchase'] = df.groupby('CustomerId')['InvoiceDate'].transform('max')
+    df['LastPurchase'] = pd.to_datetime(df['LastPurchase'])
 
     # check how many customers would have churned for each threshold:
     for threshold in thresholds:

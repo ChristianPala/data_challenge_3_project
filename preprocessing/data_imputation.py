@@ -34,4 +34,8 @@ def customer_remover(df: pd.DataFrame) -> pd.DataFrame:
     """
     # delete the missing customer ids:
     df.drop(df[df['Customer ID'].isna()].index, inplace=True)
+
+    # drop the rows with customer id 12346.0, which is a test customer:
+    df.drop(df[df['Customer ID'] == 12346.0].index, inplace=True)
+    
     return df

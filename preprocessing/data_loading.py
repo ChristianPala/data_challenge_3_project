@@ -6,6 +6,12 @@ import pandas as pd
 # Functions:
 def load_and_save_data(df_1_path: Path = Path('..', 'data', 'online_sales_2009_2010_dataset.csv'),
                        df_2_path: Path = Path('..', 'data', 'online_sales_2010_2011_dataset.csv')) -> pd.DataFrame:
+    """
+    Load the two datasets and save the combined dataset.
+    @param df_1_path: Path to the first dataset from the Excel sheet provided by professor Mitrovic.
+    @param df_2_path: Path to the second dataset from the Excel sheet provided by professor Mitrovic.
+    :return: The combined dataset as a pandas dataframe.
+    """
 
     # Load data
     df_09 = pd.read_csv(df_1_path, sep=';')

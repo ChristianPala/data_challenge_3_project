@@ -21,6 +21,8 @@ if __name__ == '__main__':
     # print(df.shape)
 
     # Extract features
+    # running this will give you a warning on line 300 of calc_features.py, you might want to change
+    # the line with this: features_final = pd.concat([features_final, feat]), or just comment the original and use this
     X = tsfel.time_series_features_extractor(cfg, df, verbose=0, window_size=15)  # how to choose window size????
 
     print(X.shape)  # window_size=100-> 58, 1110) window_size=15->(388, 852) now tell me how tf we gonna decide on ws..

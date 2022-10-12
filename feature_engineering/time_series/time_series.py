@@ -1,9 +1,6 @@
 # libraries
 from pathlib import Path
 import pandas as pd
-import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
 import matplotlib
 import tsfel
 matplotlib.use('tkagg')
@@ -11,7 +8,7 @@ matplotlib.use('tkagg')
 if __name__ == '__main__':
 
     # import the aggregated dataset:
-    df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_cleaned.csv'))
+    df = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_cleaned.csv'))
 
     # create the aggregated costumer dataset:
     df_agg = df.groupby('InvoiceDate').agg({'Invoice': 'count', 'Quantity': 'sum', 'Price': 'sum', 'Country': lambda x: x.value_counts().index[0]})
@@ -42,7 +39,7 @@ if __name__ == '__main__':
         X_toreturn = pd.concat([X_toreturn, X])
 
     # doing it on a small set, so it's faster...
-    X_toreturn.to_csv(Path('..', 'data', 'online_sales_dataset_ts_fe.csv'), index=False)
+    X_toreturn.to_csv(Path('../..', 'data', 'online_sales_dataset_ts_fe.csv'), index=False)
     # do not understand why the f it doesnt save the headers as column names, is it because
     # they start with numbers?? could be...but idk
 

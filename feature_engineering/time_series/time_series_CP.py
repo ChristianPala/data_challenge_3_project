@@ -9,7 +9,7 @@ matplotlib.use('TkAgg')
 
 if __name__ == '__main__':
     # read the dataset:
-    df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_cleaned.csv'), index_col='CustomerId',
+    df = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_cleaned.csv'), index_col='CustomerId',
                      parse_dates=['InvoiceDate'])
 
     # create a new column with the month of the purchase:

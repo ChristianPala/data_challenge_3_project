@@ -21,6 +21,17 @@ def missing_description_imputer(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def stock_code_cleaner(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Removes trailing letters from the stock code, used to perform the timeseries analysis
+    :param df: dataframe already preprocessed with stock_code_remover() function
+    :return: cleaned dataframe, containing integer-only stock codes
+    """
+    df['StockCode'].replace('[a-zA-Z]+', value='', regex=True, inplace=True)
+
+    return df
+
+
 def customer_remover(df: pd.DataFrame) -> pd.DataFrame:
     """
     Removes the missing customer ids in the dataset. Left for possible future use, if we figure out how to impute them.

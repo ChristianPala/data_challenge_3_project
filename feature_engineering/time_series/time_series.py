@@ -6,26 +6,54 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib
 import tsfel
-matplotlib.use('tkagg')
+# matplotlib.use('tkagg')
 
 if __name__ == '__main__':
 
-    # import the aggregated dataset:
-    df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg.csv'))
+    # import the timeseries dataset:
+    df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_timeseries.csv'))
 
-    # remove the description column:
-    df.drop('Description', axis=1, inplace=True)
+    print(df.isna().sum())
+    df.dropna(subset=['StockCode'], inplace=True)  # non ho proprio capito come mai non me le vuole droppare nel
+    # timeseries_dataset.py, lì non me le trova nemmeno
 
-    cfg = tsfel.get_features_by_domain()
-    # print(len(cfg))
-    # print(df.shape)
+    df = df.loc[:, ['CustomerId', 'InvoiceDate']]
+
+    X = pd.DataFrame()
+
+    cfg = tsfel.get_features_by_domain(json_path='features_mod.json')  # modified the json so that it doesnt calculate
+    # LPCC (cause it gives errors due to too few rows in certain dataframes)
 
     # Extract features
     # running this will give you a warning on line 300 of calc_features.py, you might want to change
     # the line with this: features_final = pd.concat([features_final, feat]), or just comment the original and use this
-    X = tsfel.time_series_features_extractor(cfg, df, verbose=0, window_size=15)  # how to choose window size????
 
-    print(X.shape)  # window_size=100-> 58, 1110) window_size=15->(388, 852) now tell me how tf we gonna decide on ws..
+    # perform feature extraction on slices of the dataframe for every customer id,
+    # saving all the data for that customer (invoice date, invoice code, etc.)
+    # sort the dataframe
+    df.sort_values(by='CustomerId', axis=0, inplace=True)
+    # set the index to be this and don't drop
+    df.set_index(keys=['CustomerId'], drop=False, inplace=True)
+    # get a list of customers
+    customers = df['CustomerId'].unique().tolist()
+
+    print(customers)
+
+    # now we can perform a lookup on a 'view' of the dataframe
+    for customer in customers:
+        # customers' dataframes
+        this_personDF = df.loc[df.CustomerId == customer]
+        # print(this_personDF.shape)
+        # print(customers.index(customer))
+
+        if this_personDF.shape[0] < 2:  # not working if the customer dataset is less than 2 rows
+            continue
+        # returns ONE row for each the customer
+        features_data = tsfel.time_series_features_extractor(cfg, this_personDF, verbose=0)
+        X = pd.concat([X, features_data])
+
+    print(X.shape)
+    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel.csv'), index=False)
 
     # some plots to explain stuff
     # fig, ax = plt.subplots(2, 1)

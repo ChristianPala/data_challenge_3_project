@@ -15,14 +15,14 @@ if __name__ == '__main__':
 
     print(df.isna().sum())
     df.dropna(subset=['StockCode'], inplace=True)  # non ho proprio capito come mai non me le vuole droppare nel
+    # timeseries_dataset.py, lì non me le trova nemmeno
 
     df = df.loc[:, ['CustomerId', 'InvoiceDate']]
-    # timeseries_dataset.py, lì non me le trova nemmeno
 
     X = pd.DataFrame()
 
     cfg = tsfel.get_features_by_domain(json_path='features_mod.json')  # modified the json so that it doesnt calculate
-    # LPCC (cause it gives errors due to too few rows in certain dataframes
+    # LPCC (cause it gives errors due to too few rows in certain dataframes)
 
     # Extract features
     # running this will give you a warning on line 300 of calc_features.py, you might want to change
@@ -46,13 +46,13 @@ if __name__ == '__main__':
         # print(this_personDF.shape)
         # print(customers.index(customer))
 
-        if this_personDF.shape[0] < 2:
+        if this_personDF.shape[0] < 2:  # not working if the customer dataset is less than 2 rows
             continue
         # returns ONE row for each the customer
         features_data = tsfel.time_series_features_extractor(cfg, this_personDF, verbose=0)
         X = pd.concat([X, features_data])
 
-    print(X.shape)  # shape varies much based on the window size
+    print(X.shape)
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel.csv'), index=False)
 
     # some plots to explain stuff

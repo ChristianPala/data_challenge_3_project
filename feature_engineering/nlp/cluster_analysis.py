@@ -8,8 +8,8 @@ matplotlib.use('TkAgg')
 if __name__ == '__main__':
 
     # read the dataset:
-    df_c = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_clusters_0.8.csv'))
-    df = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_agg.csv'))
+    df_c = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_clusters_0.8.csv'))
+    df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
 
     # cast the ClusterId as a set of floats:
     df_c['ClusterId'] = df_c['ClusterId'].apply(lambda x: set([float(i) for i in x[0:-1].split(',')]))
@@ -35,5 +35,5 @@ if __name__ == '__main__':
     plt.ylabel('Customer count')
     plt.show()
 
-    # the number of twins with 0.8 is pretty small, but the purity may still give some predictive power to the model.
-
+    # save the dataset:
+    df_c.to_csv(Path('..', '..', 'data', 'online_sales_dataset_clusters_0.8_purity.csv'), index=False)

@@ -17,13 +17,14 @@ def jaccard_similarity(set1: set, set2: set) -> float:
     return len(set1.intersection(set2)) / len(set1.union(set2))
 
 
-def train_validation_test_split(X: pd.DataFrame, y: pd.Series) -> tuple:
+def train_validation_test_split(features: pd.DataFrame, y: pd.Series) -> tuple:
     """
     Splits the data into training, validation and test sets.
-    @param df: dataframe to split.
+    @param features: features.
+    @param y: target.
     :return: tuple containing the three sets.
     """
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(features, y, test_size=0.2, random_state=42)
 
     # in case we want to add validation set:
     # X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.25, random_state=1)
@@ -52,7 +53,7 @@ if __name__ == '__main__':
                                                                    df_agg['CustomerChurned'])
 
     # cluster:
-    df_clusters = pd.DataFrame(columns=['CustomerId', 'ClusterId'])
+    df_clusters = pd.DataFrame(columns=['CustomerId', 'ClusterId', 'Description'])
     similarity_threshold = 0.8
 
     for index, row in X_train.iterrows():
@@ -64,11 +65,17 @@ if __name__ == '__main__':
         indexes = [i for i, x in enumerate(similarity) if x >= similarity_threshold]
         # if there is more than one row with similarity score bigger than the threshold:
         if len(indexes) > 1:
-            # add the row to the new data frame
+            # add the row to the new data frame and the shared description to the cluster:
             df_clusters = pd.concat([df_clusters, pd.DataFrame(
                 [[row['CustomerId'], ','.join([str(X_train.iloc[i]['CustomerId']) for i in indexes])]],
                 columns=['CustomerId', 'ClusterId'])], ignore_index=True)
 
+    # for each cluster, compute the shared description:
+    df_clusters['Description'] = df_clusters['ClusterId']\
+        .apply(lambda x: set.union(*[X_train.loc[X_train['CustomerId'] == int(float(i))]['Description'].iloc[0]
+                                     for i in x.split(',')]))
+
     # save the dataset:
-    X_train.to_csv(Path('../..', 'data', 'online_sales_dataset_agg_nlp_X_train.csv'), index=False)
-    df_clusters.to_csv(Path('../..', 'data', f'online_sales_dataset_clusters_{similarity_threshold}.csv'), index=False)
+    X_train.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_X_train.csv'), index=False)
+    df_clusters.to_csv(Path('..', '..', 'data', f'online_sales_dataset_clusters_{similarity_threshold}.csv'),
+                       index=False)

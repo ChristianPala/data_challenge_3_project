@@ -2,7 +2,8 @@
 import pandas as pd
 from pathlib import Path
 from datetime import datetime, timedelta
-from preprocessing.data_imputation import cancelling_order_remover
+from data_challenge_3_project.preprocessing.data_imputation import cancelling_order_remover  # had to change path
+# since it was moved in a deeper branch
 
 
 if __name__ == '__main__':

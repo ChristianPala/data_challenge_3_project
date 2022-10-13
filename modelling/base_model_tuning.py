@@ -29,7 +29,7 @@ if __name__ == '__main__':
     # tune the model:
     # define the model:
     model = RandomForestClassifier(random_state=42)
-    # define the hyperparameters:
+    # define the hyper-parameters:
     n_estimators = [100, 300, 500, 800, 1200]
     max_depth = [5, 8, 15, 25, 30]
     min_samples_split = [2, 5, 10, 15, 100]
@@ -55,6 +55,7 @@ if __name__ == '__main__':
     # evaluate the best model:
     # best_model = grid_result.best_estimator_
     # Best: 0.454 using {'max_depth': 8, 'min_samples_leaf': 2, 'min_samples_split': 100, 'n_estimators': 800}
+    # optimized on the f-score.
     best_model = RandomForestClassifier(max_depth=8, min_samples_leaf=2, min_samples_split=100, n_estimators=800)
     best_model.fit(X_train, y_train)
     y_pred = best_model.predict(X_test)

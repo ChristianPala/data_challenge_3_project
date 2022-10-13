@@ -1,6 +1,6 @@
 # Libraries:
 
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_score, train_test_split
 from sklearn.model_selection import RepeatedStratifiedKFold
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
@@ -17,8 +17,11 @@ if __name__ == '__main__':
     X = df_agg[['NumberOfPurchases', 'TotalSpent', 'TotalQuantity', 'Country']]
     y = df_agg['CustomerChurned']
 
+    # split the dataset into train and test with the usual seed:
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
     # define model:
-    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    model = RandomForestClassifier(n_estimators=500, random_state=42)
 
     # define evaluation procedure:
     cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42)
@@ -27,7 +30,7 @@ if __name__ == '__main__':
     metric = make_scorer(accuracy_score)
 
     # evaluate model:
-    scores = cross_val_score(model, X, y, scoring=metric, cv=cv, n_jobs=-1)
+    scores = cross_val_score(model, X_train, y_train, scoring=metric, cv=cv, n_jobs=-1)
 
     # print the score means and standard deviations:
     print(f"Accuracy: {scores.mean():.3f}, standard deviation: {scores.std():.3f}")

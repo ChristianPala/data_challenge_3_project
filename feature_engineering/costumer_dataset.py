@@ -12,7 +12,7 @@ if __name__ == '__main__':
     # create the aggregated costumer dataset for quantities, rename to TotalQuantity:
     df_agg = df.groupby('CustomerId').agg({'Quantity': 'sum'}).rename(columns={'Quantity': 'TotalQuantity'})
     # if the total quantity is smaller or equal to 0, delete the customer:
-    df_agg = df_agg[df_agg['TotalQuantity'] > 0]
+    df_agg = df_agg[df_aggt['TotalQuantity'] > 0]
 
     # create a total spent column, price * quantity:
     df['TotalSpent'] = df['Price'] * df['Quantity']

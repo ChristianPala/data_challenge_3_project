@@ -9,18 +9,14 @@ from sklearn.model_selection import train_test_split
 matplotlib.use('TkAgg')
 
 if __name__ == '__main__':
-    df_agg = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg_nlp.csv'))
 
-    # select the features: number of purchases, total price spent, total quantity ordered and country:
-    X = df_agg[['NumberOfPurchases', 'TotalSpent', 'TotalQuantity', 'Country']]
-    y = df_agg['CustomerChurned']
+    # load the train features:
+    X_train = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg_nlp_train.csv'), index_col='CustomerId')
+    y_train = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg_nlp_train_labels.csv'), index_col='CustomerId')
 
-    # train test split:
-    _, _, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-    # import nlp aggregated train and test sets:
-    X_train = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg_nlp_train.csv'))
-    X_test = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg_nlp_test.csv'))
+    # load the test features:
+    X_test = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg_nlp_test.csv'), index_col='CustomerId')
+    y_test = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg_nlp_test_labels.csv'), index_col='CustomerId')
 
     # drop customer id and description:
     X_train.drop(['CustomerId', 'Description'], axis=1, inplace=True)

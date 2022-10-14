@@ -2,6 +2,7 @@
 import networkx as nx
 import pandas as pd
 from pathlib import Path
+from visualize_graph import save_graph
 
 
 from matplotlib import pyplot as plt
@@ -64,14 +65,8 @@ if __name__ == '__main__':
     # print the number of edges:
     print(f'Number of edges: {G.number_of_edges()}')
 
-    # print the number of self loops:
-    print(f'Number of self loops: {G.number_of_selfloops()}')
-
-    nx.draw(G)
-    plt.show()
-
     # save the graph:
-    nx.write_gpickle(G, Path('..', 'data', 'customer_product_graph.gpickle'))
+    save_graph(G, Path('..', '..', 'plots', 'network_graph.png'))
 
 
 

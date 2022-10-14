@@ -37,7 +37,6 @@ def stock_code_cleaner(df: pd.DataFrame) -> pd.DataFrame:
 
     # cast the stock code to integer:
 
-
     return df
 
 

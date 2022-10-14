@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 
 
 # global variables:
-similarity_threshold = 0.8
+similarity_threshold = 0.7
 
 
 # Functions:
@@ -126,6 +126,10 @@ if __name__ == '__main__':
     # save the new datasets:
     X_train.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_train.csv'), index=False)
     X_test.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_test.csv'), index=False)
+    y_train.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_train_labels.csv'), index=False)
+    y_test.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_test_labels.csv'), index=False)
 
     # check the results:
     print_results(X_train, X_test)
+
+    # The clustering does not affect a large number of customers.

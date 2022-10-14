@@ -7,7 +7,7 @@ matplotlib.use('TkAgg')
 
 if __name__ == '__main__':
 
-    similarity_threshold = 0.8
+    similarity_threshold = 0.7
 
     # read the dataset:
     df = pd.read_csv(Path('..', '..', 'data', f'online_sales_dataset_clusters_{similarity_threshold}.csv'))
@@ -16,7 +16,7 @@ if __name__ == '__main__':
     print(f'Average purity: {df["ClusterPurity"].mean()}')
 
     # print average number of customers per cluster:
-    print(f'Average number of customers per cluster: {df["NumberOfCustomers"].mean()}')
+    print(f'Average number of customers per cluster: {df["ClusterSize"].mean()}')
 
     # plot the distribution of the cluster sizes:
     plt.hist(df['ClusterSize'])
@@ -24,3 +24,6 @@ if __name__ == '__main__':
     plt.xlabel('Cluster size')
     plt.ylabel('Customer count')
     plt.show()
+
+    # with 0.7 we get a good purity amongst clusters.
+

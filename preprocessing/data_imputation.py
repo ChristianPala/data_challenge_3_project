@@ -28,10 +28,16 @@ def stock_code_cleaner(df: pd.DataFrame) -> pd.DataFrame:
     :param df: dataframe already preprocessed with stock_code_remover() function
     :return: cleaned dataframe, containing integer-only stock codes
     """
-    df['StockCode'].replace('[a-zA-Z]+', value='', regex=True, inplace=True)
-    df['StockCode'].replace('', value=np.nan, inplace=True)
+    # if a stock code has non numeric characters, remove them:
+    df['StockCode'] = df['StockCode'].str.replace('[^0-9]', '', regex=True)
 
-    df.dropna(subset=['StockCode'], inplace=True)  # dropping stray null
+    # if a stock code is empty or has white spaces, remove it:
+    df['StockCode'] = df['StockCode'].str.strip()
+    df.drop(df[df['StockCode'] == ''].index, inplace=True)
+
+    # cast the stock code to integer:
+
+
     return df
 
 

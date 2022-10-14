@@ -53,6 +53,10 @@ if __name__ == '__main__':
     df = df[df['Quantity'] > 0]
     # clean the stock codes:
     df = stock_code_cleaner(df)
+
+    # cast all stock codes to int:
+    df['StockCode'] = df['StockCode'].astype(int)
+
     # save the dataset:
     df.to_csv(Path("..", "data", "online_sales_dataset_for_fe.csv"), index=False)
 

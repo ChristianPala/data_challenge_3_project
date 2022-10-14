@@ -11,13 +11,16 @@ import tsfel
 if __name__ == '__main__':
 
     # import the timeseries dataset:
-    df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_timeseries.csv'))
+    df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
 
-    print(df.isna().sum())
-    df.dropna(subset=['StockCode'], inplace=True)  # non ho proprio capito come mai non me le vuole droppare nel
-    # timeseries_dataset.py, lì non me le trova nemmeno
+    print(type(df))
+    # print(df.isna().sum())
 
-    df = df.loc[:, ['CustomerId', 'InvoiceDate']]
+    df = df[['CustomerId', 'InvoiceDate']]  # cut df down to 2 columns
+    df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate']).astype(int) / 10 ** 9
+
+    print(df.info())
+    print(df.head())
 
     X = pd.DataFrame()
 

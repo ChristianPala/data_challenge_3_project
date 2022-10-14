@@ -1,5 +1,6 @@
 # Libraries:
 import pandas as pd
+import numpy as np
 
 
 # Functions:
@@ -28,7 +29,9 @@ def stock_code_cleaner(df: pd.DataFrame) -> pd.DataFrame:
     :return: cleaned dataframe, containing integer-only stock codes
     """
     df['StockCode'].replace('[a-zA-Z]+', value='', regex=True, inplace=True)
+    df['StockCode'].replace('', value=np.nan, inplace=True)
 
+    df.dropna(subset=['StockCode'], inplace=True)  # dropping stray null
     return df
 
 

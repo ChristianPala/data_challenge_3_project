@@ -20,7 +20,7 @@ ho modificato alcune righe dei files della libreria TSFEL: (non so se riesco a t
 /!\ volendo puoi copiare il file time_series/modded_lib_files/features.py, è quello che ho modificato e se lo runni dimmi se ti da errori
 mettilo in questa path: <your install dir>/anaconda3/envs/<your env name>/lib/python3.10/site-packages/tsfel/feature_extraction/
 
-    - features.py, linea 1511: ```fmag_mean = scipy.signal.spectrogram(signal, fs, nperseg=nfreq)[2].mean(1)  # why nfreq * 2 - 2 ??? gives error of int < 0```
+    - features.py, linea 1511: ho aggiunto il check cosicche la frequency viene cappata a 0 se il parametro diventa negativo
 
     - features.py, linea 784:  ```try:
                                       return tuple([x[y <= p].max() for p in percentile])  # yes I seriously used this shit

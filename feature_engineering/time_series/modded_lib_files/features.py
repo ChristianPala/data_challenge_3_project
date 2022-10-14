@@ -1501,8 +1501,10 @@ def fft_mean_coeff(signal, fs, nfreq=256):
     """
     if nfreq > len(signal) // 2 + 1:
         nfreq = len(signal) // 2 + 1
+    elif nfreq <= 1:  # added check to make sure spectrogram dont trows errors
+        nfreq = 1
 
-    fmag_mean = scipy.signal.spectrogram(signal, fs, nperseg=nfreq)[2].mean(1)  # why nfreq * 2 - 2 ??? gives error of int < 0
+    fmag_mean = scipy.signal.spectrogram(signal, fs, nperseg=nfreq * 2 - 2)[2].mean(1)
 
     return tuple(fmag_mean)
 

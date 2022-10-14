@@ -1,4 +1,5 @@
 # libraries
+import time
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 import pandas as pd
@@ -16,16 +17,16 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
+# TIME SERIES FEATURE EXTRACTION --------------------------------------------------------------
 def feature_extractor(customer):
     global cfg
     global customers
     # now we can perform a lookup on a 'view' of the dataframe
     # customers dataframes
     this_personDF = df.loc[df.CustomerId == customer]
+    # this_personDF.to_csv(Path('..', '..', 'data', 'customers', f'c-{customers.index(customer)}.csv'), index=False)
     # print(customers.index(customer))
 
-    if this_personDF.shape[0] < 2:  # not working if the customer dataset is less than 2 rows
-        print("this is too small")
     # returns ONE row for each the customer
     features_data = tsfel.time_series_features_extractor(cfg, this_personDF, verbose=0)
     return features_data
@@ -35,15 +36,6 @@ if __name__ == '__main__':
 
     # import the timeseries dataset:
     df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
-
-    # check which columns have mixed types
-    # for col in df.columns:
-    #     weird = (df[[col]].applymap(type) != df[[col]].iloc[0].apply(type)).any(axis=1)
-    #     if len(df[weird]) > 0:
-    #         print(col)
-
-    # print(type(df))
-    # print(df.isna().sum())
 
     df = df[['CustomerId', 'InvoiceDate']]  # cut df down to 2 columns
 
@@ -55,8 +47,6 @@ if __name__ == '__main__':
 
     # print(df.info())
     # print(df.head())
-
-    X = pd.DataFrame()
 
     cfg = tsfel.get_features_by_domain(json_path='features_mod.json')  # modified the json so that it doesnt calculate
     # LPCC (cause it gives errors due to too few rows in certain dataframes)
@@ -80,23 +70,11 @@ if __name__ == '__main__':
         result = list(tqdm(pool.map(feature_extractor, customers), total=len(customers)))
     print('> task mapped')
 
+    # s = time.time()
     # print("Results: ", type(result))
     print('> creating DF')
-    for r in result:
-        X = pd.concat([X, r])
-
-    # # now we can perform a lookup on a 'view' of the dataframe
-    # for customer in customers:
-    #     # customers' dataframes
-    #     this_personDF = df.loc[df.CustomerId == customer]
-    #     # print(this_personDF.shape)
-    #     # print(customers.index(customer))
-    #
-    #     if this_personDF.shape[0] < 2:  # not working if the customer dataset is less than 2 rows
-    #         continue
-    #     # returns ONE row for each the customer
-    #     features_data = tsfel.time_series_features_extractor(cfg, this_personDF, verbose=0)
-    #     X = pd.concat([X, features_data])
+    X = pd.concat(result)
+    # print(time.time() - s)
 
     print(X.shape)
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel.csv'), index=False)

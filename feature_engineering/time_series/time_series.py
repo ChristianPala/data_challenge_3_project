@@ -18,15 +18,13 @@ warnings.filterwarnings("ignore")
 
 
 # TIME SERIES FEATURE EXTRACTION --------------------------------------------------------------
-def feature_extractor(df, cfg, customer):
+def feature_extractor(data, features, customer):
     # now we can perform a lookup on a 'view' of the dataframe
     # customers dataframes
-    this_personDF = df.loc[df.CustomerId == customer]
-    # this_personDF.to_csv(Path('..', '..', 'data', 'customers', f'c-{customers.index(customer)}.csv'), index=False)
-    # print(customers.index(customer))
+    this_personDF = data.loc[data.CustomerId == customer]
 
     # returns ONE row for each the customer
-    features_data = tsfel.time_series_features_extractor(cfg, this_personDF, verbose=0)
+    features_data = tsfel.time_series_features_extractor(features, this_personDF, verbose=0)
     return features_data
 
 
@@ -69,8 +67,8 @@ if __name__ == '__main__':
 
     # execute the feature extraction in parallel
     with ProcessPoolExecutor() as executor:
-        futures = [executor.submit(feature_extractor, df, cfg, customer) for customer in tqdm(customers)]
-        results = [f.result() for f in futures]
+        futures = [executor.submit(feature_extractor, df, cfg, customer) for customer in customers]
+        results = [future.result() for future in tqdm(futures)]
     print('> task mapped')
 
     # s = time.time()

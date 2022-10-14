@@ -7,19 +7,24 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib
 import tsfel
-
+import warnings
 
 # matplotlib.use('tkagg')
 
+# suppress warnings
+warnings.filterwarnings("ignore")
+
+
 def feature_extractor(customer):
     global cfg
+    global customers
     # now we can perform a lookup on a 'view' of the dataframe
-    # for customer in customers:
-    # customers' dataframes
+    # customers dataframes
     this_personDF = df.loc[df.CustomerId == customer]
+    # print(customers.index(customer))
 
     if this_personDF.shape[0] < 2:  # not working if the customer dataset is less than 2 rows
-        print('this is too small')
+        print("this is too small")
     # returns ONE row for each the customer
     features_data = tsfel.time_series_features_extractor(cfg, this_personDF, verbose=0)
     return features_data
@@ -43,6 +48,10 @@ if __name__ == '__main__':
 
     df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate']).astype(int) / 10 ** 9
 
+    # skip the customers that occur only one time
+    is_multi = df['CustomerId'].value_counts() > 1
+    df = df[df['CustomerId'].isin(is_multi[is_multi].index)]
+
     # print(df.info())
     # print(df.head())
 
@@ -65,19 +74,18 @@ if __name__ == '__main__':
     customers = df['CustomerId'].unique().tolist()
 
     # print(customers)
-
-    print("Starting")
-
+    print('> execution started')
     with ProcessPoolExecutor() as pool:
         result = pool.map(feature_extractor, customers)
-        print("Task mapped")
+    print('> task mapped')
 
     # print("Results: ", type(result))
+    print('> creating DF')
     for r in result:
         X = pd.concat([X, r])
 
     # # now we can perform a lookup on a 'view' of the dataframe
-    # for customer in customers[:100]:
+    # for customer in customers:
     #     # customers' dataframes
     #     this_personDF = df.loc[df.CustomerId == customer]
     #     # print(this_personDF.shape)

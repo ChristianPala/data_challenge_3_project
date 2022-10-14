@@ -3,7 +3,7 @@
 from sklearn.model_selection import cross_val_score, train_test_split
 from sklearn.model_selection import RepeatedStratifiedKFold
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import f1_score
 from sklearn.metrics import make_scorer
 
 import pandas as pd
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42)
 
     # define the model evaluation metric:
-    metric = make_scorer(accuracy_score)
+    metric = make_scorer(f1_score)
 
     # evaluate model:
     scores = cross_val_score(model, X_train, y_train, scoring=metric, cv=cv, n_jobs=-1)

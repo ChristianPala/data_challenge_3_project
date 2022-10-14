@@ -17,6 +17,7 @@ warnings.filterwarnings("ignore")
 
 
 def feature_extractor(customer):
+    global df
     global cfg
     global customers
     # now we can perform a lookup on a 'view' of the dataframe
@@ -47,7 +48,9 @@ if __name__ == '__main__':
 
     df = df[['CustomerId', 'InvoiceDate']]  # cut df down to 2 columns
 
-    df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate']).astype(int) / 10 ** 9
+    # cast the invoice date to datetime, then to int and divide by 10^9:
+    df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%Y-%m-%d %H:%M:%S')
+    df['InvoiceDate'] = df['InvoiceDate'].astype(np.int64) // 10 ** 9
 
     # skip the customers that occur only one time
     is_multi = df['CustomerId'].value_counts() > 1

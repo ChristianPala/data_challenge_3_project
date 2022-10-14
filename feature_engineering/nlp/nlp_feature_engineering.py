@@ -123,13 +123,14 @@ if __name__ == '__main__':
         X_test['Cd_' + str(index)] = X_test['Description']\
             .apply(lambda x: 1 if jaccard_similarity(x, row['Description']) > similarity_threshold else 0)
 
+    # check the results:
+    print_results(X_train, X_test)
+    # The clustering does not affect a large number of customers.
+
     # save the new datasets:
     X_train.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_train.csv'), index=False)
     X_test.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_test.csv'), index=False)
     y_train.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_train_labels.csv'), index=False)
     y_test.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_test_labels.csv'), index=False)
-
-    # check the results:
-    print_results(X_train, X_test)
 
     # The clustering does not affect a large number of customers.

@@ -2,7 +2,7 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+from sklearn.metrics import classification_report, f1_score
 from pathlib import Path
 import matplotlib.pyplot as plt
 import matplotlib
@@ -20,7 +20,7 @@ if __name__ == '__main__':
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # train the model:
-    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    model = RandomForestClassifier(n_estimators=500, random_state=42)
     model.fit(X_train, y_train)
 
     # predict:
@@ -28,8 +28,7 @@ if __name__ == '__main__':
 
     # evaluate:
     print(classification_report(y_test, y_pred))
-    print(confusion_matrix(y_test, y_pred))
-    print(accuracy_score(y_test, y_pred))
+    print(f1_score(y_test, y_pred))
 
     # visualize initial features importance:
     importance = pd.DataFrame({'feature': X_train.columns, 'importance': model.feature_importances_})

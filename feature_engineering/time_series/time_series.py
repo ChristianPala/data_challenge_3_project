@@ -70,14 +70,20 @@ if __name__ == '__main__':
     # execute the feature extraction in parallel
     with ProcessPoolExecutor() as executor:
         futures = [executor.submit(feature_extractor, df, cfg, customer) for customer in tqdm(customers)]
-        results = [f.result() for f in futures]
-    print('> task mapped')
+        # wait for all the futures to finish
+        results = [future.result() for future in tqdm(futures)]
+        # catch exceptions:
+        for future in futures:
+            if future.exception() is not None:
+                print(future.exception())
+                # remove the future from the list
+                futures.remove(future)
+                # print the customer id that caused the exception
+                print(customers[futures.index(future)])
+        # concatenate the results as a dataframe
+        X = pd.concat(results)
 
-    # s = time.time()
-    # print("Results: ", type(result))
-    print('> creating DF')
-    X = pd.concat(results)
-    # print(time.time() - s)
+    print('> task mapped')
 
     print(X.shape)
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel.csv'), index=False)

@@ -1,4 +1,5 @@
 # libraries
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 import pandas as pd
 import numpy as np
@@ -6,21 +7,44 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib
 import tsfel
+
+
 # matplotlib.use('tkagg')
+
+def feature_extractor(customer):
+    global cfg
+    # now we can perform a lookup on a 'view' of the dataframe
+    # for customer in customers:
+    # customers' dataframes
+    this_personDF = df.loc[df.CustomerId == customer]
+
+    if this_personDF.shape[0] < 2:  # not working if the customer dataset is less than 2 rows
+        print('this is too small')
+    # returns ONE row for each the customer
+    features_data = tsfel.time_series_features_extractor(cfg, this_personDF, verbose=0)
+    return features_data
+
 
 if __name__ == '__main__':
 
     # import the timeseries dataset:
     df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
 
-    print(type(df))
+    # check which columns have mixed types
+    # for col in df.columns:
+    #     weird = (df[[col]].applymap(type) != df[[col]].iloc[0].apply(type)).any(axis=1)
+    #     if len(df[weird]) > 0:
+    #         print(col)
+
+    # print(type(df))
     # print(df.isna().sum())
 
     df = df[['CustomerId', 'InvoiceDate']]  # cut df down to 2 columns
+
     df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate']).astype(int) / 10 ** 9
 
-    print(df.info())
-    print(df.head())
+    # print(df.info())
+    # print(df.head())
 
     X = pd.DataFrame()
 
@@ -40,20 +64,30 @@ if __name__ == '__main__':
     # get a list of customers
     customers = df['CustomerId'].unique().tolist()
 
-    print(customers)
+    # print(customers)
 
-    # now we can perform a lookup on a 'view' of the dataframe
-    for customer in customers:
-        # customers' dataframes
-        this_personDF = df.loc[df.CustomerId == customer]
-        # print(this_personDF.shape)
-        # print(customers.index(customer))
+    print("Starting")
 
-        if this_personDF.shape[0] < 2:  # not working if the customer dataset is less than 2 rows
-            continue
-        # returns ONE row for each the customer
-        features_data = tsfel.time_series_features_extractor(cfg, this_personDF, verbose=0)
-        X = pd.concat([X, features_data])
+    with ProcessPoolExecutor() as pool:
+        result = pool.map(feature_extractor, customers)
+        print("Task mapped")
+
+    # print("Results: ", type(result))
+    for r in result:
+        X = pd.concat([X, r])
+
+    # # now we can perform a lookup on a 'view' of the dataframe
+    # for customer in customers[:100]:
+    #     # customers' dataframes
+    #     this_personDF = df.loc[df.CustomerId == customer]
+    #     # print(this_personDF.shape)
+    #     # print(customers.index(customer))
+    #
+    #     if this_personDF.shape[0] < 2:  # not working if the customer dataset is less than 2 rows
+    #         continue
+    #     # returns ONE row for each the customer
+    #     features_data = tsfel.time_series_features_extractor(cfg, this_personDF, verbose=0)
+    #     X = pd.concat([X, features_data])
 
     print(X.shape)
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel.csv'), index=False)

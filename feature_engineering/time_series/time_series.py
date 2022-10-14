@@ -7,6 +7,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib
 import tsfel
+from tqdm import tqdm
 import warnings
 
 # matplotlib.use('tkagg')
@@ -76,7 +77,7 @@ if __name__ == '__main__':
     # print(customers)
     print('> execution started')
     with ProcessPoolExecutor() as pool:
-        result = pool.map(feature_extractor, customers)
+        result = list(tqdm(pool.map(feature_extractor, customers), total=len(customers)))
     print('> task mapped')
 
     # print("Results: ", type(result))

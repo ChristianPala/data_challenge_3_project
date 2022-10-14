@@ -18,10 +18,7 @@ warnings.filterwarnings("ignore")
 
 
 # TIME SERIES FEATURE EXTRACTION --------------------------------------------------------------
-def feature_extractor(customer):
-    global df
-    global cfg
-    global customers
+def feature_extractor(df, cfg, customer):
     # now we can perform a lookup on a 'view' of the dataframe
     # customers dataframes
     this_personDF = df.loc[df.CustomerId == customer]
@@ -69,14 +66,17 @@ if __name__ == '__main__':
 
     # print(customers)
     print('> execution started')
-    with ProcessPoolExecutor() as pool:
-        result = list(tqdm(pool.map(feature_extractor, customers), total=len(customers)))
+
+    # execute the feature extraction in parallel
+    with ProcessPoolExecutor() as executor:
+        futures = [executor.submit(feature_extractor, df, cfg, customer) for customer in tqdm(customers)]
+        results = [f.result() for f in futures]
     print('> task mapped')
 
     # s = time.time()
     # print("Results: ", type(result))
     print('> creating DF')
-    X = pd.concat(result)
+    X = pd.concat(results)
     # print(time.time() - s)
 
     print(X.shape)

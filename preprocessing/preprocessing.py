@@ -1,7 +1,7 @@
 # Libraries:
 import pandas as pd
 from pathlib import Path
-from data_imputation import customer_remover, missing_description_imputer, stock_code_remover
+from data_imputation import customer_remover, missing_description_imputer, stock_code_remover, stock_code_cleaner
 from data_loading import load_and_save_data
 
 # Driver code:
@@ -45,6 +45,17 @@ if __name__ == '__main__':
     print("Missing values:")
     print(f"{df.isna().sum()}")
 
+    # save the dataset:
+    df.to_csv(Path("..", "data", "online_sales_dataset_for_aggregation.csv"), index=False)
+
+    # for the timeseries dataset remove the cancelling orders and save in a new file:
+    # remove the cancelling orders:
+    df = df[df['Quantity'] > 0]
+    # clean the stock codes:
+    df = stock_code_cleaner(df)
+    # save the dataset:
+    df.to_csv(Path("..", "data", "online_sales_dataset_for_fe.csv"), index=False)
+
     # check the size of the dataset:
     print(f"Number of rows in the dataset: {df.shape[0]}")
     print(f"Number of unique customers: {df['CustomerId'].unique().size}")
@@ -53,5 +64,4 @@ if __name__ == '__main__':
     print(f"Number of unique descriptions: {df['Description'].unique().size}")
     print(f"Number of unique countries: {df['Country'].unique().size}")
 
-    # save the dataset:
-    df.to_csv(Path("..", "data", "online_sales_dataset_cleaned.csv"), index=False)
+

@@ -50,7 +50,9 @@ def stock_code_remover(df: pd.DataFrame) -> pd.DataFrame:
     :return: dataframe with the irrelevant stock codes removed.
     """
     # delete all bad debt, carriage, manual, postage, sample and test stock ids:
-    df = df[~df['StockCode'].str.startswith('B|C2|DOT|M|POST|S|TEST')]
+    df = df[~df['StockCode'].str.startswith('B|C2|D|DOT|M|POST|S|TEST')]
+    # delete manual descriptions:
+    df = df[~df['Description'].str.startswith('Manual')]
     return df
 
 

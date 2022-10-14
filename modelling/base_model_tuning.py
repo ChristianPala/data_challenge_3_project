@@ -88,7 +88,7 @@ if __name__ == '__main__':
     plt.savefig(Path('..', 'plots', 'roc_curve_base_model_tuned.png'))
 
     # save the model:
-    with open(Path('..', 'models', 'rf_base_model.pkl'), 'wb') as f:
+    with open(Path('..', 'models', 'rf_base_model_tuned.pkl'), 'wb') as f:
         pickle.dump(best_model, f)
 
 

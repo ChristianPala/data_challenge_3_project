@@ -2,18 +2,17 @@
 import pandas as pd
 from pathlib import Path
 from datetime import datetime, timedelta
-from data_challenge_3_project.preprocessing.data_imputation import cancelling_order_remover  # had to change path
-# since it was moved in a deeper branch
+from preprocessing.data_imputation import cancelling_order_remover
 
 
 if __name__ == '__main__':
     # import the cleaned dataset:
-    df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_cleaned.csv'))
+    df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_for_aggregation.csv'))
 
     # create the aggregated costumer dataset for quantities, rename to TotalQuantity:
     df_agg = df.groupby('CustomerId').agg({'Quantity': 'sum'}).rename(columns={'Quantity': 'TotalQuantity'})
     # if the total quantity is smaller or equal to 0, delete the customer:
-    df_agg = df_agg[df_aggt['TotalQuantity'] > 0]
+    df_agg = df_agg[df_agg['TotalQuantity'] > 0]
 
     # create a total spent column, price * quantity:
     df['TotalSpent'] = df['Price'] * df['Quantity']

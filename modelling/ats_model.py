@@ -1,16 +1,15 @@
 # Libraries:
 import matplotlib
-import numpy as np
 import pandas as pd
 from pathlib import Path
 
-from matplotlib import pyplot as plt
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, f1_score, make_scorer
-from sklearn.model_selection import train_test_split, RandomizedSearchCV
+from hyperopt import hp, STATUS_OK, Trials, fmin, tpe
+from sklearn.metrics import classification_report, f1_score
+from sklearn.model_selection import train_test_split
+from xgboost import XGBClassifier
+from tabulate import tabulate
 
 matplotlib.use('TkAgg')
-
 
 if __name__ == '__main__':
     # import the  tsfel dataset:
@@ -37,50 +36,78 @@ if __name__ == '__main__':
         train_test_split(df_ts.drop('CustomerChurned', axis=1),
                          df_ts['CustomerChurned'], test_size=0.2, random_state=42)
 
-    # hyperparameter tuning on the number of trees:
-    n_estimators = [int(x) for x in np.linspace(start=200, stop=2000, num=100)]
+    # tune xgboost for time series data:
+    space = {
+        'n_estimators': hp.choice('n_estimators', range(100, 1000)),
+        'max_depth': hp.choice('max_depth', range(1, 20)),
+        'learning_rate': hp.uniform('learning_rate', 0.01, 1),
+        'min_child_weight': hp.choice('min_child_weight', range(1, 10)),
+        'gamma': hp.uniform('gamma', 0.01, 1),
+        'subsample': hp.uniform('subsample', 0.01, 1),
+        'colsample_bytree': hp.uniform('colsample_bytree', 0.01, 1),
+        'reg_alpha': hp.uniform('reg_alpha', 0.01, 1),
+        'reg_lambda': hp.uniform('reg_lambda', 0.01, 1)
+    }
 
-    # Create the random grid
-    random_grid = {'n_estimators': n_estimators}
 
-    # Random search of parameters, using 3-fold cross validation
+    # define the objective function:
+    def objective(space):
+        model = XGBClassifier(n_estimators=space['n_estimators'],
+                              max_depth=space['max_depth'],
+                              learning_rate=space['learning_rate'],
+                              min_child_weight=space['min_child_weight'],
+                              gamma=space['gamma'],
+                              subsample=space['subsample'],
+                              colsample_bytree=space['colsample_bytree'],
+                              reg_alpha=space['reg_alpha'],
+                              reg_lambda=space['reg_lambda'],
+                              objective="binary:logistic",
+                              early_stopping_rounds=10,
+                              eval_metric="aucpr",
+                              random_state=42,
+                              n_jobs=-1)
 
-    rf = RandomForestClassifier()
-    metric = make_scorer(f1_score)
+        evaluation = [(X_train, y_train), (X_test, y_test)]
 
-    rf_random = RandomizedSearchCV(estimator=rf, param_distributions=random_grid,
-                                   n_iter=100, cv=3, scoring=metric, random_state=42, n_jobs=-1)
+        # fit the model, the metric is the f-1 score:
+        model.fit(X_train, y_train, eval_set=evaluation, verbose=False)
 
-    # Fit the random search model
-    rf_random.fit(X_train, y_train)
+        # predict:
+        y_pred = model.predict(X_test)
 
-    # print the best parameters:w
-    print(rf_random.best_params_)
+        # calculate the f1 score:
+        f1 = f1_score(y_test, y_pred)
 
-    # initialize model with the best parameters:
-    model = RandomForestClassifier(n_estimators=rf_random.best_params_['n_estimators'], random_state=42)
+        # return the negative f1 score:
+        return {'loss': -f1, 'status': STATUS_OK}
 
-    # train the model:
-    model.fit(X_train, y_train)
+
+    # define the trials object:
+    trials = Trials()
+
+    # run the optimization:
+    best = fmin(fn=objective, space=space, algo=tpe.suggest, max_evals=100, trials=trials)
+
+    # if a parameter is 0, filter it out:
+    best = {k: v for k, v in best.items() if v != 0}
+
+    # define the model:
+    model = XGBClassifier(**best, objective="binary:logistic", random_state=42, n_jobs=-1)
+
+    # fit the model:
+    model.fit(X_train, y_train.values.ravel())
 
     # predict:
     y_pred = model.predict(X_test)
 
     # evaluate:
     print(classification_report(y_test, y_pred))
-    print(f1_score(y_test, y_pred))
+    print(f"The f1 score of the time series model is : {f1_score(y_test, y_pred):.3f}")
 
-    # visualize features importance, sorted by importance, cut off at 0.5 threshold:
+    # print feature importance:
     importance = pd.DataFrame({'feature': X_train.columns, 'importance': model.feature_importances_})
     # sort by importance:
     importance.sort_values(by='importance', ascending=False, inplace=True)
 
-    top_n = 10
-    importance = importance.iloc[:top_n]
-
-    plt.figure(figsize=(10, 6))
-    plt.bar(importance['feature'][0:9], importance['importance'][0:9])
-    plt.title('Random Forest Feature Importance')
-    plt.xlabel('Feature')
-    plt.ylabel('Importance')
-    plt.show()
+    # print the feature importance in a table:
+    print(tabulate(importance, headers='keys', tablefmt='psql'))

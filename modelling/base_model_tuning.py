@@ -4,13 +4,13 @@
 #
 # # Libraries:
 import pandas as pd
-from sklearn.metrics import f1_score, make_scorer, classification_report
+from sklearn.metrics import f1_score, classification_report
 from xgboost import XGBClassifier
 from hyperopt import hp, fmin, tpe, Trials, STATUS_OK
-from sklearn.model_selection import train_test_split, RepeatedStratifiedKFold, cross_val_score, cross_val_predict
+from sklearn.model_selection import train_test_split
+import pickle
 from pathlib import Path
 import matplotlib
-
 matplotlib.use('TkAgg')
 
 # Functions:
@@ -114,3 +114,7 @@ if __name__ == '__main__':
     print(classification_report(y_test, y_predicted))
     print(f"Tuned base model has an f-score of: {f1_score(y_test, y_predicted):.3f}")
     # 0.528
+
+    # save the model as a pickle file:
+    with open(Path('..', 'models', 'xgboost_base_model_tuned.pkl'), 'wb') as f:
+        pickle.dump(model, f)

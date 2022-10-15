@@ -1,12 +1,11 @@
 # Libraries:
 from pathlib import Path
-
-import numpy as np
 import pandas as pd
 import matplotlib
 from matplotlib import pyplot as plt
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import f1_score, ConfusionMatrixDisplay, confusion_matrix, PrecisionRecallDisplay, RocCurveDisplay
+from xgboost import XGBClassifier
+
 matplotlib.use('TkAgg')
 
 if __name__ == '__main__':
@@ -24,7 +23,19 @@ if __name__ == '__main__':
     X_test.drop(['CustomerId', 'Description'], axis=1, inplace=True)
 
     # train the best random forest model found for the best case:
-    model = RandomForestClassifier(n_estimators=500)
+    model = XGBClassifier(n_estimators=127,
+                          max_depth=8,
+                          learning_rate=0.813805917920331,
+                          min_child_weight=5,
+                          gamma=0.5915603402393034,
+                          subsample=0.01129889610694531,
+                          colsample_bytree=0.4771911169038492,
+                          reg_alpha=0.538492486622712,
+                          reg_lambda=0.37144751917622304,
+                          objective="binary:logistic",
+                          random_state=42,
+                          n_jobs=-1)
+
     model.fit(X_train, y_train.values.ravel())
 
     # evaluate the model on the f1-score:

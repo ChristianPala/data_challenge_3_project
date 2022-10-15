@@ -1,6 +1,6 @@
 # Libraries:
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, f1_score
 from pathlib import Path
@@ -19,8 +19,10 @@ if __name__ == '__main__':
     # train test split:
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # train the model:
-    model = RandomForestClassifier(n_estimators=500, random_state=42)
+    # define the model:
+    model = XGBClassifier(objective="binary:logistic", n_estimators=500, random_state=42)
+
+    # fit the model:
     model.fit(X_train, y_train)
 
     # predict:

@@ -1,12 +1,13 @@
 # Libraries:
 import matplotlib
+import numpy as np
 import pandas as pd
 from pathlib import Path
 
 from matplotlib import pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, f1_score
-from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, f1_score, make_scorer
+from sklearn.model_selection import train_test_split, RandomizedSearchCV
 
 matplotlib.use('TkAgg')
 
@@ -36,8 +37,30 @@ if __name__ == '__main__':
         train_test_split(df_ts.drop('CustomerChurned', axis=1),
                          df_ts['CustomerChurned'], test_size=0.2, random_state=42)
 
+    # hyperparameter tuning on the number of trees:
+    n_estimators = [int(x) for x in np.linspace(start=200, stop=2000, num=100)]
+
+    # Create the random grid
+    random_grid = {'n_estimators': n_estimators}
+
+    # Random search of parameters, using 3-fold cross validation
+
+    rf = RandomForestClassifier()
+    metric = make_scorer(f1_score)
+
+    rf_random = RandomizedSearchCV(estimator=rf, param_distributions=random_grid,
+                                   n_iter=100, cv=3, scoring=metric, random_state=42, n_jobs=-1)
+
+    # Fit the random search model
+    rf_random.fit(X_train, y_train)
+
+    # print the best parameters:w
+    print(rf_random.best_params_)
+
+    # initialize model with the best parameters:
+    model = RandomForestClassifier(n_estimators=rf_random.best_params_['n_estimators'], random_state=42)
+
     # train the model:
-    model = RandomForestClassifier(n_estimators=500, random_state=42)
     model.fit(X_train, y_train)
 
     # predict:
@@ -51,6 +74,9 @@ if __name__ == '__main__':
     importance = pd.DataFrame({'feature': X_train.columns, 'importance': model.feature_importances_})
     # sort by importance:
     importance.sort_values(by='importance', ascending=False, inplace=True)
+
+    top_n = 10
+    importance = importance.iloc[:top_n]
 
     plt.figure(figsize=(10, 6))
     plt.bar(importance['feature'][0:9], importance['importance'][0:9])

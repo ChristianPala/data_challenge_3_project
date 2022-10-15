@@ -1,20 +1,19 @@
 # Tune the random forest model:
+# read this kaggle article as a basis:
+# https://www.kaggle.com/code/prashant111/a-guide-on-xgboost-hyperparameters-tuning/notebook
 #
 # # Libraries:
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split, StratifiedKFold, GridSearchCV
-from sklearn.metrics import classification_report, confusion_matrix, make_scorer, accuracy_score, \
-    average_precision_score, precision_recall_curve, f1_score, PrecisionRecallDisplay, RocCurveDisplay, \
-    ConfusionMatrixDisplay
-
+from sklearn.metrics import f1_score, make_scorer, classification_report
+from xgboost import XGBClassifier
+from hyperopt import hp, fmin, tpe, Trials, STATUS_OK
+from sklearn.model_selection import train_test_split, RepeatedStratifiedKFold, cross_val_score, cross_val_predict
 from pathlib import Path
 import matplotlib
-import matplotlib.pyplot as plt
-import pickle
+
 matplotlib.use('TkAgg')
 
-
+# Functions:
 if __name__ == '__main__':
     # read the aggregated dataset:
     df_agg = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg.csv'))
@@ -26,73 +25,92 @@ if __name__ == '__main__':
     # train test split:
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # tune the model:
-    # define the model:
-    model = RandomForestClassifier(random_state=42)
-    # define the hyperparameters:
-    n_estimators = [700, 800, 900, 1000]
-    max_depth = [7, 8, 9, 10]
-    min_samples_split = [1, 2, 3, 4]
-    min_samples_leaf = [7, 8, 9, 10]
-    # create the grid:
-    grid = dict(n_estimators=n_estimators, max_depth=max_depth,
-                min_samples_split=min_samples_split, min_samples_leaf=min_samples_leaf)
-    # define the evaluation procedure:
-    cv = StratifiedKFold(n_splits=3, random_state=42)
-    # define the model evaluation metric:
-    metric = make_scorer(f1_score)
-    # define the grid search:
-    grid_search = GridSearchCV(estimator=model, param_grid=grid, n_jobs=-1, cv=cv, scoring=metric, error_score=0)
-    # fit the grid search in parallel, since it's a long process:
+    # tune the model with bayesian optimization:
 
-    grid_result = grid_search.fit(X_train, y_train)
-    # summarize the results:
-    print(f"Best: {grid_result.best_score_:.3f} using {grid_result.best_params_}")
-    means = grid_result.cv_results_['mean_test_score']
-    stds = grid_result.cv_results_['std_test_score']
-    params = grid_result.cv_results_['params']
-    for mean, stdev, param in zip(means, stds, params):
-        print(f"{mean:.3f} ({stdev:.3f}) with: {param}")
-    # evaluate the best model:
-    best_model = grid_result.best_estimator_
-    # Best: 0.454 using {'max_depth': 8, 'min_samples_leaf': 2, 'min_samples_split': 100, 'n_estimators': 800}
-    # optimized on the f-score.
-    # best_model = RandomForestClassifier(max_depth=8, min_samples_leaf=2, min_samples_split=100, n_estimators=800)
-    best_model.fit(X_train, y_train)
-    y_pred = best_model.predict(X_test)
-    precision, recall, _ = precision_recall_curve(y_test, y_pred)
-    print(f"Precision: {precision}")
-    print(f"Recall: {recall}")
-    print(f"Accuracy: {accuracy_score(y_test, y_pred):.3f}")
-    print(f"f1 score: {f1_score(y_test, y_pred):.3f}")
-    print(f"Average precision score: {average_precision_score(y_test, y_pred):.3f}")
-    print(f"Classification report: {classification_report(y_test, y_pred)}")
-
-    # plot the confusion matrix:
-    display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix(y_test, y_pred),
-                                     display_labels=best_model.classes_)
-    display.plot(cmap=plt.cm.Blues)
-    plt.show()
-    display.figure_.savefig(Path('..', 'plots', 'confusion_matrix_base_model_tuned.png'))
-
-    # plot the precision recall curve:
-    display = PrecisionRecallDisplay.from_estimator(best_model, X_test, y_test, name="Random Forest")
-    display.ax_.set_title(f'Precision-Recall curve base model tuned')
-    plt.show()
-    display.figure_.savefig(Path('..', 'plots', 'precision_recall_curve_model_tuned.png'))
-
-    # plot the ROC curve:
-    display = RocCurveDisplay.from_estimator(best_model, X_test, y_test, name="Random Forest")
-    display.ax_.set_title(f'ROC curve base model tuned')
-    plt.title(f'ROC curve base model tuned')
-    plt.show()
-    plt.savefig(Path('..', 'plots', 'roc_curve_base_model_tuned.png'))
-
-    # save the model:
-    with open(Path('..', 'models', 'rf_base_model_tuned.pkl'), 'wb') as f:
-        pickle.dump(best_model, f)
+    # define the search space:
+    space = {
+        'n_estimators': hp.choice('n_estimators', range(100, 1000)),
+        'max_depth': hp.choice('max_depth', range(1, 20)),
+        'learning_rate': hp.uniform('learning_rate', 0.01, 1),
+        'min_child_weight': hp.choice('min_child_weight', range(1, 10)),
+        'gamma': hp.uniform('gamma', 0.01, 1),
+        'subsample': hp.uniform('subsample', 0.01, 1),
+        'colsample_bytree': hp.uniform('colsample_bytree', 0.01, 1),
+        'reg_alpha': hp.uniform('reg_alpha', 0.01, 1),
+        'reg_lambda': hp.uniform('reg_lambda', 0.01, 1)
+    }
 
 
+    # define the objective function:
+    def objective(space):
+        model = XGBClassifier(n_estimators=space['n_estimators'],
+                              max_depth=space['max_depth'],
+                              learning_rate=space['learning_rate'],
+                              min_child_weight=space['min_child_weight'],
+                              gamma=space['gamma'],
+                              subsample=space['subsample'],
+                              colsample_bytree=space['colsample_bytree'],
+                              reg_alpha=space['reg_alpha'],
+                              reg_lambda=space['reg_lambda'],
+                              objective="binary:logistic",
+                              early_stopping_rounds=10,
+                              eval_metric="aucpr",
+                              random_state=42,
+                              n_jobs=-1)
+
+        evaluation = [(X_train, y_train), (X_test, y_test)]
+
+        # fit the model, the metric is the f-1 score:
+        model.fit(X_train, y_train, eval_set=evaluation, verbose=False)
+
+        # predict:
+        y_pred = model.predict(X_test)
+
+        # calculate the f1 score:
+        f1 = f1_score(y_test, y_pred)
+
+        # return the negative f1 score:
+        return {'loss': -f1, 'status': STATUS_OK}
 
 
+    # define the trials object:
+    trials = Trials()
 
+    # run the optimization:
+    best = fmin(fn=objective, space=space, algo=tpe.suggest, max_evals=100, trials=trials)
+
+    # print the best parameters:
+    print("The best parameters are: ")
+    print(best)
+
+    # the best parameters are:
+    """
+    {'colsample_bytree': 0.4771911169038492, 'gamma': 0.5915603402393034, 'learning_rate': 0.813805917920331,
+    'max_depth': 8, 'min_child_weight': 5, 'n_estimators': 127, 'reg_alpha': 0.538492486622712,
+    'reg_lambda': 0.37144751917622304, 'subsample': 0.01129889610694531}
+    """
+
+    # train the model with the best parameters:
+    model = XGBClassifier(n_estimators=127,
+                          max_depth=8,
+                          learning_rate=0.813805917920331,
+                          min_child_weight=5,
+                          gamma=0.5915603402393034,
+                          subsample=0.01129889610694531,
+                          colsample_bytree=0.4771911169038492,
+                          reg_alpha=0.538492486622712,
+                          reg_lambda=0.37144751917622304,
+                          objective="binary:logistic",
+                          random_state=42,
+                          n_jobs=-1)
+
+    # fit the model:
+    model.fit(X_train, y_train)
+
+    # predict:
+    y_predicted = model.predict(X_test)
+
+    # print the classification report and the f1 score:
+    print(classification_report(y_test, y_predicted))
+    print(f"Tuned base model has an f-score of: {f1_score(y_test, y_predicted):.3f}")
+    # 0.528

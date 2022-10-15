@@ -2,7 +2,7 @@
 
 from sklearn.model_selection import cross_val_score, train_test_split
 from sklearn.model_selection import RepeatedStratifiedKFold
-from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier
 from sklearn.metrics import f1_score
 from sklearn.metrics import make_scorer
 
@@ -21,10 +21,10 @@ if __name__ == '__main__':
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # define model:
-    model = RandomForestClassifier(n_estimators=500, random_state=42)
+    model = XGBClassifier(objective="binary:logistic", n_estimators=500, random_state=42)
 
     # define evaluation procedure:
-    cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42)
+    cv = RepeatedStratifiedKFold(n_splits=3, n_repeats=3, random_state=42)
 
     # define the model evaluation metric:
     metric = make_scorer(f1_score)
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     scores = cross_val_score(model, X_train, y_train, scoring=metric, cv=cv, n_jobs=-1)
 
     # print the score means and standard deviations:
-    print(f"Accuracy: {scores.mean():.3f}, standard deviation: {scores.std():.3f}")
+    print(f"f1 score: {scores.mean():.3f}, standard deviation: {scores.std():.3f}")
 
     # the base model already has a decent accuracy score.
 

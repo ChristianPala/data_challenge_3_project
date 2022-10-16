@@ -51,6 +51,7 @@ if __name__ == '__main__':
     # for the timeseries dataset remove the cancelling orders and save in a new file:
     # remove the cancelling orders:
     df = df[df['Quantity'] > 0]
+
     # clean the stock codes:
     df = stock_code_cleaner(df)
 

@@ -3,7 +3,7 @@ import pandas as pd
 from pathlib import Path
 
 from sklearn.metrics import classification_report, f1_score
-from sklearn.model_selection import train_test_split
+from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 from xgboost import XGBClassifier
 from tuning.xgboost_tuner import tuner
 
@@ -33,8 +33,7 @@ if __name__ == '__main__':
 
     # perform the train test split:
     X_train, X_test, y_train, y_test = \
-        train_test_split(df_ts.drop('CustomerChurned', axis=1),
-                         df_ts['CustomerChurned'], test_size=0.2, random_state=42)
+        train_validation_test_split(df_ts.drop('CustomerChurned', axis=1), df_ts['CustomerChurned'])
 
     # tune xgboost for time series data:
     best = tuner(X_train, y_train, X_test, y_test)

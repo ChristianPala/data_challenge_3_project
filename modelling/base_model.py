@@ -2,11 +2,12 @@
 import pandas as pd
 from tabulate import tabulate
 from xgboost import XGBClassifier
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, f1_score
 from pathlib import Path
 import matplotlib.pyplot as plt
 import matplotlib
+from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
+
 matplotlib.use('TkAgg')
 
 if __name__ == '__main__':
@@ -18,7 +19,7 @@ if __name__ == '__main__':
     y = df_agg['CustomerChurned']
 
     # train test split:
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_validation_test_split(X, y)
 
     # define the model:
     model = XGBClassifier(objective="binary:logistic", n_estimators=500, random_state=42)

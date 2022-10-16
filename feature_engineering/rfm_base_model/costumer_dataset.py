@@ -45,9 +45,9 @@ if __name__ == '__main__':
 
     # With the number of purchases and the total spent, we have a frequency and a monetary value.
     # Since we defined a churned customer as a customer who has not made a purchase after
-    # 2011-12-10 - timeframe, we will that as the reference date for the recency calculation:
+    # 2011-12-10 - timeframe, we will take that as the reference date for the recency calculation:
 
-    # exclude all invoice dates after the reference date - timeframe and compute receny:
+    # exclude all invoice dates after the reference date - timeframe and compute recency:
     df = df[pd.to_datetime(df['InvoiceDate']) <= churn_date]
     df['Recency'] = churn_date - pd.to_datetime(df['InvoiceDate'])
 

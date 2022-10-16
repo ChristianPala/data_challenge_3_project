@@ -77,18 +77,18 @@ if __name__ == '__main__':
     # cluster:
     df_clusters = pd.DataFrame(columns=['CustomerId', 'ClusterId', 'Description'])
 
-    for index, row in X_train.iterrows():
+    for row in X_train.itertuples():
         similarity = []
         # save all the similarity scores in a list
-        for index2, row2 in X_train.iterrows():
-            similarity.append(jaccard_similarity(row['Description'], row2['Description']))
+        for row2 in X_train.itertuples():
+            similarity.append(jaccard_similarity(row.Description, row2.Description))
         # find the indexes of the rows that have similarity score bigger than the similarity threshold
         indexes = [i for i, x in enumerate(similarity) if x >= similarity_threshold]
         # if there is more than one row with similarity score bigger than the threshold:
         if len(indexes) > 1:
             # add the row to the new data frame and the shared description to the cluster:
             df_clusters = pd.concat([df_clusters, pd.DataFrame(
-                [[row['CustomerId'], ','.join([str(X_train.iloc[i]['CustomerId']) for i in indexes])]],
+                [[row.CustomerId, ','.join([str(X_train.iloc[i]['CustomerId']) for i in indexes])]],
                 columns=['CustomerId', 'ClusterId'])], ignore_index=True)
 
     # for each cluster, compute the shared description:
@@ -118,10 +118,10 @@ if __name__ == '__main__':
     # for each cluster create a feature in the train dataset, that indicates if the customer is in the cluster:
     # for each cluster create a feature in the test dataset, that indicates if the customer is in the cluster,
     # the assignment is based on the jaccard similarity of the description of the customer and cluster:
-    for index, row in df_clusters.iterrows():
-        X_train['Cd_' + str(index)] = X_train['CustomerId'].apply(lambda x: 1 if x in row['ClusterId'] else 0)
-        X_test['Cd_' + str(index)] = X_test['Description']\
-            .apply(lambda x: 1 if jaccard_similarity(x, row['Description']) > similarity_threshold else 0)
+    for row in df_clusters.itertuples():
+        X_train['Cd_' + str(row.Index)] = X_train['CustomerId'].apply(lambda x: 1 if x in row.ClusterId else 0)
+        X_test['Cd_' + str(row.Index)] = X_test['Description']\
+            .apply(lambda x: 1 if jaccard_similarity(x, row.Description) > similarity_threshold else 0)
 
     # check the results:
     print_results(X_train, X_test)

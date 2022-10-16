@@ -1,5 +1,6 @@
 # Libraries:
 import pandas as pd
+from tabulate import tabulate
 from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, f1_score
@@ -13,7 +14,7 @@ if __name__ == '__main__':
     df_agg = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg.csv'))
 
     # select the features: number of purchases, total price spent, total quantity ordered and country:
-    X = df_agg[['NumberOfPurchases', 'TotalSpent', 'TotalQuantity', 'Country']]
+    X = df_agg[['Recency', 'NumberOfPurchases', 'TotalSpent', 'TotalQuantity', 'Country']]
     y = df_agg['CustomerChurned']
 
     # train test split:
@@ -30,7 +31,7 @@ if __name__ == '__main__':
 
     # evaluate:
     print(classification_report(y_test, y_pred))
-    print(f1_score(y_test, y_pred))
+    print(f"f-score for the base model: {f1_score(y_test, y_pred): .3f}")
 
     # visualize initial features importance:
     importance = pd.DataFrame({'feature': X_train.columns, 'importance': model.feature_importances_})
@@ -41,4 +42,8 @@ if __name__ == '__main__':
     plt.title('Random Forest Feature Importance')
     plt.xlabel('Feature')
     plt.ylabel('Importance')
-    plt.show()
+    # save the figure:
+    plt.savefig(Path('..', 'plots', 'feature_importance_RFM.png'))
+
+    # print the feature importance in a table:
+    print(tabulate(importance, headers='keys', tablefmt='psql'))

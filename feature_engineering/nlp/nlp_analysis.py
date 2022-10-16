@@ -25,5 +25,8 @@ if __name__ == '__main__':
     plt.ylabel('Customer count')
     plt.show()
 
-    # with 0.7 we get a good purity amongst clusters.
+    # with 0.7 as a threshold we have an average purity slightly better compared to
+    # the f-score of the RFM model (0.722 vs 0.7) so we may have better predictors
+    # in the test set where we can use the clusters to predict the target variable.
+
 

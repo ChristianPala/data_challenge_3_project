@@ -14,7 +14,7 @@ if __name__ == '__main__':
     df_agg = pd.read_csv('../data/online_sales_dataset_agg.csv')
 
     # select the features: number of purchases, total price spent, total quantity ordered and country:
-    X = df_agg[['NumberOfPurchases', 'TotalSpent', 'TotalQuantity', 'Country']]
+    X = df_agg[['Recency', 'NumberOfPurchases', 'TotalSpent', 'TotalQuantity', 'Country']]
     y = df_agg['CustomerChurned']
 
     # split the dataset into train and test with the usual seed:
@@ -35,5 +35,5 @@ if __name__ == '__main__':
     # print the score means and standard deviations:
     print(f"f1 score: {scores.mean():.3f}, standard deviation: {scores.std():.3f}")
 
-    # the base model already has a decent accuracy score.
+    # the base model already has a decent accuracy score and it's quite stable.
 

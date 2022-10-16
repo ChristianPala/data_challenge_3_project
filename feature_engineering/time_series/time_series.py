@@ -17,16 +17,11 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-# TIME SERIES FEATURE EXTRACTION --------------------------------------------------------------
-def feature_extractor(df, cfg, customer):
-    # now we can perform a lookup on a 'view' of the dataframe
+def feature_extractor(data, features, customer):
     # customers dataframes
-    this_personDF = df.loc[df.CustomerId == customer]
-    # this_personDF.to_csv(Path('..', '..', 'data', 'customers', f'c-{customers.index(customer)}.csv'), index=False)
-    # print(customers.index(customer))
-
+    this_personDF = data.loc[data.CustomerId == customer]
     # returns ONE row for each the customer
-    features_data = tsfel.time_series_features_extractor(cfg, this_personDF, verbose=0)
+    features_data = tsfel.time_series_features_extractor(features, this_personDF, verbose=0)
     return features_data
 
 
@@ -45,18 +40,9 @@ if __name__ == '__main__':
     is_multi = df['CustomerId'].value_counts() > 1
     df = df[df['CustomerId'].isin(is_multi[is_multi].index)]
 
-    # print(df.info())
-    # print(df.head())
-
     cfg = tsfel.get_features_by_domain(json_path='features_mod.json')  # modified the json so that it doesnt calculate
     # LPCC (cause it gives errors due to too few rows in certain dataframes)
 
-    # Extract features
-    # running this will give you a warning on line 300 of calc_features.py, you might want to change
-    # the line with this: features_final = pd.concat([features_final, feat]), or just comment the original and use this
-
-    # perform feature extraction on slices of the dataframe for every customer id,
-    # saving all the data for that customer (invoice date, invoice code, etc.)
     # sort the dataframe
     df.sort_values(by='CustomerId', axis=0, inplace=True)
     # set the index to be this and don't drop
@@ -64,7 +50,6 @@ if __name__ == '__main__':
     # get a list of customers
     customers = df['CustomerId'].unique().tolist()
 
-    # print(customers)
     print('> execution started')
 
     # execute the feature extraction in parallel

@@ -2,7 +2,7 @@
 
 [DONE] trasformare tutti stock code con le lettere a integers (semplicemente togliere la lettera dallo stock code
 
-[DONE: (df.dropna())] se ci sono stock code che non hanno mai nessuna descrizione:
+[DONE]: (df.dropna())] se ci sono stock code che non hanno mai nessuna descrizione:
             - droppiamo direttamente la row,
             oppure
             - lasciamo la descrizione vuota se decidiamo che non è importante
@@ -28,3 +28,10 @@ mettilo in questa path: <your install dir>/anaconda3/envs/<your env name>/lib/py
                                       pass```
 
 also, ci mette una vita a fare il feature extraction per ogni customer...
+
+[Done]: modding copiato.
+
+todo:
+- Graph feature extraction, working on pagerank, consider other graph features
+- NLP performance improvement
+- Time series explore which features were extracted automatically.

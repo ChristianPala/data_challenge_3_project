@@ -1,6 +1,5 @@
 # Libraries:
 import pandas as pd
-import numpy as np
 
 
 # Functions:
@@ -25,7 +24,7 @@ def missing_description_imputer(df: pd.DataFrame) -> pd.DataFrame:
 def stock_code_cleaner(df: pd.DataFrame) -> pd.DataFrame:
     """
     Removes trailing letters from the stock code, used to perform the timeseries analysis
-    :param df: dataframe already preprocessed with stock_code_remover() function
+    @param df: dataframe already preprocessed with stock_code_remover() function
     :return: cleaned dataframe, containing integer-only stock codes
     """
     # if a stock code has non numeric characters, remove them:
@@ -54,7 +53,7 @@ def customer_remover(df: pd.DataFrame) -> pd.DataFrame:
 def stock_code_remover(df: pd.DataFrame) -> pd.DataFrame:
     """
     Removes the stock codes of postage, sample, test and other non product stock items.
-    :param df: dataframe with the stock codes.
+    @param df: dataframe with the stock codes.
     :return: dataframe with the irrelevant stock codes removed.
     """
     # delete all bad debt, carriage, manual, postage, sample and test stock ids:
@@ -67,7 +66,7 @@ def stock_code_remover(df: pd.DataFrame) -> pd.DataFrame:
 def cancelling_order_remover(df: pd.DataFrame) -> pd.DataFrame:
     """
     removes all cancelling orders from the dataset.
-    :param df: dataframe with the cancelling orders.
+    @param df: dataframe with the cancelling orders.
     :return: dataframe with the cancelling orders removed.
     """
     # remove all the cancelling orders:

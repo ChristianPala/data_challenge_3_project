@@ -13,6 +13,9 @@ if __name__ == '__main__':
     # set some thresholds:
     thresholds = np.arange(0, 730, 30)
 
+    # add a year for significance to the ndarray:
+    thresholds = np.append(thresholds, 365)
+
     # cast LastPurchase to datetime:
     df['LastPurchase'] = df.groupby('CustomerId')['InvoiceDate'].transform('max')
     df['LastPurchase'] = pd.to_datetime(df['LastPurchase'])
@@ -24,5 +27,5 @@ if __name__ == '__main__':
         print(f'For a hard threshold of {threshold} days from the end of the dataset, '
               f'{churned} customers would have churned.')
 
-    # starting with considering churning costumers those that did not purchase anything in
-    # the last year seems reasonable.
+    # Considering as churners all customers that have not made a purchase in the last 365 days,
+    # seems like a reasonable threshold. We will use this as a hard threshold for the churned customers.

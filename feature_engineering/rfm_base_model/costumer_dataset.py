@@ -9,7 +9,7 @@ from preprocessing.data_imputation import cancelling_order_remover
 # Driver:
 if __name__ == '__main__':
     # import the cleaned dataset:
-    df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_for_aggregation.csv'))
+    df = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_for_aggregation.csv'))
 
     # create the aggregated costumer dataset for quantities, rename to TotalQuantity:
     df_agg = df.groupby('CustomerId').agg({'Quantity': 'sum'}).rename(columns={'Quantity': 'TotalQuantity'})
@@ -64,10 +64,10 @@ if __name__ == '__main__':
     print(f'Number of customers: {df_agg.shape[0]}')
 
     # save the dataset:
-    df_agg.to_csv(Path('..', 'data', 'online_sales_dataset_agg.csv'))
+    df_agg.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
 
     # save the churned costumers in a separate dataset:
-    df_agg[df_agg['CustomerChurned']]['CustomerChurned'].to_csv(Path('..', 'data',
+    df_agg[df_agg['CustomerChurned']]['CustomerChurned'].to_csv(Path('..', '..', 'data',
                                                                      'online_sales_dataset_agg_churned.csv'))
 
     # check for missing values:

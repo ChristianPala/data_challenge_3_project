@@ -12,11 +12,17 @@ from tuning.xgboost_tuner import tuner
 
 # Functions:
 if __name__ == '__main__':
-    # read the page rank dataset:
+    # read the pagerank dataset:
     X = pd.read_csv(Path('..', 'data', 'customer_pagerank.csv'))
 
-    # drop the unnamed column:
-    X.drop(columns=['Unnamed: 0'], inplace=True)
+    # read the deepwalk dataset:
+    X_deepwalk = pd.read_csv(Path('..', 'data', 'customer_deepwalk_embeddings.csv'))
+
+    # merge the datasets on CustomerId:
+    X = X.merge(X_deepwalk, on='CustomerId')
+
+    # remove the customer id column:
+    X.drop('CustomerId', axis=1, inplace=True)
 
     # get the target from the aggregated dataset:
     y = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg.csv'))['CustomerChurned']
@@ -29,7 +35,7 @@ if __name__ == '__main__':
     X_train, X_test, y_train, y_test = train_validation_test_split(X, y)
 
     # tune the model with bayesian optimization:
-    best_parameters = tuner(X_train, y_train, X_test, y_test, max_evaluations=1000, early_stopping=30)
+    best_parameters = tuner(X_train, y_train, X_test, y_test)
 
     # print the best parameters:
     print('Best parameters:')
@@ -54,4 +60,3 @@ if __name__ == '__main__':
     importance.sort_values(by='importance', ascending=False, inplace=True)
     # print the feature importance with tabulate:
     print(tabulate.tabulate(importance, headers='keys', tablefmt='psql'))
-

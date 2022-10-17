@@ -6,6 +6,7 @@
 import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
+from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 
 # networkx
 import networkx as nx
@@ -13,28 +14,31 @@ import networkx as nx
 if __name__ == '__main__':
     # import the feature engineering dataset:
     df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
-    df_agg_ids = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))['CustomerId']
+    df_c = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
 
     # remove ids in df not in df_agg_ids due to aggregated cancelling order possible mismatches:
-    df = df[df['CustomerId'].isin(df_agg_ids)]
+    df = df[df['CustomerId'].isin(df_c['CustomerId'])]
 
     # create a column with the future weights of the graph, round to 2 decimals:
     df['Weight'] = (df['Quantity'] * df['Price']).round(2)
 
+    # create the target:
+    y = df_c['CustomerChurned']
+
     # Create a graph:
     G = nx.DiGraph()
 
-    # Create a node of each unique customer:
-    nodes = df['CustomerId'].unique()
-
-    # Add the nodes:
-    G.add_nodes_from(nodes)
-
     # aggregate the dataset by customerId, save the stock codes as a list, the weights as a tuple of
     # stock code and weight:
-    df_agg = df.groupby('CustomerId')\
-        .agg({'StockCode': lambda x: list(x),
-              'Weight': lambda x: list(zip(df.loc[x.index, 'StockCode'], x))})
+    df_agg = df.groupby('CustomerId').agg({'StockCode': lambda x: list(x),
+                                           'Weight': lambda x: list(zip(df.loc[x.index, 'StockCode'], x))})
+
+    # todo: ask if this is the best way to do this:
+    # split into train and test:
+    # dg_agg_train, df_agg_test, _, _ = train_validation_test_split(df_agg, y)
+
+    # Add the nodes:s
+    G.add_nodes_from(df_agg.index)
 
     # add an edge to the graph if the stock code is in the list of stock codes of the other customer,
     # the weight of the edge is the sum of the weights of the pzsroducts that the two customers have

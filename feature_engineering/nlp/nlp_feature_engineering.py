@@ -5,6 +5,7 @@ from pathlib import Path
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
+from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 
 # global variables:
 similarity_threshold = 0.7

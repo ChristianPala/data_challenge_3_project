@@ -31,11 +31,11 @@ if __name__ == '__main__':
     X = pd.concat([X, pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg.csv'))
     [['NumberOfPurchases', 'TotalSpent', 'TotalQuantity', 'Country', 'Recency']]], axis=1)
 
-    # train test split:
-    X_train, X_test, y_train, y_test = train_validation_test_split(X, y)
+    # train validation test split:
+    X_train, X_validation, X_test, y_train, y_validation, y_test = train_validation_test_split(X, y, validation=True)
 
     # tune the model with bayesian optimization:
-    best_parameters = tuner(X_train, y_train, X_test, y_test)
+    best_parameters = tuner(X_train, y_train, X_validation, y_validation, cross_validation=5)
 
     # print the best parameters:
     print('Best parameters:')

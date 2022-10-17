@@ -2,7 +2,6 @@
 # data manipulation:
 import pandas as pd
 from pathlib import Path
-import pickle
 import tabulate
 # modelling:
 from sklearn.metrics import f1_score, classification_report
@@ -20,10 +19,10 @@ if __name__ == '__main__':
     y = df_agg['CustomerChurned']
 
     # train test split:
-    X_train, X_test, y_train, y_test = train_validation_test_split(X, y)
+    X_train, X_val, X_test, y_train, y_val, y_test = train_validation_test_split(X, y, validation=True)
 
     # tune the model with bayesian optimization:
-    best_parameters = tuner(X_train, y_train, X_test, y_test)
+    best_parameters = tuner(X_train, y_train, X_val, y_val, cross_validation=5)
 
     # print the best parameters:
     print('Best parameters:')

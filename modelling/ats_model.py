@@ -27,16 +27,19 @@ if __name__ == '__main__':
     # df_ts["TotalSpent"] = df_agg["TotalSpent"]
     # df_ts["TotalQuantity"] = df_agg["TotalQuantity"]
     # df_ts["Country"] = df_agg["Country"]
+    # df_ts["Recency"] = df_agg["Recency"]
 
     # add the target variable:
     df_ts["CustomerChurned"] = df_agg["CustomerChurned"]
 
     # perform the train test split:
-    X_train, X_test, y_train, y_test = \
-        train_validation_test_split(df_ts.drop('CustomerChurned', axis=1), df_ts['CustomerChurned'])
+    X_train, X_test, X_validation, y_validation, y_train, y_test = \
+        train_validation_test_split(df_ts.drop('CustomerChurned', axis=1), df_ts['CustomerChurned'], validation=True)
 
     # tune xgboost for time series data:
-    best = tuner(X_train, y_train, X_test, y_test)
+    best = tuner(X_train, y_train, X_validation, y_validation, cross_validation=5)
+    print('Best parameters:')
+    print(best)
 
     # define the model:
     model = XGBClassifier(**best, objective="binary:logistic", random_state=42, n_jobs=-1)

@@ -1,7 +1,8 @@
 # Libraries:
 import pandas as pd
 from pathlib import Path
-from data_imputation import customer_remover, missing_description_imputer, stock_code_remover, stock_code_cleaner
+from data_imputation import customer_remover, missing_description_imputer, \
+    stock_code_remover, stock_code_cleaner, parallelized_cancelling_order_imputer
 from data_loading import load_and_save_data
 
 # Driver code:
@@ -26,6 +27,18 @@ if __name__ == '__main__':
     # fix the date
     df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%d/%m/%Y %H:%M')
 
+    # sort the dataset by customer ID and date:
+    df.sort_values(by=['Customer ID', 'InvoiceDate'], inplace=True)
+
+    # rename Customer ID to CustomerId for consistency:
+    df.rename(columns={'Customer ID': 'CustomerId'}, inplace=True)
+
+    # impute the cancelling orders:
+    df = parallelized_cancelling_order_imputer(df)
+
+    # clean the stock codes to remove product variants:
+    df = stock_code_cleaner(df)
+
     # Replace the comma with a dot in the price column:
     df['Price'] = df['Price'].str.replace(',', '.')
     # Cast the price column to float:
@@ -35,28 +48,12 @@ if __name__ == '__main__':
     df['Country'] = df['Country'].astype('category')
     df['Country'] = df['Country'].cat.codes
 
-    # sort the dataset by customer ID and date:
-    df.sort_values(by=['Customer ID', 'InvoiceDate'], inplace=True)
-
-    # rename Customer ID to CustomerId for consistency:
-    df.rename(columns={'Customer ID': 'CustomerId'}, inplace=True)
+    # Cast the CustomerId column to int:
+    df['CustomerId'] = df['CustomerId'].astype(int)
 
     # check that no missing values are left:
     print("Missing values:")
     print(f"{df.isna().sum()}")
-
-    # save the dataset:
-    df.to_csv(Path("..", "data", "online_sales_dataset_for_aggregation.csv"), index=False)
-
-    # for the timeseries dataset remove the cancelling orders and save in a new file:
-    # remove the cancelling orders:
-    df = df[df['Quantity'] > 0]
-
-    # clean the stock codes:
-    df = stock_code_cleaner(df)
-
-    # cast all stock codes to int:
-    df['StockCode'] = df['StockCode'].astype(int)
 
     # save the dataset:
     df.to_csv(Path("..", "data", "online_sales_dataset_for_fe.csv"), index=False)
@@ -68,5 +65,3 @@ if __name__ == '__main__':
     print(f"Number of unique products: {df['StockCode'].unique().size}")
     print(f"Number of unique descriptions: {df['Description'].unique().size}")
     print(f"Number of unique countries: {df['Country'].unique().size}")
-
-

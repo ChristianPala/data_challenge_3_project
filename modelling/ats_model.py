@@ -1,15 +1,14 @@
 # Libraries:
+# Data manipulation:
 import pandas as pd
 from pathlib import Path
 
-from sklearn.metrics import classification_report, f1_score
+# Modelling:
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 from xgboost import XGBClassifier
 from tuning.xgboost_tuner import tuner
+from reporting.classifier_report import report_model_results
 
-from tabulate import tabulate
-import matplotlib
-matplotlib.use('TkAgg')
 
 if __name__ == '__main__':
     # import the  tsfel dataset:
@@ -38,8 +37,6 @@ if __name__ == '__main__':
 
     # tune xgboost for time series data:
     best = tuner(X_train, y_train, X_validation, y_validation, cross_validation=5)
-    print('Best parameters:')
-    print(best)
 
     # define the model:
     model = XGBClassifier(**best, objective="binary:logistic", random_state=42, n_jobs=-1)
@@ -51,16 +48,4 @@ if __name__ == '__main__':
     y_pred = model.predict(X_test)
 
     # evaluate:
-    print(classification_report(y_test, y_pred))
-    print(f"The f1 score of the time series model is : {f1_score(y_test, y_pred):.3f}")
-
-    # print feature importance:
-    importance = pd.DataFrame({'feature': X_train.columns, 'importance': model.feature_importances_})
-    # sort by importance:
-    importance.sort_values(by='importance', ascending=False, inplace=True)
-
-    # print the feature importance in a table:
-    print(tabulate(importance, headers='keys', tablefmt='psql'))
-
-    # save the feature importance in a csv file:
-    importance.to_csv(Path('..', 'data', 'feature_importance_ts.csv'), index=False)
+    report_model_results(model, X_train, y_test, y_pred, "Time series enriched RFM model", save=True)

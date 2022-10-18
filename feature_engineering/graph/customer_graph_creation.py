@@ -16,9 +16,6 @@ if __name__ == '__main__':
     df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
     df_c = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
 
-    # remove ids in df not in df_agg_ids due to aggregated cancelling order possible mismatches:
-    df = df[df['CustomerId'].isin(df_c['CustomerId'])]
-
     # create a column with the future weights of the graph, round to 2 decimals:
     df['Weight'] = (df['Quantity'] * df['Price']).round(2)
 
@@ -31,19 +28,21 @@ if __name__ == '__main__':
     # aggregate the dataset by customerId, save the stock codes as a list, the weights as a tuple of
     # stock code and weight:
     df_agg = df.groupby('CustomerId').agg({'StockCode': lambda x: list(x),
-                                           'Weight': lambda x: list(zip(df.loc[x.index, 'StockCode'], x))})
+                                           'Weight': lambda x: list(zip(df.loc[x.index, 'StockCode'], x)),
+                                           'Country': lambda x: x.value_counts().index[0]})
 
     # todo: ask if this is the best way to do this:
     # split into train and test:
-    # dg_agg_train, df_agg_test, _, _ = train_validation_test_split(df_agg, y)
+    df_agg_train, df_agg_test, _, _ = train_validation_test_split(df_agg, y)
 
-    # Add the nodes:s
-    G.add_nodes_from(df_agg.index)
+    df_agg = df_agg_train
+
+    # Add the nodes customer ids as nodes, the country as attribute
+    G.add_nodes_from(df_agg.index, country=df_agg['Country'])
 
     # add an edge to the graph if the stock code is in the list of stock codes of the other customer,
     # the weight of the edge is the sum of the weights of the pzsroducts that the two customers have
     # in common, add tdqm to show progress:
-
     for i in tqdm(range(len(df_agg))):
         for j in range(len(df_agg)):
             if i != j:
@@ -66,5 +65,5 @@ if __name__ == '__main__':
                     G.add_edge(df_agg.index[j], df_agg.index[i], weight=sum(weights_j))
 
     # save the graph:
-    nx.write_gpickle(G, Path('saved_graphs', 'customer_graph.gpickle'))
+    nx.write_gpickle(G, Path('saved_graphs', 'customer_graph_train.gpickle'))
 

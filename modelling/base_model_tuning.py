@@ -2,12 +2,13 @@
 # data manipulation:
 import pandas as pd
 from pathlib import Path
-import tabulate
+
 # modelling:
-from sklearn.metrics import f1_score, classification_report
 from xgboost import XGBClassifier
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 from tuning.xgboost_tuner import tuner
+from reporting.classifier_report import report_model_results
+
 
 # Functions:
 if __name__ == '__main__':
@@ -37,13 +38,5 @@ if __name__ == '__main__':
     # predict:
     y_predicted = model.predict(X_test)
 
-    # print the classification report and the f1 score:
-    print(classification_report(y_test, y_predicted))
-    print(f"Tuned base model has an f-score of: {f1_score(y_test, y_predicted):.3f}")
-
-    # print the feature importance:
-    importance = pd.DataFrame({'feature': X_train.columns, 'importance': model.feature_importances_})
-    # sort by importance:
-    importance.sort_values(by='importance', ascending=False, inplace=True)
-    # print the feature importance with tabulate:
-    print(tabulate.tabulate(importance, headers='keys', tablefmt='psql'))
+    # report the results:
+    report_model_results(model, X_train, X_test, y_test, y_predicted, "Tuned RFM model", save=True)

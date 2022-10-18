@@ -3,13 +3,11 @@
 import pandas as pd
 from pathlib import Path
 from datetime import datetime, timedelta
-from preprocessing.data_imputation import cancelling_order_remover
-
 
 # Driver:
 if __name__ == '__main__':
     # import the cleaned dataset:
-    df = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_for_aggregation.csv'))
+    df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
 
     # create the aggregated costumer dataset for quantities, rename to TotalQuantity:
     df_agg = df.groupby('CustomerId').agg({'Quantity': 'sum'}).rename(columns={'Quantity': 'TotalQuantity'})
@@ -23,10 +21,6 @@ if __name__ == '__main__':
     df_agg['TotalSpent'] = df_agg['TotalSpent'].round(2)
     # if the total spent is smaller or equal to 0, delete the customer:
     df_agg = df_agg[df_agg['TotalSpent'] > 0]
-
-    # now that we have corrected the cancellation orders on a customer ID level, we can aggregate on the
-    # rest of the dataset after dropping those rows:
-    df = cancelling_order_remover(df)
 
     # aggregate the other columns:
     df_agg[['NumberOfPurchases', 'Description', 'LastPurchase', 'Country']] = \

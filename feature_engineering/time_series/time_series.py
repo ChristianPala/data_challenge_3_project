@@ -1,18 +1,11 @@
 # libraries
-import time
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 import pandas as pd
 import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
-import matplotlib
 import tsfel
 from tqdm import tqdm
 import warnings
-
-# matplotlib.use('tkagg')
-
 # suppress warnings
 warnings.filterwarnings("ignore")
 

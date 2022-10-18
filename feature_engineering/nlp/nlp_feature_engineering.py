@@ -3,8 +3,6 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from pathlib import Path
 import pandas as pd
-from sklearn.model_selection import train_test_split
-
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 
 # global variables:
@@ -20,8 +18,6 @@ def jaccard_similarity(set1: set, set2: set) -> float:
     :return: Jaccard index.
     """
     return len(set1.intersection(set2)) / len(set1.union(set2))
-
-
 
 
 def print_results(training_set: pd.DataFrame, testing_set: pd.DataFrame) -> None:
@@ -48,6 +44,9 @@ if __name__ == '__main__':
     # import the aggregated dataset:
     df_agg = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
 
+    # tokenize the description column in parallel:
+    df_agg['Description'] = df_agg['Description'].parallel_apply(lambda x: word_tokenize(x))
+
     # tokenize the description column:
     df_agg['Description'] = df_agg['Description'].apply(word_tokenize)
 
@@ -62,7 +61,7 @@ if __name__ == '__main__':
     # split the data set, note should stay consistent with all other splits!
     X_train, X_test, y_train, y_test = train_validation_test_split(df_agg.drop('CustomerChurned', axis=1),
                                                                    df_agg['CustomerChurned'])
-    # cluster:
+    # cluster on the training set:
     df_clusters = pd.DataFrame(columns=['CustomerId', 'ClusterId', 'Description'])
 
     for row in X_train.itertuples():
@@ -121,4 +120,4 @@ if __name__ == '__main__':
     y_train.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_train_labels.csv'), index=False)
     y_test.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_test_labels.csv'), index=False)
 
-    # The clustering does not affect a large number of customers.
+    # Unfortunately the clustering does not affect a large number of customers.

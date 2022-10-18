@@ -46,7 +46,7 @@ def objective(space, x_train: pd.DataFrame, y_train: pd.DataFrame, x_test: pd.Da
     metric = make_scorer(f1_score)
 
     # evaluate the model:
-    f1 = cross_val_score(model, X, y, scoring=metric, cv=cv).mean()
+    f1 = cross_val_score(model, X, y, scoring=metric, cv=cv, n_jobs=-1).mean()
 
     # return the loss, 1 - f1 score since we want to maximize the f1 score:
     return {'loss': 1-f1, 'status': STATUS_OK}

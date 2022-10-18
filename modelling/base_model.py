@@ -1,14 +1,13 @@
 # Libraries:
+# Data manipulation:
 import pandas as pd
-from tabulate import tabulate
-from xgboost import XGBClassifier
-from sklearn.metrics import classification_report, f1_score
-from pathlib import Path
-import matplotlib.pyplot as plt
-import matplotlib
-from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 
-matplotlib.use('TkAgg')
+# Modelling:
+from xgboost import XGBClassifier
+from pathlib import Path
+from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
+from reporting.classifier_report import report_model_results
+
 
 if __name__ == '__main__':
     # read the aggregated dataset:
@@ -30,21 +29,8 @@ if __name__ == '__main__':
     # predict:
     y_pred = model.predict(X_test)
 
-    # evaluate:
-    print(classification_report(y_test, y_pred))
-    print(f"f-score for the base model: {f1_score(y_test, y_pred): .3f}")
+    # report the results:
+    report_model_results(model, X_train, X_test, y_test, y_pred, "Base model", save=True)
 
-    # visualize initial features importance:
-    importance = pd.DataFrame({'feature': X_train.columns, 'importance': model.feature_importances_})
-    # sort by importance:
-    importance.sort_values(by='importance', ascending=False, inplace=True)
-    plt.figure(figsize=(10, 6))
-    plt.bar(importance['feature'], importance['importance'])
-    plt.title('Random Forest Feature Importance')
-    plt.xlabel('Feature')
-    plt.ylabel('Importance')
-    # save the figure:
-    plt.savefig(Path('..', 'plots', 'feature_importance_RFM.png'))
 
-    # print the feature importance in a table:
-    print(tabulate(importance, headers='keys', tablefmt='psql'))
+

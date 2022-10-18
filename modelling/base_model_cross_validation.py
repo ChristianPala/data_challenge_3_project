@@ -27,7 +27,7 @@ if __name__ == '__main__':
     model = XGBClassifier(objective="binary:logistic", n_estimators=500, random_state=42)
 
     # define evaluation procedure:
-    cv = RepeatedStratifiedKFold(n_splits=3, n_repeats=3, random_state=42)
+    cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=10, random_state=42)
 
     # define the model evaluation metric:
     metric = make_scorer(f1_score)

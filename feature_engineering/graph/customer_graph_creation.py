@@ -11,31 +11,32 @@ from modelling.data_splitting.train_val_test_splitter import train_validation_te
 # networkx
 import networkx as nx
 
+
 if __name__ == '__main__':
     # import the feature engineering dataset:
     df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
-    df_c = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
+
+    # import the target labels:
+    y = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))['CustomerChurned']
 
     # create a column with the future weights of the graph, round to 2 decimals:
     df['Weight'] = (df['Quantity'] * df['Price']).round(2)
-
-    # create the target:
-    y = df_c['CustomerChurned']
 
     # Create a graph:
     G = nx.DiGraph()
 
     # aggregate the dataset by customerId, save the stock codes as a list, the weights as a tuple of
     # stock code and weight:
+
     df_agg = df.groupby('CustomerId').agg({'StockCode': lambda x: list(x),
                                            'Weight': lambda x: list(zip(df.loc[x.index, 'StockCode'], x)),
                                            'Country': lambda x: x.value_counts().index[0]})
-
     # todo: ask if this is the best way to do this:
-    # split into train and test:
-    df_agg_train, df_agg_test, _, _ = train_validation_test_split(df_agg, y)
+    # split into train, validation and test:
+    X_train, X_val, X_test, y_train, y_val, y_test = train_validation_test_split(df_agg, y, validation=True)
 
-    df_agg = df_agg_train
+    # create the graph:
+    df_agg = X_test
 
     # Add the nodes customer ids as nodes, the country as attribute
     G.add_nodes_from(df_agg.index, country=df_agg['Country'])
@@ -60,10 +61,9 @@ if __name__ == '__main__':
                     # get the weights of the common stock codes for each customer:
                     weights_i = [weight for stock_code, weight in weights_i if stock_code in common_stock_codes]
                     weights_j = [weight for stock_code, weight in weights_j if stock_code in common_stock_codes]
-                    # add the edges:
+                    # add the edges:de
                     G.add_edge(df_agg.index[i], df_agg.index[j], weight=sum(weights_i))
                     G.add_edge(df_agg.index[j], df_agg.index[i], weight=sum(weights_j))
 
     # save the graph:
-    nx.write_gpickle(G, Path('saved_graphs', 'customer_graph_train.gpickle'))
-
+    nx.write_gpickle(G, Path('saved_graphs', 'customer_graph_test.gpickle'))

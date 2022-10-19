@@ -11,7 +11,7 @@ def train_validation_test_split(features: pd.DataFrame, y: pd.Series, validation
     @param features: features.
     @param y: target.
     @param validation: bool: whether to split the data into training, validation and test sets.
-    :return: tuple containing the three sets.
+    :return: tuple containing the two or three sets.
     """
 
     # in case we want to add validation set:

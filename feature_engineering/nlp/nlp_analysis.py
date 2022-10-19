@@ -7,7 +7,7 @@ matplotlib.use('TkAgg')
 
 if __name__ == '__main__':
 
-    similarity_threshold = 0.7
+    similarity_threshold = 0.8
 
     # read the dataset:
     df = pd.read_csv(Path('..', '..', 'data', f'online_sales_dataset_clusters_{similarity_threshold}.csv'))
@@ -25,8 +25,7 @@ if __name__ == '__main__':
     plt.ylabel('Customer count')
     plt.show()
 
-    # with 0.7 as a threshold we have an average purity slightly better compared to
-    # the f-score of the RFM model (0.722 vs 0.7) so we may have better predictors
-    # in the test set where we can use the clusters to predict the target variable.
+    # unfortunately either the clusters are too small or the purity is very low, it's unlikely
+    # we will be able to use the clustering to improve the model.
 
 

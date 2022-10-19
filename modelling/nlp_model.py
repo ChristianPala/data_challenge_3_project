@@ -5,8 +5,10 @@ import pandas as pd
 
 # modelling:
 from xgboost import XGBClassifier
+from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 from tuning.xgboost_tuner import tuner
 from reporting.classifier_report import report_model_results
+from sklearn.metrics import f1_score
 
 if __name__ == '__main__':
 
@@ -22,15 +24,16 @@ if __name__ == '__main__':
     X_train.drop(['CustomerId', 'Description'], axis=1, inplace=True)
     X_test.drop(['CustomerId', 'Description', ], axis=1, inplace=True)
 
-    # todo: should we drop the clusters with no matches in the test set?
+    # split the train set into train and validation sets:
+    X_train, X_val, y_train, y_val = train_validation_test_split(X_train, y_train)
 
     # tune xgboost for the base plus nlp data:
-    best_params = tuner(X_train, y_train, X_test, y_test, max_evaluations=1000, cross_validation=5)
-    """
-    {'colsample_bytree': 0.3278595548390614, 'gamma': 0.548702557753846, 'learning_rate': 0.6506709414891841,
-     'max_depth': 1, 'min_child_weight': 3, 'n_estimators': 609, 'reg_alpha': 0.8301138158484043,
-     'reg_lambda': 0.2118779348144419, 'subsample': 0.19379912149955214}
-    """
+    # best_params = tuner(X_train, y_train, X_val, y_val, cross_validation=5)
+    # saved an instance to avoid re-running the tuning:
+
+    best_params = {'colsample_bytree': 0.8643399558254448, 'gamma': 0.11916403406850484,
+                   'learning_rate': 0.011208512864416056, 'max_depth': 1, 'min_child_weight': 6, 'n_estimators': 583,
+                   'reg_alpha': 0.10000953068501083, 'reg_lambda': 0.6175769686746342, 'subsample': 0.4390968706966535}
 
     print("The best parameters are: ")
     print(best_params)
@@ -45,4 +48,7 @@ if __name__ == '__main__':
     y_predicted = model.predict(X_test)
 
     # report the results:
-    report_model_results(model, X_train, y_test, y_predicted, "NLP enriched RFM model", save=True)
+    report_model_results(model, X_train, X_test, y_test, y_predicted, "NLP enriched RFM model", save=True)
+    """
+    f-score for the NLP enriched RFM model:  0.750
+    """

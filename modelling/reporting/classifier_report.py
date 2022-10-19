@@ -34,7 +34,7 @@ def report_model_results(model: XGBClassifier, x_train: pd.DataFrame, x_test: pd
     """
     # evaluate:
     print(classification_report(y_test, y_predicted))
-    print(f"f-score for the base model: {f1_score(y_test, y_predicted): .3f}")
+    print(f"f-score for the {model_name}: {f1_score(y_test, y_predicted): .3f}")
 
     # visualize initial features importance:
     importance = pd.DataFrame({'feature': x_train.columns, 'importance': model.feature_importances_})

@@ -9,6 +9,21 @@ missing_counter = 0
 
 
 # Functions:
+
+def sort_by_date_given_reference(df: pd.DataFrame, reference_date) -> pd.DataFrame:
+    """
+    Auxiliary function for cancelling_order_imputer() to sort the dataframe by the date given a reference date.
+    @param df: the dataframe to be sorted.
+    @param reference_date: the reference date to sort the dataframe by.
+    :return: the sorted dataframe.
+    """
+
+    df['DateDiff'] = abs(df['InvoiceDate'] - reference_date)
+    df.sort_values(by=['DateDiff'], inplace=True)
+    df.drop(columns=['DateDiff'], inplace=True)
+    return df
+
+
 def missing_description_imputer(df: pd.DataFrame) -> pd.DataFrame:
     """
     Imputes the missing descriptions in the dataset, which can be recovered with the stock code.
@@ -88,13 +103,16 @@ def cancelling_order_imputer(df: pd.DataFrame) -> pd.DataFrame:
                                  & ((df['InvoiceDate'].dt.date == row.InvoiceDate.date() + pd.Timedelta(days=1))
                                     | (df['InvoiceDate'].dt.date == row.InvoiceDate.date())
                                     | (df['InvoiceDate'].dt.date == row.InvoiceDate.date() - pd.Timedelta(days=1)))
-                                 & (df['StockCode'] == row.StockCode)]
+                                 & (df['StockCode'] == row.StockCode)].copy()
             # check if the positive order exists:
             if original_orders.empty:
                 # if no positive order exists, remove the cancelling order:
                 missing_counter += 1
                 df.drop(row.Index, inplace=True)
                 continue
+
+            # sort the original orders by the cancellation date:
+            original_orders = sort_by_date_given_reference(original_orders, row.InvoiceDate)
 
             for order in original_orders.itertuples():
                 # if the positive order exists, and the quantity is greater than the cancelling order,
@@ -157,5 +175,40 @@ def parallelized_cancelling_order_imputer(df: pd.DataFrame) -> pd.DataFrame:
 
     print(f"Missing positive orders: {missing_counter}")
     print("Recovered cancelling orders: ", cancelling_orders - missing_counter)
+
+    return df
+
+
+def price_imputer(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Imputes prices incorrectly set to 0.
+    @param df: dataframe to impute
+    :return: dataframe with the prices imputed.
+    """
+
+    # Replace the comma with a dot in the price column:
+    df['Price'] = df['Price'].str.replace(',', '.')
+    # Cast the price column to float:
+    df['Price'] = df['Price'].astype(float)
+    # Round the price column to 2 decimals:
+    df['Price'] = df['Price'].round(2)
+
+    # get rows with price 0 or lower:
+    zero_price_rows = df[df['Price'] <= 0.00]
+    # check if there are rows with the same stock code, but different prices:
+    for row in zero_price_rows.itertuples():
+        # get all the rows with the same stock code:
+        same_stock_code_rows = df[df['StockCode'] == row.StockCode]
+        # get the unique prices of the rows with the same stock code:
+        unique_prices = same_stock_code_rows['Price'].unique()
+        # if there is only one unique price, impute the price of the row with the unique price:
+        if len(unique_prices) == 1:
+            df.at[row.Index, 'Price'] = unique_prices[0]
+        # if there are multiple unique prices, impute the price of the row with the median price:
+        else:
+            df.at[row.Index, 'Price'] = same_stock_code_rows['Price'].median()
+
+    # if the price is still 0 or lower, delete the row:
+    df = df[df['Price'] > 0.00]
 
     return df

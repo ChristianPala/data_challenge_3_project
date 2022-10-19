@@ -2,7 +2,8 @@
 import pandas as pd
 from pathlib import Path
 from data_imputation import customer_remover, missing_description_imputer, \
-    stock_code_remover, stock_code_cleaner, parallelized_cancelling_order_imputer
+    stock_code_remover, stock_code_cleaner, parallelized_cancelling_order_imputer, \
+    price_imputer
 from data_loading import load_and_save_data
 
 # Driver code:
@@ -39,12 +40,8 @@ if __name__ == '__main__':
     # clean the stock codes to remove product variants:
     df = stock_code_cleaner(df)
 
-    # Replace the comma with a dot in the price column:
-    df['Price'] = df['Price'].str.replace(',', '.')
-    # Cast the price column to float:
-    df['Price'] = df['Price'].astype(float)
-    # Drop items with a price smaller or equal to 0:
-    df = df[df['Price'] > 0]
+    # impute the values in the price column:
+    df = price_imputer(df)
 
     # Create an enum for the countries:
     df['Country'] = df['Country'].astype('category')

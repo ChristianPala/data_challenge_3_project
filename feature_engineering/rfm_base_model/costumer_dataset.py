@@ -67,7 +67,7 @@ if __name__ == '__main__':
     # check for missing values:
     print(df_agg.isnull().sum())
 
-    # consistency check
+    # consistency check between the customer dataset and the dataset for feature engineering:
     fe_customers = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))['CustomerId'].unique()
 
     df_fe_customers = pd.DataFrame(fe_customers, columns=['CustomerId'])

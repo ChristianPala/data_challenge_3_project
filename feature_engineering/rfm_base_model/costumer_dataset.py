@@ -66,3 +66,14 @@ if __name__ == '__main__':
 
     # check for missing values:
     print(df_agg.isnull().sum())
+
+    # consistency check
+    fe_customers = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))['CustomerId'].unique()
+
+    df_fe_customers = pd.DataFrame(fe_customers, columns=['CustomerId'])
+
+    if df_agg.shape[0] != df_fe_customers.shape[0]:
+        # print the difference:
+        print(df_fe_customers[~df_fe_customers['CustomerId'].isin(df_agg.index)])
+    else:
+        print("Consistency check passed")

@@ -43,6 +43,8 @@ if __name__ == '__main__':
     df['Price'] = df['Price'].str.replace(',', '.')
     # Cast the price column to float:
     df['Price'] = df['Price'].astype(float)
+    # Drop items with a price smaller or equal to 0:
+    df = df[df['Price'] > 0]
 
     # Create an enum for the countries:
     df['Country'] = df['Country'].astype('category')

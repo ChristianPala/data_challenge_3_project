@@ -31,7 +31,6 @@ if __name__ == '__main__':
     df_agg = df.groupby('CustomerId').agg({'StockCode': lambda x: list(x),
                                            'Weight': lambda x: list(zip(df.loc[x.index, 'StockCode'], x)),
                                            'Country': lambda x: x.value_counts().index[0]})
-    # todo: ask if this is the best way to do this:
     # split into train, validation and test:
     X_train, X_val, X_test, y_train, y_val, y_test = train_validation_test_split(df_agg, y, validation=True)
 

@@ -22,6 +22,7 @@ if __name__ == '__main__':
 
     # import the timeseries dataset:
     df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
+    y = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))[["CustomerId", "CustomerChurned"]]
 
     df = df[['CustomerId', 'InvoiceDate']]  # cut df down to 2 columns
 
@@ -29,9 +30,15 @@ if __name__ == '__main__':
     df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%Y-%m-%d %H:%M:%S')
     df['InvoiceDate'] = df['InvoiceDate'].astype(np.int64) // 10 ** 9
 
-    # skip the customers that occur only one time
+    # skip the customers that occur only one time since we cannot find patterns from this data.
     is_multi = df['CustomerId'].value_counts() > 1
+
+    # remove the customers not in is_multi from y:
     df = df[df['CustomerId'].isin(is_multi[is_multi].index)]
+    y = y[y['CustomerId'].isin(is_multi[is_multi].index)]
+
+    # drop the customer id from y:
+    y = y.drop("CustomerId", axis=1)
 
     cfg = tsfel.get_features_by_domain(json_path='features_mod.json')  # modified the json so that it doesnt calculate
     # LPCC (cause it gives errors due to too few rows in certain dataframes)
@@ -65,6 +72,7 @@ if __name__ == '__main__':
 
     print(X.shape)
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel.csv'), index=False)
+    y.to_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index=False)
 
     # some plots to explain stuff
     # fig, ax = plt.subplots(2, 1)

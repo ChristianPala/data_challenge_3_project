@@ -13,8 +13,8 @@ from reporting.classifier_report import report_model_results
 if __name__ == '__main__':
     # import the  tsfel dataset:
     df_ts = pd.read_csv(Path('..', 'data', 'online_sales_dataset_tsfel.csv'))
-    # import the aggregated dataset:
-    df_agg = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg.csv'))
+    # import the label dataset:
+    y = pd.read_csv(Path('..', 'data', 'online_sales_labels_tsfel.csv'))
     # drop the first row:
     df_ts = df_ts.drop(df_ts.index[0])
 
@@ -28,12 +28,9 @@ if __name__ == '__main__':
     # df_ts["Country"] = df_agg["Country"]
     # df_ts["Recency"] = df_agg["Recency"]
 
-    # add the target variable:
-    df_ts["CustomerChurned"] = df_agg["CustomerChurned"]
-
     # perform the train test split:
     X_train, X_test, X_validation, y_validation, y_train, y_test = \
-        train_validation_test_split(df_ts.drop('CustomerChurned', axis=1), df_ts['CustomerChurned'], validation=True)
+        train_validation_test_split(df_ts, y, validation=True)
 
     # tune xgboost for time series data:
     best = tuner(X_train, y_train, X_validation, y_validation, cross_validation=5)

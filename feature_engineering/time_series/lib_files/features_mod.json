@@ -9,7 +9,7 @@
         "nfreq": 256
       },
       "n_features": "nfreq",
-      "use": "yes"
+      "use": "no"
     },
     "Fundamental frequency": {
       "complexity": "log",
@@ -19,7 +19,7 @@
         "fs": 100
       },
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Human range energy": {
       "complexity": "log",
@@ -29,10 +29,20 @@
         "fs": 100
       },
       "n_features": 1,
-      "use": "yes",
+      "use": "no",
       "tag": "inertial"
     },
-    
+    "LPCC": {
+      "complexity": "log",
+      "description": "Computes the linear prediction cepstral coefficients.",
+      "function": "tsfel.lpcc",
+      "parameters": {
+        "n_coeff": 12
+      },
+      "n_features": "n_coeff",
+      "use": "no",
+      "tag": "audio"
+    },
     "MFCC": {
       "complexity": "constant",
       "description": "Computes the MEL cepstral coefficients.",
@@ -46,7 +56,7 @@
         "pre_emphasis": 0.97
       },
       "n_features": "num_ceps",
-      "use": "yes",
+      "use": "no",
       "tag": [
         "audio",
         "emg"
@@ -60,7 +70,7 @@
         "fs": 100
       },
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Maximum frequency": {
       "complexity": "log",
@@ -70,7 +80,7 @@
         "fs": 100
       },
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Median frequency": {
       "complexity": "log",
@@ -80,7 +90,7 @@
         "fs": 100
       },
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Power bandwidth": {
       "complexity": "log",
@@ -90,7 +100,7 @@
         "fs": 100
       },
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Spectral centroid": {
       "complexity": "linear",
@@ -100,7 +110,7 @@
         "fs": 100
       },
       "n_features": 1,
-      "use": "yes",
+      "use": "no",
       "tag": "audio"
     },
     "Spectral decrease": {
@@ -131,7 +141,7 @@
         "fs": 100
       },
       "n_features": 1,
-      "use": "yes",
+      "use": "no",
       "tag": "eeg"
     },
     "Spectral kurtosis": {
@@ -162,7 +172,7 @@
         "fs": 100
       },
       "n_features": 1,
-      "use": "yes",
+      "use": "no",
       "tag": "audio"
     },
     "Spectral roll-on": {
@@ -173,7 +183,7 @@
         "fs": 100
       },
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Spectral skewness": {
       "complexity": "linear",
@@ -224,7 +234,7 @@
         "widths": "np.arange(1,10)"
       },
       "n_features": "widths",
-      "use": "yes",
+      "use": "no",
       "tag": [
         "eeg",
         "ecg"
@@ -239,7 +249,7 @@
         "widths": "np.arange(1,10)"
       },
       "n_features": "widths",
-      "use": "yes",
+      "use": "no",
       "tag": "eeg"
     },
     "Wavelet entropy": {
@@ -251,7 +261,7 @@
         "widths": "np.arange(1,10)"
       },
       "n_features": 1,
-      "use": "yes",
+      "use": "no",
       "tag": "eeg"
     },
     "Wavelet standard deviation": {
@@ -263,7 +273,7 @@
         "widths": "np.arange(1,10)"
       },
       "n_features": "widths",
-      "use": "yes",
+      "use": "no",
       "tag": "eeg"
     },
     "Wavelet variance": {
@@ -275,7 +285,7 @@
         "widths": "np.arange(1,10)"
       },
       "n_features": "widths",
-      "use": "yes",
+      "use": "no",
       "tag": "eeg"
     }
   },
@@ -298,7 +308,7 @@
         "percentile": "[0.2, 0.8]"
       },
       "n_features": "percentile",
-      "use": "yes"
+      "use": "no"
     },
     "ECDF Percentile Count": {
       "complexity": "log",
@@ -308,7 +318,7 @@
         "percentile": "[0.2, 0.8]"
       },
       "n_features": "percentile",
-      "use": "yes"
+      "use": "no"
     },
     "Histogram": {
       "complexity": "log",
@@ -319,7 +329,7 @@
         "r": 1
       },
       "n_features": "nbins",
-      "use": "yes"
+      "use": "no"
     },
     "Interquartile range": {
       "complexity": "constant",
@@ -327,7 +337,7 @@
       "function": "tsfel.interq_range",
       "parameters": "",
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Kurtosis": {
       "complexity": "constant",
@@ -335,7 +345,7 @@
       "function": "tsfel.kurtosis",
       "parameters": "",
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Max": {
       "complexity": "constant",
@@ -343,7 +353,7 @@
       "function": "tsfel.calc_max",
       "parameters": "",
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Mean": {
       "complexity": "constant",
@@ -351,7 +361,7 @@
       "function": "tsfel.calc_mean",
       "parameters": "",
       "n_features": 1,
-      "use": "yes",
+      "use": "no",
       "tag": "inertial"
     },
     "Mean absolute deviation": {
@@ -360,7 +370,7 @@
       "function": "tsfel.mean_abs_deviation",
       "parameters": "",
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Median": {
       "complexity": "constant",
@@ -368,7 +378,7 @@
       "function": "tsfel.calc_median",
       "parameters": "",
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Median absolute deviation": {
       "complexity": "constant",
@@ -376,7 +386,7 @@
       "function": "tsfel.median_abs_deviation",
       "parameters": "",
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Min": {
       "complexity": "constant",
@@ -384,7 +394,7 @@
       "function": "tsfel.calc_min",
       "parameters": "",
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Root mean square": {
       "complexity": "constant",
@@ -392,7 +402,7 @@
       "function": "tsfel.rms",
       "parameters": "",
       "n_features": 1,
-      "use": "yes",
+      "use": "no",
       "tag": [
         "emg",
         "inertial"
@@ -404,7 +414,7 @@
       "function": "tsfel.skewness",
       "parameters": "",
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Standard deviation": {
       "complexity": "constant",
@@ -412,7 +422,7 @@
       "function": "tsfel.calc_std",
       "parameters": "",
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Variance": {
       "complexity": "constant",
@@ -420,7 +430,7 @@
       "function": "tsfel.calc_var",
       "parameters": "",
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     }
   },
   "temporal": {
@@ -430,7 +440,7 @@
       "function": "tsfel.abs_energy",
       "parameters": "",
       "n_features": 1,
-      "use": "yes",
+      "use": "no",
       "tag": "audio"
     },
     "Area under the curve": {
@@ -470,7 +480,7 @@
         "prob": "standard"
       },
       "n_features": 1,
-      "use": "yes",
+      "use": "no",
       "tag": "eeg"
     },
     "Mean absolute diff": {
@@ -479,7 +489,7 @@
       "function": "tsfel.mean_abs_diff",
       "parameters": "",
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Mean diff": {
       "complexity": "constant",
@@ -487,7 +497,7 @@
       "function": "tsfel.mean_diff",
       "parameters": "",
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Median absolute diff": {
       "complexity": "constant",
@@ -495,7 +505,7 @@
       "function": "tsfel.median_abs_diff",
       "parameters": "",
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Median diff": {
       "complexity": "constant",
@@ -503,7 +513,7 @@
       "function": "tsfel.median_diff",
       "parameters": "",
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Negative turning points": {
       "complexity": "constant",
@@ -511,7 +521,7 @@
       "function": "tsfel.negative_turning",
       "parameters": "",
       "n_features": 1,
-      "use": "yes",
+      "use": "no",
       "tag": "emg"
     },
     "Neighbourhood peaks": {
@@ -522,7 +532,7 @@
         "n": 10
       },
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Peak to peak distance": {
       "complexity": "constant",
@@ -530,7 +540,7 @@
       "function": "tsfel.pk_pk_distance",
       "parameters": "",
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Positive turning points": {
       "complexity": "constant",
@@ -538,7 +548,7 @@
       "function": "tsfel.positive_turning",
       "parameters": "",
       "n_features": 1,
-      "use": "yes",
+      "use": "no",
       "tag": "emg"
     },
     "Signal distance": {
@@ -563,7 +573,7 @@
       "function": "tsfel.sum_abs_diff",
       "parameters": "",
       "n_features": 1,
-      "use": "yes"
+      "use": "no"
     },
     "Total energy": {
       "complexity": "constant",
@@ -573,7 +583,7 @@
         "fs": 100
       },
       "n_features": 1,
-      "use": "yes",
+      "use": "no",
       "tag": "audio"
     },
     "Zero crossing rate": {
@@ -582,7 +592,7 @@
       "function": "tsfel.zero_cross",
       "parameters": "",
       "n_features": 1,
-      "use": "yes",
+      "use": "no",
       "tag": [
         "audio",
         "emg"

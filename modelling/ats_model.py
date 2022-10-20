@@ -15,8 +15,6 @@ if __name__ == '__main__':
     df_ts = pd.read_csv(Path('..', 'data', 'online_sales_dataset_tsfel.csv'))
     # import the label dataset:
     y = pd.read_csv(Path('..', 'data', 'online_sales_labels_tsfel.csv'))
-    # drop the first row:
-    df_ts = df_ts.drop(df_ts.index[0])
 
     # remove all columns with NaN values:
     df_ts = df_ts.dropna(axis=1)
@@ -29,7 +27,7 @@ if __name__ == '__main__':
     # df_ts["Recency"] = df_agg["Recency"]
 
     # perform the train test split:
-    X_train, X_test, X_validation, y_validation, y_train, y_test = \
+    X_train, X_validation, X_test, y_train, y_validation, y_test = \
         train_validation_test_split(df_ts, y, validation=True)
 
     # tune xgboost for time series data:
@@ -45,4 +43,4 @@ if __name__ == '__main__':
     y_pred = model.predict(X_test)
 
     # evaluate:
-    report_model_results(model, X_train, y_test, y_pred, "Time series enriched RFM model", save=True)
+    report_model_results(model, X_train, X_test, y_test, y_pred, "Time series enriched RFM model", save=True)

@@ -11,8 +11,8 @@ from matplotlib import pyplot as plt
 
 # Driver:
 if __name__ == '__main__':
-    # import the small graph:
-    G = nx.read_gpickle(Path('saved_graphs', 'customer_graph_train_small.gpickle'))
+
+    G = nx.read_gpickle(Path('saved_graphs', 'product_graph.gpickle'))
+
     # plot the graph:
-    nx.draw(G, with_labels=True)
-    plt.show()
+    nx.draw(G, with_labels=False, node_size=15)

@@ -22,8 +22,16 @@ if __name__ == '__main__':
 
     agg = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
 
+    y = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))[["CustomerId", "CustomerChurned"]]
+
     # create a list of customers that have more than one purchase
     customers = agg[agg['NumberOfPurchases'] > 1]['CustomerId'].unique().tolist()
+
+    # create a dataframe with the customers and the target variable
+    y = y[y['CustomerId'].isin(customers)]
+
+    # drop the customer_id from the labels:
+    y.drop(columns=['CustomerId'], inplace=True)
 
     # import the timeseries dataset:
     df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
@@ -62,3 +70,4 @@ if __name__ == '__main__':
 
     print(X.shape)
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel.csv'), index=False)
+    y.to_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index=False)

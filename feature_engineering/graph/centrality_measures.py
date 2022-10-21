@@ -49,11 +49,15 @@ def main(graph_type: str) -> None:
     df_centrality = pd.concat([df_degree_centrality, df_closeness_centrality, df_betweenness_centrality,
                                df_eigenvector_centrality, df_pagerank], axis=1)
 
-    df_centrality.index.name = 'CustomerId'
+    if graph_type == 'customer':
+        df_centrality.index.name = 'CustomerId'
+
+    if graph_type == 'product':
+        df_centrality.index.name = 'StockCode'
     # save the extracted features to a csv file:
     df_centrality.to_csv(Path('..', '..', 'data', d_name))
 
 
 # Driver:
 if __name__ == '__main__':
-    main(graph_type='product')
+    main(graph_type='customer')

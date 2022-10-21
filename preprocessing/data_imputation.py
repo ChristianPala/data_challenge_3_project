@@ -36,7 +36,8 @@ def missing_description_imputer(df: pd.DataFrame) -> pd.DataFrame:
     df.drop(df[df['Description'].str.startswith('Adjustment by', na=False)].index, inplace=True)
     # remove "POSTAGE" from the dataset:
     df.drop(df[df['Description'] == 'POSTAGE'].index, inplace=True)
-
+    # delete Manual descriptions:
+    df = df[~df['Description'].str.startswith('Manual')]
     # impute the missing values in the description column:
     df['Description'] = df['Description'].fillna(df['StockCode'])
     return df
@@ -57,6 +58,7 @@ def stock_code_cleaner(df: pd.DataFrame) -> pd.DataFrame:
 
     # cast the stock code to integer:
     df['StockCode'] = df['StockCode'].astype(int)
+
     return df
 
 
@@ -79,8 +81,6 @@ def stock_code_remover(df: pd.DataFrame) -> pd.DataFrame:
     """
     # delete all bad debt, carriage, manual, postage, sample and test stock ids:
     df = df[~df['StockCode'].str.startswith('B|C2|D|DOT|M|POST|S|TEST')]
-    # delete manual descriptions:
-    df = df[~df['Description'].str.startswith('Manual')]
     return df
 
 

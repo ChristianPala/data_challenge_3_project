@@ -37,7 +37,7 @@ if __name__ == '__main__':
     # impute the cancelling orders:
     df = parallelized_cancelling_order_imputer(df)
 
-    # clean the stock codes to remove product variants:
+    # clean the stock codes to remove product variants, done after recovering the cancelling orders:
     df = stock_code_cleaner(df)
 
     # impute the values in the price column:
@@ -50,6 +50,8 @@ if __name__ == '__main__':
     # Cast the CustomerId column to int:
     df['CustomerId'] = df['CustomerId'].astype(int)
 
+    # Summary:
+    # --------------------------------------------------------------
     # check that no missing values are left:
     print("Missing values:")
     print(f"{df.isna().sum()}")

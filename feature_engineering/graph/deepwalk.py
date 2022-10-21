@@ -3,16 +3,17 @@ import pandas as pd
 from pathlib import Path
 from karateclub import DeepWalk
 import networkx as nx
+from multiprocessing import cpu_count
 
 if __name__ == '__main__':
     # import the customer graph:
     G = nx.read_gpickle(Path('saved_graphs', 'customer_graph.gpickle'))
 
     # make sure the nodes are indexed as integers:
-    G = nx.convert_node_labels_to_integers(G)
+    # G = nx.convert_node_labels_to_integers(G)
 
     # train a DeepWalk model:
-    model = DeepWalk(walk_length=100, dimensions=64, workers=4)
+    model = DeepWalk(walk_length=100, dimensions=128, workers=cpu_count() - 1)
     model.fit(G)
     embeddings = model.get_embedding()
 

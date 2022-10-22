@@ -10,9 +10,9 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-def feature_extractor(data, features, customer):
+def feature_extractor(data: pd.DataFrame, features, customer):
     # customers dataframes
-    this_personDF = data.loc[data.CustomerId == customer]
+    this_personDF = data.loc[data.CustomerId == customer].drop('CustomerId', axis=1)
     # returns ONE row for each the customer
     features_data = tsfel.time_series_features_extractor(features, this_personDF, verbose=0)
     return features_data
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     # import the timeseries dataset:
     df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
 
-    df = df[['CustomerId', 'InvoiceDate', 'Quantity']]  # cut df down to 2 columns
+    df = df[['CustomerId', 'InvoiceDate', 'Quantity', 'Price']]  # cut df down to 2 columns
 
     # cast the invoice date to datetime, then to int and divide by 10^9:
     df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%Y-%m-%d %H:%M:%S')

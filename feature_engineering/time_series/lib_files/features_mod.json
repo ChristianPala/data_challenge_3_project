@@ -9,7 +9,7 @@
         "nfreq": 256
       },
       "n_features": "nfreq",
-      "use": "no"
+      "use": "yes"
     },
     "Fundamental frequency": {
       "complexity": "log",
@@ -19,7 +19,7 @@
         "fs": 100
       },
       "n_features": 1,
-      "use": "no"
+      "use": "yes"
     },
     "Human range energy": {
       "complexity": "log",
@@ -70,7 +70,7 @@
         "fs": 100
       },
       "n_features": 1,
-      "use": "no"
+      "use": "yes"
     },
     "Maximum frequency": {
       "complexity": "log",
@@ -100,7 +100,7 @@
         "fs": 100
       },
       "n_features": 1,
-      "use": "no"
+      "use": "yes"
     },
     "Spectral centroid": {
       "complexity": "linear",
@@ -308,7 +308,7 @@
         "percentile": "[0.2, 0.8]"
       },
       "n_features": "percentile",
-      "use": "no"
+      "use": "yes"
     },
     "ECDF Percentile Count": {
       "complexity": "log",
@@ -318,7 +318,7 @@
         "percentile": "[0.2, 0.8]"
       },
       "n_features": "percentile",
-      "use": "no"
+      "use": "yes"
     },
     "Histogram": {
       "complexity": "log",
@@ -337,7 +337,7 @@
       "function": "tsfel.interq_range",
       "parameters": "",
       "n_features": 1,
-      "use": "no"
+      "use": "yes"
     },
     "Kurtosis": {
       "complexity": "constant",
@@ -345,7 +345,7 @@
       "function": "tsfel.kurtosis",
       "parameters": "",
       "n_features": 1,
-      "use": "no"
+      "use": "yes"
     },
     "Max": {
       "complexity": "constant",
@@ -353,7 +353,7 @@
       "function": "tsfel.calc_max",
       "parameters": "",
       "n_features": 1,
-      "use": "no"
+      "use": "yes"
     },
     "Mean": {
       "complexity": "constant",
@@ -361,7 +361,7 @@
       "function": "tsfel.calc_mean",
       "parameters": "",
       "n_features": 1,
-      "use": "no",
+      "use": "yes",
       "tag": "inertial"
     },
     "Mean absolute deviation": {
@@ -370,7 +370,7 @@
       "function": "tsfel.mean_abs_deviation",
       "parameters": "",
       "n_features": 1,
-      "use": "no"
+      "use": "yes"
     },
     "Median": {
       "complexity": "constant",
@@ -378,7 +378,7 @@
       "function": "tsfel.calc_median",
       "parameters": "",
       "n_features": 1,
-      "use": "no"
+      "use": "yes"
     },
     "Median absolute deviation": {
       "complexity": "constant",
@@ -386,7 +386,7 @@
       "function": "tsfel.median_abs_deviation",
       "parameters": "",
       "n_features": 1,
-      "use": "no"
+      "use": "yes"
     },
     "Min": {
       "complexity": "constant",
@@ -394,7 +394,7 @@
       "function": "tsfel.calc_min",
       "parameters": "",
       "n_features": 1,
-      "use": "no"
+      "use": "yes"
     },
     "Root mean square": {
       "complexity": "constant",
@@ -402,7 +402,7 @@
       "function": "tsfel.rms",
       "parameters": "",
       "n_features": 1,
-      "use": "no",
+      "use": "yes",
       "tag": [
         "emg",
         "inertial"
@@ -489,7 +489,7 @@
       "function": "tsfel.mean_abs_diff",
       "parameters": "",
       "n_features": 1,
-      "use": "no"
+      "use": "yes"
     },
     "Mean diff": {
       "complexity": "constant",
@@ -497,7 +497,7 @@
       "function": "tsfel.mean_diff",
       "parameters": "",
       "n_features": 1,
-      "use": "no"
+      "use": "yes"
     },
     "Median absolute diff": {
       "complexity": "constant",
@@ -540,7 +540,7 @@
       "function": "tsfel.pk_pk_distance",
       "parameters": "",
       "n_features": 1,
-      "use": "no"
+      "use": "yes"
     },
     "Positive turning points": {
       "complexity": "constant",
@@ -573,7 +573,7 @@
       "function": "tsfel.sum_abs_diff",
       "parameters": "",
       "n_features": 1,
-      "use": "no"
+      "use": "yes"
     },
     "Total energy": {
       "complexity": "constant",

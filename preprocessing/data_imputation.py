@@ -187,7 +187,7 @@ def price_imputer(df: pd.DataFrame) -> pd.DataFrame:
     """
 
     # Replace the comma with a dot in the price column:
-    df['Price'] = df['Price'].str.replace(',', '.')
+    df['Price'] = df['Price'].astype(str).str.replace(',', '.')
     # Cast the price column to float:
     df['Price'] = df['Price'].astype(float)
     # Round the price column to 2 decimals:

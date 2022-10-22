@@ -31,17 +31,19 @@ if __name__ == '__main__':
     model = XGBClassifier(**best, objective="binary:logistic", random_state=42, n_jobs=-1)
 
     sfs = SequentialFeatureSelector(model, n_features_to_select='auto', tol=None)
+    print('performing feature selection')
     sfs.fit(X, y)
 
-    sfs.get_support()
+    print(sfs.get_support())
 
     print(sfs.transform(X).shape)
 
     # fit the model:
-    # model.fit(X_train, y_train.values.ravel())
-    #
-    # # predict:
-    # y_pred = model.predict(X_test)
-    #
-    # # evaluate:
-    # report_model_results(model, X_train, X_test, y_test, y_pred, "Time series enriched RFM model", save=True)
+    print('fitting xgboost model')
+    model.fit(X_train, y_train.values.ravel())
+
+    # predict:
+    y_pred = model.predict(X_test)
+
+    # evaluate:
+    report_model_results(model, X_train, X_test, y_test, y_pred, "Time series enriched RFM model", save=True)

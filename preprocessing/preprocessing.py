@@ -4,12 +4,12 @@ from pathlib import Path
 from data_imputation import customer_remover, missing_description_imputer, \
     stock_code_remover, stock_code_cleaner, parallelized_cancelling_order_imputer, \
     price_imputer
-from data_loading import load_and_save_from_csv, load_and_save_from_excel
+from data_loading import load_and_save_data
 
 # Driver code:
 if __name__ == '__main__':
     # Load data
-    df = load_and_save_from_excel(Path('..', 'data', 'online_sales_dataset.xlsx'))
+    df = load_and_save_data()
 
     # Data Cleaning:
     # --------------------------------------------------------------
@@ -24,9 +24,6 @@ if __name__ == '__main__':
 
     # impute the missing values in the description column:
     df = missing_description_imputer(df)
-
-    # fix the date
-    df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%d/%m/%Y %H:%M')
 
     # sort the dataset by customer ID and date:
     df.sort_values(by=['Customer ID', 'InvoiceDate'], inplace=True)

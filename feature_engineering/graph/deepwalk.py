@@ -10,7 +10,7 @@ if __name__ == '__main__':
     G = nx.read_gpickle(Path('saved_graphs', 'customer_graph.gpickle'))
 
     # make sure the nodes are indexed as integers:
-    # G = nx.convert_node_labels_to_integers(G)
+    G = nx.convert_node_labels_to_integers(G)
 
     # train a DeepWalk model:
     model = DeepWalk(walk_length=100, dimensions=128, workers=cpu_count() - 1)

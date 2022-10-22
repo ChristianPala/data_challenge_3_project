@@ -4,12 +4,12 @@ from pathlib import Path
 from data_imputation import customer_remover, missing_description_imputer, \
     stock_code_remover, stock_code_cleaner, parallelized_cancelling_order_imputer, \
     price_imputer
-from data_loading import load_and_save_data
+from data_loading import load_and_save_from_csv, load_and_save_from_excel
 
 # Driver code:
 if __name__ == '__main__':
     # Load data
-    df = load_and_save_data()
+    df = load_and_save_from_excel(Path('..', 'data', 'online_sales_dataset.xlsx'))
 
     # Data Cleaning:
     # --------------------------------------------------------------

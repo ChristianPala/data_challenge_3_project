@@ -17,11 +17,11 @@ def sort_by_date_given_reference(df: pd.DataFrame, reference_date) -> pd.DataFra
     @param reference_date: the reference date to sort the dataframe by.
     :return: the sorted dataframe.
     """
-
+    df = df.copy()
     df['DateDiff'] = abs(df['InvoiceDate'] - reference_date)
     df.sort_values(by=['DateDiff'], inplace=True)
     df.drop(columns=['DateDiff'], inplace=True)
-    return df
+    return df.copy()
 
 
 def missing_description_imputer(df: pd.DataFrame) -> pd.DataFrame:
@@ -30,6 +30,7 @@ def missing_description_imputer(df: pd.DataFrame) -> pd.DataFrame:
     @param df: dataframe with the missing descriptions.
     :return: dataframe with the missing descriptions imputed.
     """
+    df = df.copy()
     # remove "this is a test product" from the dataset:
     df.drop(df[df['Description'] == 'This is a test product.'].index, inplace=True)
     # remove "adjustment by" from the dataset:
@@ -49,6 +50,8 @@ def stock_code_cleaner(df: pd.DataFrame) -> pd.DataFrame:
     @param df: dataframe already preprocessed with stock_code_remover() function
     :return: cleaned dataframe, containing integer-only stock codes
     """
+
+    df = df.copy()
     # if a stock code has non-numeric characters, remove them:
     df['StockCode'] = df['StockCode'].str.replace('[^0-9]', '', regex=True)
 
@@ -68,6 +71,8 @@ def customer_remover(df: pd.DataFrame) -> pd.DataFrame:
     @param df: dataframe with the missing customer ids.
     :return: dataframe with the missing customer ids removed
     """
+
+    df = df.copy()
     # delete the missing customer ids:
     df.drop(df[df['Customer ID'].isna()].index, inplace=True)
     return df
@@ -79,6 +84,8 @@ def stock_code_remover(df: pd.DataFrame) -> pd.DataFrame:
     @param df: dataframe with the stock codes.
     :return: dataframe with the irrelevant stock codes removed.
     """
+
+    df = df.copy()
     # delete all bad debt, carriage, manual, postage, sample and test stock ids:
     df = df[~df['StockCode'].str.startswith('B|C2|D|DOT|M|POST|S|TEST')]
     return df
@@ -91,6 +98,7 @@ def cancelling_order_imputer(df: pd.DataFrame) -> pd.DataFrame:
     :return: dataframe with the cancelling orders removed."""
 
     global missing_counter
+    df = df.copy()
 
     for row in tqdm(df.itertuples()):
         # if the invoice starts with C, it is a cancelling order:
@@ -141,6 +149,7 @@ def parallelized_cancelling_order_imputer(df: pd.DataFrame) -> pd.DataFrame:
     @param df: dataframe with the cancelling orders.
     :return: dataframe with the cancelling orders removed."""
 
+    df = df.copy()
     # format the invoice date as a datetime object, if it is not already:
     if not isinstance(df['InvoiceDate'].iloc[0], pd.Timestamp):
         df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%d/%m/%Y %H:%M')
@@ -186,6 +195,7 @@ def price_imputer(df: pd.DataFrame) -> pd.DataFrame:
     :return: dataframe with the prices imputed.
     """
 
+    df = df.copy()
     # Replace the comma with a dot in the price column:
     df['Price'] = df['Price'].str.replace(',', '.')
     # Cast the price column to float:

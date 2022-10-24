@@ -24,19 +24,15 @@ if __name__ == '__main__':
 
     # add the edges, the weight of the edge is the number of invoices in which the two stock codes
     # appear together
-    for i in tqdm(range(len(df_agg))):
-        for j in range(len(df_agg)):
-            if i != j:
-                # get the invoice numbers of the two stock codes:
-                invoices_i = df_agg.iloc[i, 0]
-                invoices_j = df_agg.iloc[j, 0]
-                # get the invoices in which the two stock codes appear together:
-                invoices_shared = list(set(invoices_i).intersection(set(invoices_j)))
-                # if there are invoices in which the two stock codes appear together, add an edge
-                # with the weight of the number of invoices in which the two stock codes appear
-                # together:
-                if len(invoices_shared) > 0:
-                    G.add_edge(df_agg.index[i], df_agg.index[j], weight=len(invoices_shared))
+    for row in tqdm(df_agg.itertuples(), total=df_agg.shape[0]):
+        for node in G.nodes:
+            if node != row.Index:
+                # get the intersection of the invoices:
+                intersection = set(row.Invoice).intersection(set(df_agg.loc[node, 'Invoice']))
+                # if the intersection is not empty:
+                if intersection:
+                    # add the edge:
+                    G.add_edge(row.Index, node, weight=len(intersection))
 
     # save the graph:
     nx.write_gpickle(G, Path('saved_graphs', 'product_graph.gpickle'))

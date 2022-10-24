@@ -102,7 +102,7 @@ def cancelling_order_imputer(df: pd.DataFrame) -> pd.DataFrame:
 
     global missing_counter
 
-    for row in tqdm(df.itertuples()):
+    for row in tqdm(df.itertuples(), total=len(df)):
         # if the invoice starts with C, it is a cancelling order:
         if row.Invoice.startswith('C'):
             # find the corresponding positive order:

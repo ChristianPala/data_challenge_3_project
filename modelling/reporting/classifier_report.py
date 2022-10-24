@@ -43,6 +43,9 @@ def report_model_results(model: XGBClassifier, x_train: pd.DataFrame, x_test: pd
 
     if plot or save:
 
+        # if no folder plots exists, creat it:
+        if not Path('..', 'plots').exists():
+            Path('..', 'plots').mkdir()
         # if no folder model_name exists in plots, create it:
         if not Path('..', 'plots', model_name).exists():
             Path('..', 'plots', model_name).mkdir()

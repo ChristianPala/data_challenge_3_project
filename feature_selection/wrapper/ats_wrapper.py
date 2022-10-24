@@ -15,7 +15,8 @@ from modelling.reporting.classifier_report import report_model_results
 
 if __name__ == '__main__':
     # import the  tsfel dataset:
-    curr_dir = os.getcwd()  # breaks my balls when I use '..' twice, and only here, not in the other files
+    # todo change this to the dataset with all the engineered features when ready.
+    curr_dir = os.getcwd()  # compatibility with CB's structure.
     X = pd.read_csv(Path(curr_dir, '..', 'data', 'online_sales_dataset_tsfel.csv'))
     # import the label dataset:
     y = pd.read_csv(Path(curr_dir, '..', 'data', 'online_sales_labels_tsfel.csv'))

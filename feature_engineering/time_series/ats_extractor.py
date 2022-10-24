@@ -41,7 +41,7 @@ if __name__ == '__main__':
     df['TotalSpent'] = df['Price'] * df['Quantity']
 
     # we cannot use the invoice date as it is a proxy for the target variable, we compute the recency:
-    df = df[['CustomerId', 'TotalSpent']]  # cut df down to 2 columns
+    df = df[['CustomerId', 'TotalSpent', 'Quantity']]
 
     # cast the invoice date to datetime, then to int and divide by 10^9:
     # df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%Y-%m-%d %H:%M:%S')

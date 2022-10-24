@@ -1,11 +1,15 @@
 # implement feature selection with the SHAP package:
-import numpy as np
 # Libraries:
+
+# Data manipulation:
 import pandas as pd
 from pathlib import Path
-import shap
-from xgboost import XGBClassifier
 
+# Feature selection:
+import shap
+
+# Modelling:
+from xgboost import XGBClassifier
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 
 
@@ -17,6 +21,7 @@ def main() -> None:
     """
 
     # import the RFM dataset:
+    # todo: change this to the dataset with all the engineered features
     df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
 
     y = df['CustomerChurned']

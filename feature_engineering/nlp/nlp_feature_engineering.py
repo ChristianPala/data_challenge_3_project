@@ -68,7 +68,7 @@ if __name__ == '__main__':
     # cluster on the training set:
     df_clusters = pd.DataFrame(columns=['CustomerId', 'ClusterId', 'Description'])
 
-    for row in tqdm(X_train.itertuples()):
+    for row in tqdm(X_train.itertuples(), total=X_train.shape[0]):
         similarity = []
         # save all the similarity scores in a list
         for row2 in X_train.itertuples():
@@ -110,7 +110,7 @@ if __name__ == '__main__':
     # for each cluster create a feature in the train dataset, that indicates if the customer is in the cluster:
     # for each cluster create a feature in the test dataset, that indicates if the customer is in the cluster,
     # the assignment is based on the jaccard similarity of the description of the customer and cluster:
-    for row in tqdm(df_clusters.itertuples()):
+    for row in tqdm(df_clusters.itertuples(), total=df_clusters.shape[0]):
         X_train['Cd_' + str(row.Index)] = X_train['CustomerId'].apply(lambda x: 1 if x in row.ClusterId else 0)
         X_test['Cd_' + str(row.Index)] = X_test['Description']\
             .apply(lambda x: 1 if jaccard_similarity(x, row.Description) > similarity_threshold else 0)

@@ -4,20 +4,18 @@ import pandas as pd
 from pathlib import Path
 # Graph:
 import networkx as nx
-# Modelling:
-from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 
 
 # Functions:
-def main(graph_type: str) -> None:
+def main(graph_type_name: str) -> None:
     """
-    Calculates the PageRank for each customer.
-    @param graph_type: The type of graph to use.
-    :return: None
+    Extracts centrality measures from a graph and saves them as a csv file.
+    @param graph_type_name: str: The name of the graph type to use.
+    :return: None: Saves the centrality measures as a csv file.
     """
 
-    graph_name = f'{graph_type}_graph.gpickle'
-    d_name: str = f"{graph_type}_graph_centrality.csv"
+    graph_name = f'{graph_type_name}_graph.gpickle'
+    d_name: str = f"{graph_type_name}_graph_centrality.csv"
 
     # import the saved graph:
     G = nx.read_gpickle(Path('saved_graphs', graph_name))
@@ -49,15 +47,27 @@ def main(graph_type: str) -> None:
     df_centrality = pd.concat([df_degree_centrality, df_closeness_centrality, df_betweenness_centrality,
                                df_eigenvector_centrality, df_pagerank], axis=1)
 
-    if graph_type == 'customer':
+    if graph_type_name == 'customer':
         df_centrality.index.name = 'CustomerId'
+        # calculate the number of self-loops for each customer:
+        self_loops = G.selfloop_edges()
+        # add the self-loops to the dataframe:
+        df_centrality['SelfLoops'] = [len([edge for edge in self_loops if edge[0] == node]) for node in
+                                      df_centrality.index]
 
-    if graph_type == 'product':
+    if graph_type_name == 'product':
         df_centrality.index.name = 'StockCode'
+        # calculate the number of self-loops for each product:
+        self_loops = G.selfloop_edges()
+        # add the self-loops to the dataframe:
+        df_centrality['SelfLoops'] = [len([edge for edge in self_loops if edge[0] == node]) for node in
+                                      df_centrality.index]
+
     # save the extracted features to a csv file:
     df_centrality.to_csv(Path('..', '..', 'data', d_name))
 
 
 # Driver:
 if __name__ == '__main__':
-    main(graph_type='customer')
+    main(graph_type_name='customer')
+    main(graph_type_name='product')

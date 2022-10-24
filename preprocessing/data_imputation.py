@@ -62,6 +62,9 @@ def stock_code_cleaner(df: pd.DataFrame) -> pd.DataFrame:
     # cast the stock code to integer:
     df['StockCode'] = df['StockCode'].astype(int)
 
+    # remove stock code 2 as it is a CARRIAGE charge and not a product:
+    df.drop(df[df['StockCode'] == 2].index, inplace=True)
+
     return df
 
 
@@ -98,7 +101,6 @@ def cancelling_order_imputer(df: pd.DataFrame) -> pd.DataFrame:
     :return: dataframe with the cancelling orders removed."""
 
     global missing_counter
-    df = df.copy()
 
     for row in tqdm(df.itertuples()):
         # if the invoice starts with C, it is a cancelling order:

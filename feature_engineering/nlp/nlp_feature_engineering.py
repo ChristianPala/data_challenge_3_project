@@ -1,7 +1,6 @@
 # Libraries:
 # Data manipulation:
 import pandas as pd
-from pathlib import Path
 
 # Modelling:
 from nltk.corpus import stopwords
@@ -13,7 +12,7 @@ from modelling.data_splitting.train_val_test_splitter import train_validation_te
 from tqdm import tqdm
 
 # global variables:
-similarity_threshold = 0.6
+similarity_threshold = 0.8
 
 
 # Functions:
@@ -54,15 +53,16 @@ if __name__ == '__main__':
     # tokenize the description column:
     df_agg['Description'] = df_agg['Description'].apply(word_tokenize)
 
-    # remove stopwords and punctuation:
+    # remove stopwords, punctuation and numbers:
     punctuation = ['.', ',', '!', '?', '(', ')', '[', ']', '{', '}', ':', ';', '"', "'"]
     stop_words = stopwords.words('english') + punctuation
-    df_agg['Description'] = df_agg['Description'].apply(lambda x: [word for word in x if word not in stop_words])
+    df_agg['Description'] = df_agg['Description'].apply(lambda x: [word for word in x if word not in stop_words
+                                                                   and not word.isdigit()])
 
     # remove duplicate words from the tokenized description:
     df_agg['Description'] = df_agg['Description'].apply(lambda x: set(x))
 
-    # split the data set, note should stay consistent with all other splits!
+    # split the data set into train and test sets:
     X_train, X_test, y_train, y_test = train_validation_test_split(df_agg.drop('CustomerChurned', axis=1),
                                                                    df_agg['CustomerChurned'])
     # cluster on the training set:

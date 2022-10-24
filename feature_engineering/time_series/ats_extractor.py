@@ -1,5 +1,6 @@
 # libraries
 from concurrent.futures import ProcessPoolExecutor
+from datetime import datetime, timedelta
 from pathlib import Path
 import pandas as pd
 import numpy as np
@@ -36,11 +37,15 @@ if __name__ == '__main__':
     # import the timeseries dataset:
     df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
 
-    df = df[['CustomerId', 'InvoiceDate', 'Quantity', 'Price']]  # cut df down to 2 columns
+    # create a column for the total spent:
+    df['TotalSpent'] = df['Price'] * df['Quantity']
+
+    # we cannot use the invoice date as it is a proxy for the target variable, we compute the recency:
+    df = df[['CustomerId', 'TotalSpent']]  # cut df down to 2 columns
 
     # cast the invoice date to datetime, then to int and divide by 10^9:
-    df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%Y-%m-%d %H:%M:%S')
-    df['InvoiceDate'] = df['InvoiceDate'].astype(np.int64) // 10 ** 9
+    # df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%Y-%m-%d %H:%M:%S')
+    # df['InvoiceDate'] = df['InvoiceDate'].astype(np.int64) // 10 ** 9
 
     # extract the features from the dataframe
     cfg = tsfel.get_features_by_domain(json_path='lib_files/features_mod.json')  # modified the json so that it doesnt

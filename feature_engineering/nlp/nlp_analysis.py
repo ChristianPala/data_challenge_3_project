@@ -26,6 +26,7 @@ if __name__ == '__main__':
     plt.show()
 
     # unfortunately either the clusters are too small or the purity is very low, it's unlikely
-    # we will be able to use the clustering to improve the model.
+    # we will be able to use the clustering to improve the model, we leave it in the list of features
+    # for the feature selection step in case it's useful for some marginal improvement.
 
 

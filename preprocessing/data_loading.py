@@ -3,22 +3,14 @@ from pathlib import Path
 import pandas as pd
 
 
-# Libraries:
-from pathlib import Path
-import pandas as pd
-
-
 # Functions:
 def load_and_save_data() -> pd.DataFrame:
     """
     Load the two datasets and save the combined dataset.
-    @param df_1_path: Path to the first dataset from the Excel sheet provided by professor Mitrovic.
-    @param df_2_path: Path to the second dataset from the Excel sheet provided by professor Mitrovic.
     :return: The combined dataset as a pandas dataframe.
     """
-    # We created 2 csv's from the Excel sheet provided by professor Mitrovic to speed up the loading process:
+    # We created 2 csv files from the Excel sheet provided by professor Mitrovic to speed up the loading process:
     try:
-
         df_1_path: Path = Path('..', 'data', 'online_sales_2009_2010_dataset.csv')
         df_2_path: Path = Path('..', 'data', 'online_sales_2010_2011_dataset.csv')
         # Load data
@@ -28,10 +20,7 @@ def load_and_save_data() -> pd.DataFrame:
         pd.concat([df_09, df_10], axis=0).to_csv(Path('..', 'data', 'online_sales_dataset.csv'), index=False)
         df = pd.read_csv(Path('..', 'data', 'online_sales_dataset.csv'))
 
-        # fix the date
-        df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%d/%m/%Y %H:%M')
-
-    # if they are not available, load the original Excel sheet:
+    # If they are not available, load the original Excel sheet:
     except FileNotFoundError:
         dict_df = pd.read_excel(Path('..', 'data', 'online_sales_dataset.xlsx'), sheet_name=['Year 2009-2010', 'Year 2010-2011'])
 
@@ -41,8 +30,13 @@ def load_and_save_data() -> pd.DataFrame:
         pd.concat([df_09, df_10], axis=0).to_csv(Path('..', 'data', 'online_sales_dataset.csv'), index=False)
         df = pd.read_csv(Path('..', 'data', 'online_sales_dataset.csv'))
 
-        # fix the date
-        df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%Y/%m/%d %H:%M:%S')
+    # fix the date, works for both windows and ubuntu:
+    try:
+        # windows:
+        df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%d/%m/%Y %H:%M:%S')
+    except ValueError:
+        # ubuntu:
+        df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%Y-%m-%d %H:%M:%S')
 
     return df
 

@@ -16,6 +16,8 @@ from modelling.reporting.classifier_report import report_model_results
 if __name__ == '__main__':
     # import the  tsfel dataset:
     curr_dir = os.getcwd()  # compatibility with CB's structure.
+
+    # Todo: use the complete dataset once it's ready.
     X = pd.read_csv(Path(curr_dir, '..', 'data', 'online_sales_dataset_tsfel.csv'))
     df_agg = pd.read_csv(Path(curr_dir, '..', 'data', 'online_sales_dataset_agg.csv'))
 

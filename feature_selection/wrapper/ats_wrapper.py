@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     # check that both df are sorted, so that customer ids match
     assert X.loc[0, 'CustomerId'] == df_agg.loc[0, 'CustomerId'], 'CustomerId are not matching (not sorted dataframes)'
-    X.drop('Customerid', axis=1)
+    X.drop('CustomerId', axis=1)
     # import the label dataset:
     y = pd.read_csv(Path(curr_dir, '..', 'data', 'online_sales_labels_tsfel.csv'))
 

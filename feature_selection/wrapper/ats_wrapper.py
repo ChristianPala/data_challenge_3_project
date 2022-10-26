@@ -16,8 +16,12 @@ from modelling.reporting.classifier_report import report_model_results
 if __name__ == '__main__':
     # import the  tsfel dataset:
     curr_dir = os.getcwd()  # compatibility with CB's structure.
-    # I drop the column here cause I dont really need it for the model
-    X = pd.read_csv(Path(curr_dir, '..', 'data', 'online_sales_dataset_tsfel.csv')).drop('CustomerId', axis=1)
+    X = pd.read_csv(Path(curr_dir, '..', 'data', 'online_sales_dataset_tsfel.csv'))
+    df_agg = pd.read_csv(Path(curr_dir, '..', 'data', 'online_sales_dataset_agg.csv'))
+
+    # check that both df are sorted, so that customer ids match
+    assert X.loc[0, 'CustomerId'] == df_agg.loc[0, 'CustomerId'], 'CustomerId are not matching (not sorted dataframes)'
+    X.drop('Customerid', axis=1)
     # import the label dataset:
     y = pd.read_csv(Path(curr_dir, '..', 'data', 'online_sales_labels_tsfel.csv'))
 

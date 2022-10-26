@@ -36,16 +36,40 @@ if __name__ == '__main__':
 
     # import the timeseries dataset:
     df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
+    # convert the string date to a datetime
+    df['InvoiceDate'] = pd.to_datetime(df.InvoiceDate)
+    df = df.sort_values(['CustomerId', 'InvoiceDate'])
+
+    dates = df.copy()
+
+    # calculate the difference between each date in days
+    # (the .shift method will offset the rows, play around with this to understand how it works
+    # - We apply this to every customer using a groupby
+    df2 = dates.groupby("CustomerId").apply(lambda x: (x.InvoiceDate - x.InvoiceDate.shift(1)).dt.days).reset_index()
+    df2 = df2.rename(columns={'InvoiceDate': 'AvgDays'})
+    df2.index = df2.level_1
+
+    # then join the result back on to the original dataframe
+    dates = dates.join(df2['AvgDays'])
+
+    # add the mean time to your groupby
+    grouped = dates.groupby("CustomerId").agg({"AvgDays": "mean"})
+
+    # rename columns per your original specification
+    # grouped.columns = grouped.columns.get_level_values(0) + grouped.columns.get_level_values(1)
+    dates = grouped.rename(columns={'AvgDays': 'avgTimeBetweenPurchases'})
+
+    dates = dates[dates.index.isin(customers)]
 
     # create a column for the total spent:
     df['TotalSpent'] = df['Price'] * df['Quantity']
 
-    # we cannot use the invoice date as it is a proxy for the target variable, we compute the recency:
-    df = df[['CustomerId', 'TotalSpent', 'Quantity']]
+    for c in tqdm(dates.index.tolist()):
+        if c in df['CustomerId'].tolist():
+            df.loc[df['CustomerId'] == c, 'AvgDays'] = dates[dates.index == c].values
 
-    # cast the invoice date to datetime, then to int and divide by 10^9:
-    # df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%Y-%m-%d %H:%M:%S')
-    # df['InvoiceDate'] = df['InvoiceDate'].astype(np.int64) // 10 ** 9
+    # we cannot use the invoice date as it is a proxy for the target variable
+    df = df[['CustomerId', 'TotalSpent', 'AvgDays']]
 
     # extract the features from the dataframe
     cfg = tsfel.get_features_by_domain(json_path='lib_files/features_mod.json')  # modified the json so that it doesnt
@@ -71,7 +95,7 @@ if __name__ == '__main__':
 
     print('> task mapped')
 
-    # X['CustomerId'] = customers
+    X['CustomerId'] = customers
 
     print(X.shape)
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel.csv'), index=False)

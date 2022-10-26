@@ -15,9 +15,9 @@ from modelling.reporting.classifier_report import report_model_results
 
 if __name__ == '__main__':
     # import the  tsfel dataset:
-    # todo change this to the dataset with all the engineered features when ready.
     curr_dir = os.getcwd()  # compatibility with CB's structure.
-    X = pd.read_csv(Path(curr_dir, '..', 'data', 'online_sales_dataset_tsfel.csv'))
+    # I drop the column here cause I dont really need it for the model
+    X = pd.read_csv(Path(curr_dir, '..', 'data', 'online_sales_dataset_tsfel.csv')).drop('CustomerId', axis=1)
     # import the label dataset:
     y = pd.read_csv(Path(curr_dir, '..', 'data', 'online_sales_labels_tsfel.csv'))
 

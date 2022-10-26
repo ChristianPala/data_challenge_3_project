@@ -47,21 +47,11 @@ def main(graph_type_name: str) -> None:
     df_centrality = pd.concat([df_degree_centrality, df_closeness_centrality, df_betweenness_centrality,
                                df_eigenvector_centrality, df_pagerank], axis=1)
 
-    if graph_type_name == 'customer':
+    if graph_type_name == 'customer' or graph_type_name == 'customer_country':
         df_centrality.index.name = 'CustomerId'
-        # calculate the number of self-loops for each customer:
-        self_loops = G.selfloop_edges()
-        # add the self-loops to the dataframe:
-        df_centrality['SelfLoops'] = [len([edge for edge in self_loops if edge[0] == node]) for node in
-                                      df_centrality.index]
 
     if graph_type_name == 'product':
         df_centrality.index.name = 'StockCode'
-        # calculate the number of self-loops for each product:
-        self_loops = G.selfloop_edges()
-        # add the self-loops to the dataframe:
-        df_centrality['SelfLoops'] = [len([edge for edge in self_loops if edge[0] == node]) for node in
-                                      df_centrality.index]
 
     # save the extracted features to a csv file:
     df_centrality.to_csv(Path('..', '..', 'data', d_name))
@@ -69,5 +59,4 @@ def main(graph_type_name: str) -> None:
 
 # Driver:
 if __name__ == '__main__':
-    main(graph_type_name='customer')
-    main(graph_type_name='product')
+    main(graph_type_name='customer_country')

@@ -8,17 +8,31 @@ import networkx as nx
 
 # Plotting:
 from matplotlib import pyplot as plt
+import matplotlib
+matplotlib.use('TkAgg')
 
 # Driver:
 if __name__ == '__main__':
 
-    G = nx.read_gpickle(Path('saved_graphs', 'customer_graph_country.gpickle'))
+    G = nx.read_gpickle(Path('saved_graphs', 'customer_country_graph.gpickle'))
 
-    G = nx.convert_node_labels_to_integers(G)
+    # print the number of nodes and edges:
+    print(f'Number of nodes: {G.number_of_nodes()}')
+    print(f'Number of edges: {G.number_of_edges()}')
 
-    subgraph = G.subgraph([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+    # print the number of connected components:
+    print(f'Number of connected components: {nx.number_connected_components(G)}')
+
+    # if the graph labels are not integers, convert them to integers:
+    if not all(isinstance(node, int) for node in G.nodes):
+        G = nx.convert_node_labels_to_integers(G)
+
+    # select a subset of the graph:
+    sample_size = 100
+    G = G.subgraph(list(G.nodes)[:sample_size])
 
     # plot the graph:
     plt.figure(figsize=(10, 10))
-    nx.draw(subgraph, with_labels=True, node_size=1000, node_color='skyblue', edge_color='grey', width=2, font_size=12)
+    nx.draw(G, node_size=100, cmap=plt.cm.Blues, font_size=8)
+    plt.title('Customer Country Graph')
     plt.show()

@@ -46,21 +46,3 @@ if __name__ == '__main__':
 
     # save the graph:
     nx.write_gpickle(G, Path('saved_graphs', 'customer_graph.gpickle'))
-
-    # create a graph with the same nodes, but the edges are whether the customers are buying from the same country:
-    G_country = nx.Graph()
-
-    # add the nodes:
-    G_country.add_nodes_from(G.nodes, country=G.nodes(data='country'))
-
-    # add the edges:
-    for row in tqdm(df_agg.itertuples(), total=df_agg.shape[0]):
-        for node in G_country.nodes:
-            if node != row.Index:
-                # if the countries are the same:
-                if row.Country == G_country.nodes[node]['country']:
-                    # add the edge:
-                    G_country.add_edge(row.Index, node)
-
-    # save the graph:
-    nx.write_gpickle(G_country, Path('saved_graphs', 'customer_graph_country.gpickle'))

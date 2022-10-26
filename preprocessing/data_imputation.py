@@ -1,15 +1,17 @@
 # Libraries:
+# Data manipulation:
 import numpy as np
 import pandas as pd
+# Timing:
 from tqdm import tqdm
+# Multiprocessing:
 import multiprocessing as mp
 
-# globals:
+# global variables:
 missing_counter = 0
 
 
 # Functions:
-
 def sort_by_date_given_reference(df: pd.DataFrame, reference_date) -> pd.DataFrame:
     """
     Auxiliary function for cancelling_order_imputer() to sort the dataframe by the date given a reference date.

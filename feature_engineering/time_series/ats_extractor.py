@@ -1,21 +1,31 @@
 # libraries
+# Multiprocessing:
 from concurrent.futures import ProcessPoolExecutor
-from datetime import datetime, timedelta
+# Data manipulation:
 from pathlib import Path
 import pandas as pd
-import numpy as np
+# Time series feature extraction library:
 import tsfel
+# Timing:
 from tqdm import tqdm
+# Warning Handling:
 import warnings
-# suppress warnings
+# suppress warnings during feature extraction:
 warnings.filterwarnings("ignore")
 
 
-def feature_extractor(data: pd.DataFrame, features, customer):
+def feature_extractor(data: pd.DataFrame, features, customer) -> pd.DataFrame:
+    """
+    Extracts the time series features from the time series data.
+    @param data: the time series data
+    @param features: the features to extract
+    @param customer: the customer id
+    :return: pd.DataFrame: the extracted features
+    """
     # customers dataframes
-    this_personDF = data.loc[data.CustomerId == customer].drop('CustomerId', axis=1)
+    this_customer = data.loc[data.CustomerId == customer].drop('CustomerId', axis=1)
     # returns ONE row for each the customer
-    features_data = tsfel.time_series_features_extractor(features, this_personDF, verbose=0)
+    features_data = tsfel.time_series_features_extractor(features, this_customer, verbose=0)
     return features_data
 
 
@@ -72,11 +82,11 @@ if __name__ == '__main__':
     df = df[['CustomerId', 'TotalSpent', 'AvgDays']]
 
     # extract the features from the dataframe
-    cfg = tsfel.get_features_by_domain(json_path='lib_files/features_mod.json')  # modified the json so that it doesnt
-    # calculate useless features, like the ones specific for audio or EEG, etc..
+    cfg = tsfel.get_features_by_domain(json_path='lib_files/features_mod.json')  # modified the json so that it $
+    # does not calculate irrelevant features, like the ones specific for audio or EEG ... , it also ignores the
+    # CustomerId for the extraction, the column is necessary for the grouping.
 
     print('> execution started')
-
     # execute the feature extraction in parallel
     with ProcessPoolExecutor() as executor:
         futures = [executor.submit(feature_extractor, df, cfg, customer) for customer in tqdm(customers)]
@@ -92,11 +102,14 @@ if __name__ == '__main__':
                 print(customers[futures.index(future)])
         # concatenate the results as a dataframe
         X = pd.concat(results)
-
     print('> task mapped')
 
+    # add the customer id as a column
     X['CustomerId'] = customers
 
+    # check the shape of the data
     print(X.shape)
+
+    # save the features:
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel.csv'), index=False)
     y.to_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index=False)

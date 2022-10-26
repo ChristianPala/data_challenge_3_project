@@ -8,7 +8,8 @@ from data_loading import load_and_save_data
 
 # Driver code:
 if __name__ == '__main__':
-    # Load data
+    # Data Loading:
+    # --------------------------------------------------------------
     df = load_and_save_data()
 
     # Data Cleaning:
@@ -31,6 +32,9 @@ if __name__ == '__main__':
     # rename Customer ID to CustomerId for consistency:
     df.rename(columns={'Customer ID': 'CustomerId'}, inplace=True)
 
+    # Cast the CustomerId column to int:
+    df['CustomerId'] = df['CustomerId'].astype(int)
+
     # impute the cancelling orders:
     df = parallelized_cancelling_order_imputer(df)
 
@@ -43,9 +47,6 @@ if __name__ == '__main__':
     # Create an enum for the countries:
     df['Country'] = df['Country'].astype('category')
     df['Country'] = df['Country'].cat.codes
-
-    # Cast the CustomerId column to int:
-    df['CustomerId'] = df['CustomerId'].astype(int)
 
     # Summary:
     # --------------------------------------------------------------

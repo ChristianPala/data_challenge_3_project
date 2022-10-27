@@ -14,7 +14,6 @@ if __name__ == '__main__':
     X = df[['Recency', 'NumberOfPurchases', 'TotalSpent', 'TotalQuantity', 'Country']]
 
     # add the features from the time series analysis:
-    # todo add the customer id to the time series dataset
     # import the time series dataset:
     df_ts = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel.csv'))
     # remove customer id's in the aggregated dataset that are not in the time series dataset:

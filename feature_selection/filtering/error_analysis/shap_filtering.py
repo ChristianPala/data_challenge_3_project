@@ -22,7 +22,7 @@ def main() -> None:
 
     # import the RFM dataset:
     # todo: change this to the dataset with all the engineered features
-    df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
+    df = pd.read_csv(Path('../..', '..', 'data', 'online_sales_dataset_agg.csv'))
 
     y = df['CustomerChurned']
 
@@ -67,7 +67,7 @@ def main() -> None:
 
     # save the shap values:
     shap_values_df = pd.DataFrame(shap_values, columns=X_train.columns)
-    shap_values_df.to_csv(Path('..', '..', 'data', 'shap_values.csv'))
+    shap_values_df.to_csv(Path('../..', '..', 'data', 'shap_values.csv'))
 
 
 # Driver:

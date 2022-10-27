@@ -41,9 +41,6 @@ if __name__ == '__main__':
     # create a dataframe with the customers and the target variable
     y = y[y['CustomerId'].isin(customers)]
 
-    # drop the customer_id from the labels:
-    y.drop(columns=['CustomerId'], inplace=True)
-
     # import the timeseries dataset:
     df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
     # convert the string date to a datetime
@@ -109,6 +106,10 @@ if __name__ == '__main__':
 
     # check the shape of the data
     print(X.shape)
+
+    # check how many missing values we have for each feature:
+    print(X.isna().sum())
+
 
     # save the features:
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel.csv'), index=False)

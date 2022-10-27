@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     # add the features from the time series analysis:
     # import the time series dataset:
-    df_ts = pd.read_csv(Path('', '..', 'data', 'online_sales_dataset_tsfel.csv'))
+    df_ts = pd.read_csv(Path('', '..', 'data', 'online_sales_dataset_tsfel_for_fs.csv'))
 
     # check how many customers are in the aggregated dataset and not in the time series dataset:
     print(f"Number of customers in the aggregated dataset and not in the time series dataset: "

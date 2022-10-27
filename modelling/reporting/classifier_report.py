@@ -78,9 +78,9 @@ def report_model_results(model: XGBClassifier, x_train: pd.DataFrame, x_test: pd
         plt.savefig(Path('..', 'plots', model_name, f'roc_curve_{model_name}.png'))
 
         # save the feature importance:
-        importance.to_csv(Path('..', 'data', f'feature_importance_{model_name}.csv'), index=False)
+        importance.to_csv(Path('..', '..', 'data', f'feature_importance_{model_name}.csv'), index=False)
 
         if save:
             # save the feature importance:
-            importance.to_csv(Path('..', 'data', f'feature_importance_{model_name}.csv'), index=False)
+            importance.to_csv(Path('..', '..', 'data', f'feature_importance_{model_name}.csv'), index=False)
 

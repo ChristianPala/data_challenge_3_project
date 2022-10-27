@@ -24,7 +24,7 @@ def feature_extractor(data: pd.DataFrame, features, customer) -> pd.DataFrame:
     """
     # customers dataframes
     this_customer = data.loc[data.CustomerId == customer].drop('CustomerId', axis=1)
-    # returns ONE row for each the customer
+    # returns ONE row for each customer df
     features_data = tsfel.time_series_features_extractor(features, this_customer, verbose=0)
     return features_data
 
@@ -103,6 +103,9 @@ if __name__ == '__main__':
 
     # add the customer id as a column
     X['CustomerId'] = customers
+
+    # remove all columns with NaN values:
+    X = X.dropna(axis=1)
 
     # check the shape of the data
     print(X.shape)

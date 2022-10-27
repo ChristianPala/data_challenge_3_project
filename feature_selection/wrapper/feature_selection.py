@@ -38,13 +38,19 @@ def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.a
 
 
 if __name__ == '__main__':
-    # import the  tsfel dataset:
-    # Todo: use the complete dataset once it's ready.
-    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel.csv'))
+    # import the dataset:
+    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs_mutual_information.csv'))
     df_agg = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
 
-    # check that both df are sorted, so that customer ids match
-    assert X.loc[0, 'CustomerId'] == df_agg.loc[0, 'CustomerId'], 'CustomerId are not matching (not sorted dataframes)'
+    try:
+        # check that both df are sorted, so that customer ids match
+        assert X.loc[0, 'CustomerId'] == df_agg.loc[0, 'CustomerId'], \
+            'CustomerId are not matching (not sorted dataframes)'
+    except AssertionError:
+        # if not sorted, sort the dataframe and reset the index value
+        X.sort_values(by='CustomerId', inplace=True)
+        X.reset_index(inplace=True, drop=True)
+
     X.drop('CustomerId', axis=1, inplace=True)
     # import the label dataset:
     y = pd.read_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'))
@@ -111,8 +117,8 @@ if __name__ == '__main__':
     X.drop(X.columns.difference(selected_b), axis=1, inplace=True)
     X.to_csv(Path('..', '..', 'data', f'FS_backward_timeseries.csv'), index=False)
 
-    VIP_features = feature_names[np.isin(selected_f, selected_b)]
+    VIP_features = np.isin(selected_f, selected_b)
     # print(feature_names[VIP_features])
     # saving the dataframe with only the selected features shared with both the selection methods
-    X.drop(X.columns.difference(VIP_features), axis=1, inplace=True)
+    X.drop(X.columns.difference(selected_f[VIP_features]), axis=1, inplace=True)
     X.to_csv(Path('..', '..', 'data', f'FS_shared_timeseries.csv'), index=False)

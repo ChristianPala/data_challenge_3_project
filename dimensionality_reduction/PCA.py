@@ -35,7 +35,7 @@ if __name__ == '__main__':
     principal_components = pd.DataFrame(principal_components, columns=[f"PC{i}" for i in range(1, n_components + 1)])
 
     # save the dataset:
-    principal_components.to_csv(Path('../..', '..', 'data', 'online_sales_dataset_dim_reduction_pca.csv'))
+    principal_components.to_csv(Path('..', 'data', 'online_sales_dataset_dim_reduction_pca.csv'))
 
 
 

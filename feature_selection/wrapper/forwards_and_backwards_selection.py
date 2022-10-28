@@ -11,8 +11,6 @@ from pathlib import Path
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 from sklearn.feature_selection import SequentialFeatureSelector
 from xgboost import XGBClassifier
-from modelling.tuning.xgboost_tuner import tuner
-from modelling.reporting.classifier_report import report_model_results
 import time
 import datetime
 
@@ -29,10 +27,10 @@ def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.a
     sfs = SequentialFeatureSelector(estimator=estimator,
                                     direction=direction,
                                     n_features_to_select='auto',
-                                    tol=None,
+                                    tol=0.0001,
                                     n_jobs=-1)
     print(f'> performing feature selection. Method: {direction}')
-    sfs.fit(x_tr, y_tr.values.ravel())
+    sfs.fit(x_tr, y_tr)
     print(f'sfs_{direction} fitted')
     print(f'shape ({direction}):', sfs.transform(x_tr).shape)
     support = sfs.get_support()
@@ -55,7 +53,7 @@ if __name__ == '__main__':
 
     X.drop('CustomerId', axis=1, inplace=True)
     # import the label dataset:
-    y = pd.read_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'))
+    y = pd.read_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
 
     # X = X[:50]  # slice for debugging
     # y = y[:50]  # slice for debugging
@@ -64,28 +62,15 @@ if __name__ == '__main__':
     # print(feature_names)
 
     # perform the train test split:
-    X_train, X_validation, X_test, y_train, y_validation, y_test = \
-        train_validation_test_split(X, y, validation=True)
+    X_train, X_test, y_train, y_test = \
+        train_validation_test_split(X, y)
 
     # best = tuner(X_train, y_train, X_validation, y_validation, cross_validation=5)
 
     # define the model:
     model = XGBClassifier(objective="binary:logistic", random_state=42, n_jobs=-1)
 
-    # # multiprocessing to perform feature selection simultaneously...doesn't work
-    # with ProcessPoolExecutor() as executor:
-    #     futures = [executor.submit(feature_selection, model, X_train, y_train, direction)
-    #                for direction in ['forward', 'backward']]
-    #     # wait for all the futures to finish
-    #     results = [future.result() for future in futures]  # returns the selector
-    #     # catch exceptions:
-    #     for future in futures:
-    #         if future.exception() is not None:
-    #             print(future.exception())
-    #             # remove the future from the list
-    #             futures.remove(future)
-    # print('> task submitted')
-
+    # perform feature selection:
     s = time.time()
     support_f = feature_selection(model, X_train, y_train, 'forward')
     e = time.time() - s
@@ -100,26 +85,16 @@ if __name__ == '__main__':
     selected_b = feature_names[support_b]
     print(f"\nFeatures selected by SequentialFeatureSelector (backward): {selected_b}")
 
-    # fit the model:
-    print('> fitting xgboost model')
-    model.fit(X_train, y_train.values.ravel())
-
-    # predict:
-    y_pred = model.predict(X_test)
-
-    # evaluate:
-    report_model_results(model, X_train, X_test, y_test, y_pred, "Time series enriched RFM model (wrapper)", save=True)
-
     # saving the dataframe with only the selected features, depending on the selection method
 
     X.drop(X.columns.difference(selected_f), axis=1, inplace=True)
-    X.to_csv(Path('..', '..', 'data', f'FS_forward_timeseries.csv'), index=False)
+    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs_forward_selection.csv'), index=False)
 
     X.drop(X.columns.difference(selected_b), axis=1, inplace=True)
-    X.to_csv(Path('..', '..', 'data', f'FS_backward_timeseries.csv'), index=False)
+    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs_backwards_selection.csv'), index=False)
 
     VIP_features = np.isin(selected_f, selected_b)
     # print(feature_names[VIP_features])
     # saving the dataframe with only the selected features shared with both the selection methods
     X.drop(X.columns.difference(selected_f[VIP_features]), axis=1, inplace=True)
-    X.to_csv(Path('..', '..', 'data', f'FS_shared_timeseries.csv'), index=False)
+    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs_forward_and_backward_selection.csv'), index=False)

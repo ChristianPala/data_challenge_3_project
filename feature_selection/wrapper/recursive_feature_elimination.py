@@ -4,6 +4,7 @@ import numpy as np
 # Data manipulation:
 import pandas as pd
 from pathlib import Path
+from tabulate import tabulate
 
 # Feature selection:
 from sklearn.feature_selection import RFE
@@ -42,11 +43,11 @@ if __name__ == '__main__':
     # get the features selected by RFE:
     rfe_features = X.columns[rfe.support_]
 
-    # print the features selected by RFE:
-    print(rfe_features)
-
     # keep only the features selected by RFE:
     X = X[rfe_features]
 
     # save the dataset:
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs_rfe.csv'))
+
+    # print the features selected by RFE:
+    print(tabulate([rfe_features], headers='keys', tablefmt='psql'))

@@ -79,5 +79,5 @@ def report_model_results(model: XGBClassifier, x_train: pd.DataFrame, x_test: pd
 
         if save:
             # save the feature importance:
-            importance.to_csv(Path('..', 'data', f'feature_importance_{model_name}.csv'), index=False)
+            importance.to_csv(Path('..''..', 'data', f'feature_importance_{model_name}.csv'), index=False)
 

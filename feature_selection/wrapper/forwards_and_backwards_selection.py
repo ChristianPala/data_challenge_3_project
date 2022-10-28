@@ -1,8 +1,5 @@
 # Libraries:
 # Data manipulation:
-import os
-from concurrent.futures import ProcessPoolExecutor
-
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -11,10 +8,13 @@ from pathlib import Path
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 from sklearn.feature_selection import SequentialFeatureSelector
 from xgboost import XGBClassifier
+
+# Time:
 import time
 import datetime
 
 
+# Functions:
 def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.array:
     """
     Function to perform feature selection on a given direction, default is forward.
@@ -40,11 +40,13 @@ def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.a
 if __name__ == '__main__':
     # import the dataset:
     X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs_mutual_information.csv'))
-    df_agg = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
+    df_fs = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs.csv'))
 
+    # make sure the dataset from mutual information preserves the order
+    # of the dataset from feature selection
     try:
         # check that both df are sorted, so that customer ids match
-        assert X.loc[0, 'CustomerId'] == df_agg.loc[0, 'CustomerId'], \
+        assert X.loc[0, 'CustomerId'] == df_fs.loc[0, 'CustomerId'], \
             'CustomerId are not matching (not sorted dataframes)'
     except AssertionError:
         # if not sorted, sort the dataframe and reset the index value

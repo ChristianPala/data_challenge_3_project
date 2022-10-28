@@ -34,7 +34,7 @@ if __name__ == '__main__':
     model = XGBClassifier(n_estimators=500)
 
     # create the RFE object:
-    rfe = RFE(model, n_features_to_select=10)
+    rfe = RFE(model, n_features_to_select=100)
 
     # fit the RFE object to the dataset:
     rfe.fit(X_train, y_train)
@@ -50,4 +50,3 @@ if __name__ == '__main__':
 
     # save the dataset:
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs_rfe.csv'))
-g

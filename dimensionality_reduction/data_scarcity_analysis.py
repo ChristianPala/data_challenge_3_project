@@ -17,4 +17,6 @@ if __name__ == '__main__':
     spar_df = df.apply(pd.arrays.SparseArray)
 
     print(f"The sparsity density is: {spar_df.sparse.density:.3f}")
-    print(f"The dataset is basically full, PCA should work well")
+    """
+    The dataset is basically full, PCA should work well
+    """

@@ -21,8 +21,8 @@ from reporting.classifier_report import report_model_results
 if __name__ == '__main__':
 
     # load the dataset:
-    X = pd.read_csv(Path('..', 'data', 'online_sales_dataset_for_fs_rfe.csv'), index_col=0)
-    y = pd.read_csv(Path('..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
+    X = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_for_fs_rfe.csv'), index_col=0)
+    y = pd.read_csv(Path('../..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
 
     # train test split with validation set:
     X_train, X_val, X_test, y_train, y_val, y_test = train_validation_test_split(X, y, validation=True)

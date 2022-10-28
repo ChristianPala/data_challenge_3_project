@@ -6,15 +6,15 @@ from pathlib import Path
 # Modelling:
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 from xgboost import XGBClassifier
-from tuning.xgboost_tuner import tuner
-from reporting.classifier_report import report_model_results
+from modelling.tuning.xgboost_tuner import tuner
+from modelling.reporting.classifier_report import report_model_results
 
 
 if __name__ == '__main__':
     # import the  tsfel dataset:
-    df_ts = pd.read_csv(Path('..', 'data', 'online_sales_dataset_tsfel.csv'))
+    df_ts = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_tsfel.csv'))
     # import the label dataset:
-    y = pd.read_csv(Path('..', 'data', 'online_sales_labels_tsfel.csv'))
+    y = pd.read_csv(Path('../..', 'data', 'online_sales_labels_tsfel.csv'))
 
     # remove all columns with NaN values:
     df_ts = df_ts.dropna(axis=1)

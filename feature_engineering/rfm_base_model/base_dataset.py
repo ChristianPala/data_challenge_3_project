@@ -77,4 +77,4 @@ if __name__ == '__main__':
         print(df_fe_customers[~df_fe_customers['CustomerId'].isin(df_agg.index)])
     else:
         print("Consistency check passed, customer dataset and dataset for feature engineering have the same number of "
-                "customers.")
+              "customers.")

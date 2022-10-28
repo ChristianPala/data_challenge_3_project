@@ -15,7 +15,7 @@ from modelling.data_splitting.train_val_test_splitter import train_validation_te
 # Driver:
 if __name__ == '__main__':
     # read the aggregated dataset:
-    df_agg = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg.csv'))
+    df_agg = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_agg.csv'))
 
     # select the features: number of purchases, total price spent, total quantity ordered and country:
     X = df_agg[['Recency', 'NumberOfPurchases', 'TotalSpent', 'TotalQuantity', 'Country']]

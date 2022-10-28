@@ -6,18 +6,18 @@ from pathlib import Path
 # modelling:
 from xgboost import XGBClassifier
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
-from tuning.xgboost_tuner import tuner
-from reporting.classifier_report import report_model_results
+from modelling.tuning.xgboost_tuner import tuner
+from modelling.reporting.classifier_report import report_model_results
 
 # Functions:
 if __name__ == '__main__':
     # read the graph datasets:
-    X_train = pd.read_csv(Path('..', 'data', 'customer_graph_train_centrality.csv'))
-    X_val = pd.read_csv(Path('..', 'data', 'customer_graph_val_centrality.csv'))
-    X_test = pd.read_csv(Path('..', 'data', 'customer_graph_test_centrality.csv'))
+    X_train = pd.read_csv(Path('../..', 'data', 'customer_graph_train_centrality.csv'))
+    X_val = pd.read_csv(Path('../..', 'data', 'customer_graph_val_centrality.csv'))
+    X_test = pd.read_csv(Path('../..', 'data', 'customer_graph_test_centrality.csv'))
 
     # read the aggregated dataset:
-    X = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg.csv'))
+    X = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_agg.csv'))
     y = X['CustomerChurned']
     X.drop(columns=['CustomerChurned'], inplace=True)
 

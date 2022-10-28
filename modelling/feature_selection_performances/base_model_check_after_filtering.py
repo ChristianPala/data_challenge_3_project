@@ -6,21 +6,18 @@ from pathlib import Path
 
 # Modelling:
 from xgboost import XGBClassifier
-from data_splitting.train_val_test_splitter import train_validation_test_split
-
+from sklearn.metrics import f1_score
+from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 # Tuning:
-from tuning.xgboost_tuner import tuner
-
-# Evaluation:
-from reporting.classifier_report import report_model_results
+from modelling.tuning.xgboost_tuner import tuner
 
 
 # Driver:
 if __name__ == '__main__':
 
     # load the dataset:
-    X = pd.read_csv(Path('..', 'data', 'online_sales_dataset_for_fs_mutual_information.csv'), index_col=0)
-    y = pd.read_csv(Path('..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
+    X = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_for_fs_mutual_information.csv'), index_col=0)
+    y = pd.read_csv(Path('../..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
 
     # Select only the RFM features of the base model:
     X = X[['Recency', 'TotalSpent', 'TotalQuantity', 'NumberOfPurchases']]
@@ -43,9 +40,12 @@ if __name__ == '__main__':
     # evaluate the model:
     y_predicted = model.predict(X_test)
 
-    # report the results:
-    report_model_results(model, X_train, X_test, y_test, y_predicted, "recursive_elimination_base_model", save=True)
+    # f-score:
+    f_score = f1_score(y_test, y_predicted)
 
+    """
+    The f-score is comparable to the base model, no inconsistency found.
+    """
 
 
 

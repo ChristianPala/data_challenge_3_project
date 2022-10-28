@@ -6,19 +6,18 @@ import pandas as pd
 # modelling:
 from xgboost import XGBClassifier
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
-from tuning.xgboost_tuner import tuner
-from reporting.classifier_report import report_model_results
-from sklearn.metrics import f1_score
+from modelling.tuning.xgboost_tuner import tuner
+from modelling.reporting.classifier_report import report_model_results
 
 if __name__ == '__main__':
 
     # load the train features:
-    X_train = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg_nlp_train.csv'))
-    y_train = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg_nlp_train_labels.csv'))
+    X_train = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_train.csv'))
+    y_train = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_train_labels.csv'))
 
     # load the test features:
-    X_test = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg_nlp_test.csv'))
-    y_test = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg_nlp_test_labels.csv'))
+    X_test = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_test.csv'))
+    y_test = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_test_labels.csv'))
 
     # drop customer id and description:
     X_train.drop(['CustomerId', 'Description'], axis=1, inplace=True)

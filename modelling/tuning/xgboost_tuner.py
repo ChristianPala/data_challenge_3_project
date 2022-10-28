@@ -52,7 +52,7 @@ def objective(space, x_train: pd.DataFrame, y_train: pd.DataFrame, x_test: pd.Da
     return {'loss': 1-f1, 'status': STATUS_OK}
 
 
-def tuner(x_train: pd.DataFrame, y_train: pd.DataFrame,
+def tune_xgboost(x_train: pd.DataFrame, y_train: pd.DataFrame,
           x_test: pd.DataFrame, y_test: pd.DataFrame, max_evaluations: int = 100, cross_validation: int = 5) -> dict:
     """
     Tune the xgboost model.

@@ -17,7 +17,7 @@ threshold: float = 0.01
 if __name__ == '__main__':
     # import the dataset for feature selection, filteres by variance threshold:
     X = pd.read_csv(Path('..', '..', '..', 'data',
-                         'online_sales_dataset_for_fs_variance_threshold.csv'), index_col=0)
+                         'online_sales_dataset_fs_variance_threshold.csv'), index_col=0)
 
     print(f"Incoming features: {X.shape[1]}")
 
@@ -44,4 +44,4 @@ if __name__ == '__main__':
     print(tabulate.tabulate([mi_features], headers='keys', tablefmt='psql'))
 
     # save the dataset:
-    X.to_csv(Path('..', '..', '..', 'data', 'online_sales_dataset_for_fs_mutual_information.csv'))
+    X.to_csv(Path('..', '..', '..', 'data', 'online_sales_dataset_fs_mutual_information.csv'))

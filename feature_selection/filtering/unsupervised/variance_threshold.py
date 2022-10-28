@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
 
     # save the dataset:
-    pd.DataFrame(X).to_csv(Path('../..', '..', 'data', 'online_sales_dataset_for_fs_variance_threshold.csv'))
+    pd.DataFrame(X).to_csv(Path('..', '..', '..', 'data', 'online_sales_dataset_fs_variance_threshold.csv'))
 
     # We removed features which would likely not add information to the model.
 

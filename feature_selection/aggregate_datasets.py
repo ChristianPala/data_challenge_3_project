@@ -1,48 +1,25 @@
-# auxiliary library to merge the nlp, time series and graph datasets
+# Auxiliary library to combine the results from the wrapper methods
+# based on feature commonality and performance with the tuned XGB model
+# with embedded methods based on feature importance.
 
+# Libraries:
+# Data manipulation:
 import pandas as pd
 from pathlib import Path
 
+# Driver:
 if __name__ == '__main__':
+    # import the dataset from recursive feature elimination:
+    rfe = pd.read_csv(Path('..', 'data', 'online_sales_dataset_fs_rfe.csv'), index_col=0)
+    # import the dataset from forwards selection:
+    fs = pd.read_csv(Path('..', 'data', 'online_sales_dataset_fs_forward_selection.csv'), index_col=0)
+    # import the dataset from backwards selection:
+    bs = pd.read_csv(Path('..', 'data', 'online_sales_dataset_fs_backward_selection.csv'), index_col=0)
+    # import the dataset with shared features from backwards and forwards selection:
+    fs_bs = pd.read_csv(Path('..', 'data', 'online_sales_dataset_fs_forward_and_backward_selection.csv'), index_col=0)
 
-    # import the RFM dataset:
-    df = pd.read_csv(Path('', '..', 'data', 'online_sales_dataset_agg.csv'))
-
-    y = df['CustomerChurned']
-
-    # remove the target variable and the description from the dataset:
-    df.drop(['CustomerChurned', 'Description'], axis=1, inplace=True)
-
-    # add the features from the time series analysis:
-    # import the time series dataset:
-    df_ts = pd.read_csv(Path('', '..', 'data', 'online_sales_dataset_tsfel_for_fs.csv'))
-
-    # check how many customers are in the aggregated dataset and not in the time series dataset:
-    print(f"Number of customers in the aggregated dataset and not in the time series dataset: "
-          f"{df.shape[0] - df_ts.shape[0]}")
-
-    # remove customer id's in the aggregated dataset that are not in the time series dataset:
-    df = df[df['CustomerId'].isin(df_ts['CustomerId'])]
-
-    # merge the time series features with the aggregated dataset:
-    df = df.merge(df_ts, how='left', on='CustomerId')
-
-    # import the nlp dataset:
-    df_nlp = pd.read_csv(Path('', '..', 'data', 'online_sales_dataset_nlp_for_fs.csv'), index_col=0)
-    # merge the nlp dataset with the aggregated dataset:
-    df = df.merge(df_nlp, how='left', left_on='CustomerId', right_on='CustomerId')
-
-    # import the graph dataset:
-    df_graph = pd.read_csv(Path('', '..', 'data', 'online_sales_dataset_graph_for_fs.csv'), index_col=0)
-    # merge the graph dataset with the aggregated dataset:
-    df = df.merge(df_graph, how='left', left_on='CustomerId', right_on='CustomerId')
-
-    # if there are missing values, raise an exception:
-    if df.isnull().sum().sum() > 0:
-        raise Exception('There are missing values in the dataset.')
-
-    # save the dataset, the first row is the header:
-    df.to_csv(Path('', '..', 'data', 'online_sales_dataset_for_fs.csv'), index=False)
-    # print the number of features:
-    print(f"Number of features: {df.shape[1]}")
-
+    # get the features in all the datasets:
+    rfe_features = set(rfe.columns)
+    fs_bs_features = set(fs_bs.columns)
+    intersection = rfe_features.intersection(fs_bs_features)
+    print(f"The number of features in the intersection of RFE and FS+BS is: {len(intersection)}")

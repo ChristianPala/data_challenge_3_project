@@ -39,7 +39,7 @@ def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.a
 
 if __name__ == '__main__':
     # import the dataset:
-    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs_mutual_information.csv'))
+    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_mutual_information.csv'))
     df_fs = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs.csv'))
 
     # make sure the dataset from mutual information preserves the order
@@ -90,13 +90,13 @@ if __name__ == '__main__':
     # saving the dataframe with only the selected features, depending on the selection method
 
     X.drop(X.columns.difference(selected_f), axis=1, inplace=True)
-    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs_forward_selection.csv'), index=False)
+    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_forward_selection.csv'), index=False)
 
     X.drop(X.columns.difference(selected_b), axis=1, inplace=True)
-    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs_backwards_selection.csv'), index=False)
+    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_backwards_selection.csv'), index=False)
 
     VIP_features = np.isin(selected_f, selected_b)
     # print(feature_names[VIP_features])
     # saving the dataframe with only the selected features shared with both the selection methods
     X.drop(X.columns.difference(selected_f[VIP_features]), axis=1, inplace=True)
-    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs_forward_and_backward_selection.csv'), index=False)
+    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_forward_and_backward_selection.csv'), index=False)

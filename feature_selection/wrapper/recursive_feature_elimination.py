@@ -16,7 +16,7 @@ from modelling.data_splitting.train_val_test_splitter import train_validation_te
 # Driver:
 if __name__ == '__main__':
     # get the dataset from the mutual information filtering:
-    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs_mutual_information.csv'), index_col=0)
+    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_mutual_information.csv'), index_col=0)
 
     # get the time series labels from the dataset:
     y = pd.read_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
@@ -35,7 +35,7 @@ if __name__ == '__main__':
     model = XGBClassifier(n_estimators=500)
 
     # create the RFE object:
-    rfe = RFE(model, n_features_to_select=100)
+    rfe = RFE(model, n_features_to_select=10)   # selected based on the results of forwards and backwards selection
 
     # fit the RFE object to the dataset:
     rfe.fit(X_train, y_train)
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     X = X[rfe_features]
 
     # save the dataset:
-    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs_rfe.csv'))
+    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset__fs_rfe.csv'))
 
     # print the features selected by RFE:
     print(tabulate([rfe_features], headers='keys', tablefmt='psql'))

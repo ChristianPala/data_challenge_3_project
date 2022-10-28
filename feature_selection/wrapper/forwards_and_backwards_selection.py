@@ -13,6 +13,8 @@ from sklearn.feature_selection import SequentialFeatureSelector
 from xgboost import XGBClassifier
 from modelling.tuning.xgboost_tuner import tuner
 from modelling.reporting.classifier_report import report_model_results
+import time
+import datetime
 
 
 def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.array:
@@ -84,18 +86,17 @@ if __name__ == '__main__':
     #             futures.remove(future)
     # print('> task submitted')
 
+    s = time.time()
     support_f = feature_selection(model, X_train, y_train, 'forward')
+    e = time.time() - s
+    print('time:', str(datetime.timedelta(seconds=e)))
     support_b = feature_selection(model, X_train, y_train, 'backward')
 
     # support_f = results[0]
-    # print(f'shape of the selected features (forward):', sfs_f.transform(X_train).shape)
-    # support_f = sfs_f.get_support()
     selected_f = feature_names[support_f]
     print(f"Features selected by SequentialFeatureSelector (forward): {selected_f}")
 
     # support_b = results[1]
-    # print(f'shape of the selected features (forward):', sfs_b.transform(X_train).shape)
-    # support_b = sfs_b.get_support()
     selected_b = feature_names[support_b]
     print(f"\nFeatures selected by SequentialFeatureSelector (backward): {selected_b}")
 

@@ -6,7 +6,7 @@ from pathlib import Path
 # Modelling:
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 from xgboost import XGBClassifier
-from modelling.tuning.xgboost_tuner import tune_xgboost
+from modelling.tuning.xgboost_tuner import objective
 from modelling.reporting.classifier_report import report_model_results
 
 
@@ -31,7 +31,7 @@ if __name__ == '__main__':
         train_validation_test_split(df_ts, y, validation=True)
 
     # tune xgboost for time series data:
-    best = tune_xgboost(X_train, y_train, X_validation, y_validation, cross_validation=5)
+    best = objective(X_train, y_train, X_validation, y_validation, cross_validation=5)
 
     # define the model:
     model = XGBClassifier(**best, objective="binary:logistic", random_state=42, n_jobs=-1)

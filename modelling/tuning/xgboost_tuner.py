@@ -1,6 +1,8 @@
 # Auxiliary library to tune the xgboost model:
 # Libraries:
 # Data manipulation:
+from typing import Dict, Any
+
 import pandas as pd
 # Modelling:
 from hyperopt import hp, Trials, fmin, STATUS_OK, tpe
@@ -10,7 +12,7 @@ from xgboost import XGBClassifier
 
 
 def objective(space, x_train: pd.DataFrame, y_train: pd.DataFrame, x_test: pd.DataFrame, y_test: pd.DataFrame,
-              cross_validation: int = 5, fast: bool = False) -> float:
+              cross_validation: int = 5, fast: bool = False) -> dict[str, int | Any]:
     """
     Objective function to be minimized.
     @param space: the hyperparameters to be tuned

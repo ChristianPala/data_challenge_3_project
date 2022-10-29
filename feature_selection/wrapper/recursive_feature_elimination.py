@@ -4,10 +4,12 @@ import numpy as np
 # Data manipulation:
 import pandas as pd
 from pathlib import Path
+
+from sklearn.model_selection import RepeatedStratifiedKFold
 from tabulate import tabulate
 
 # Feature selection:
-from sklearn.feature_selection import RFE
+from sklearn.feature_selection import RFECV
 
 # Modelling:
 from xgboost import XGBClassifier
@@ -34,8 +36,9 @@ if __name__ == '__main__':
     # create the model:
     model = XGBClassifier(n_estimators=500)
 
-    # create the RFE object:
-    rfe = RFE(model, n_features_to_select=10)   # selected based on the results of forwards and backwards selection
+    # create the RFE object with automatic feature number selection and cross validation:
+    cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=3, random_state=42)
+    rfe = RFECV(estimator=model, step=1, cv=cv, scoring='f1', n_jobs=-1)
 
     # fit the RFE object to the dataset:
     rfe.fit(X_train, y_train)

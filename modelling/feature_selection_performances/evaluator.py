@@ -56,11 +56,11 @@ if __name__ == '__main__':
     recursive_elimination_path = Path('..', '..', 'data', 'online_sales_dataset_fs_rfe.csv')
 
     # evaluate the models:
-    evaluate_csv(full_features_path, 'all_fe_features', fast=True)
-    evaluate_csv(variance_threshold_path, 'variance_threshold_fs', fast=True)
+    # evaluate_csv(full_features_path, 'all_fe_features', fast=True)
+    # evaluate_csv(variance_threshold_path, 'variance_threshold_fs', fast=True)
     evaluate_csv(mutual_info_path, 'mutual_information_fs', fast=True)
-    evaluate_csv(forward_selection_path, 'forward_selection_fs', fast=True)
-    evaluate_csv(backward_selection_path, 'backward_selection_fs', fast=True)
-    evaluate_csv(recursive_elimination_path, 'recursive_elimination_100_fs', fast=True)
+    # evaluate_csv(forward_selection_path, 'forward_selection_fs', fast=True)
+    # evaluate_csv(backward_selection_path, 'backward_selection_fs', fast=True)
+    # evaluate_csv(recursive_elimination_path, 'recursive_elimination_100_fs', fast=True)
 
 

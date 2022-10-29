@@ -1,5 +1,6 @@
 # auxiliary library to merge the nlp, time series and graph datasets
-
+# Libraries:
+# Data manipulation:
 import pandas as pd
 from pathlib import Path
 

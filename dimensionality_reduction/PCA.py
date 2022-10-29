@@ -29,8 +29,8 @@ if __name__ == '__main__':
         principal_components = pca.fit_transform(X_scaled)
 
         # cast the principal components to a dataframe:
-        principal_components = pd.DataFrame(principal_components,
-                                            columns=[f"PC{i}" for i in range(1, nr_components + 1)])
+        principal_components_df = pd.DataFrame(principal_components,
+                                               columns=[f"PC{i}" for i in range(1, nr_components + 1)])
 
         # print the sum of the explained variance ratio:
         print(f"Sum of the explained variance ratio for {nr_components} components: "
@@ -43,8 +43,8 @@ if __name__ == '__main__':
     principal_components = pca.fit_transform(X_scaled)
 
     # cast the principal components to a dataframe:
-    principal_components = pd.DataFrame(principal_components,
-                                        columns=[f"PC{i}" for i in range(1, 10)])
+    principal_components_df = pd.DataFrame(principal_components,
+                                           columns=[f"PC{i}" for i in range(1, 10)])
 
     # save the principal components:
-    principal_components.to_csv(Path('..', 'data', 'online_sales_dataset_dr_pca.csv'))
+    principal_components_df.to_csv(Path('..', 'data', 'online_sales_dataset_dr_pca.csv'))

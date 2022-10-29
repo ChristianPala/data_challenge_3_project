@@ -6,7 +6,7 @@ from pathlib import Path
 # modelling:
 from xgboost import XGBClassifier
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
-from modelling.tuning.xgboost_tuner import tune_xgboost
+from modelling.tuning.xgboost_tuner import tuner
 from modelling.reporting.classifier_report import report_model_results
 
 
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     X_train, X_val, X_test, y_train, y_val, y_test = train_validation_test_split(X, y, validation=True)
 
     # tune the model with bayesian optimization:
-    best_parameters = tune_xgboost(X_train, y_train, X_val, y_val, cross_validation=5)
+    best_parameters = tuner(X_train, y_train, X_val, y_val, cross_validation=5)
 
     # print the best parameters:
     print('Best parameters:')

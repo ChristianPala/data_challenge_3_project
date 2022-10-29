@@ -6,7 +6,7 @@ import pandas as pd
 # modelling:
 from xgboost import XGBClassifier
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
-from modelling.tuning.xgboost_tuner import tune_xgboost
+from modelling.tuning.xgboost_tuner import tuner
 from modelling.reporting.classifier_report import report_model_results
 
 if __name__ == '__main__':

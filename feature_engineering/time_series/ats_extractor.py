@@ -113,7 +113,6 @@ if __name__ == '__main__':
     # check how many missing values we have for each feature:
     print(X.isna().sum())
 
-
     # save the features:
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel.csv'), index=False)
     y.to_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index=False)

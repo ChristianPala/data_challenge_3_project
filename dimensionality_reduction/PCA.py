@@ -10,34 +10,41 @@ from sklearn.decomposition import PCA
 # Scaling:
 from sklearn.preprocessing import StandardScaler
 
-# Global variables:
-n_components = 5
-# number of components to keep, do an analysis on how much variance is explained by each component to decide
-# on the number of components to keep.
-
-
 # Driver:
 if __name__ == '__main__':
-    # import the dataset for feature selection:
-    # Todo: change to the dataset with the features selected by the wrapper method once it is ready.
-    X = pd.read_csv(Path('../..', '..', 'data', 'online_sales_dataset_for_fs.csv'), index_col=0)
+    # import the dataset for dimensionality reduction:
+    X = pd.read_csv(Path('..', 'data', 'online_sales_dataset_for_dr.csv'), index_col=0)
+
+    # get the number of features:
+    n_features = X.shape[1]
 
     # Scale the data before performing PCA:
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
 
+    for nr_components in range(n_features):
+        # initialize the selector:
+        pca = PCA(n_components=nr_components)
+        # fit
+        principal_components = pca.fit_transform(X_scaled)
+
+        # cast the principal components to a dataframe:
+        principal_components = pd.DataFrame(principal_components,
+                                            columns=[f"PC{i}" for i in range(1, nr_components + 1)])
+
+        # print the sum of the explained variance ratio:
+        print(f"Sum of the explained variance ratio for {nr_components} components: "
+              f"{pca.explained_variance_ratio_.sum():.3f}")
+
+    # based on the analysis, we will keep 9 components using .8 as the threshold:
     # initialize the selector:
-    pca = PCA(n_components=n_components)
+    pca = PCA(n_components=9)
     # fit
     principal_components = pca.fit_transform(X_scaled)
 
     # cast the principal components to a dataframe:
-    principal_components = pd.DataFrame(principal_components, columns=[f"PC{i}" for i in range(1, n_components + 1)])
+    principal_components = pd.DataFrame(principal_components,
+                                        columns=[f"PC{i}" for i in range(1, 10)])
 
-    # save the dataset:
-    principal_components.to_csv(Path('..', 'data', 'online_sales_dataset_dim_reduction_pca.csv'))
-
-
-
-
-
+    # save the principal components:
+    principal_components.to_csv(Path('..', 'data', 'online_sales_dataset_dr_pca.csv'))

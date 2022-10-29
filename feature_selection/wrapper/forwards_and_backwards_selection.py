@@ -27,7 +27,8 @@ def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.a
     sfs = SequentialFeatureSelector(estimator=estimator,
                                     direction=direction,
                                     n_features_to_select='auto',
-                                    tol=0.0001,
+                                    scoring='f1',
+                                    tol=0.0001, 
                                     n_jobs=-1)
     print(f'> performing feature selection. Method: {direction}')
     sfs.fit(x_tr, y_tr)

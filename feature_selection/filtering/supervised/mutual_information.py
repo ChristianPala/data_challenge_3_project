@@ -11,7 +11,7 @@ from modelling.data_splitting.train_val_test_splitter import train_validation_te
 
 # Global variables:
 # set a threshold for the mutual information:
-threshold: float = 0.01
+threshold: float = 10 ** -6  # based on the model evaluation results.
 
 # Driver:
 if __name__ == '__main__':
@@ -50,5 +50,5 @@ if __name__ == '__main__':
 
     """
     incoming features:  349
-    Outgoing features: 136
+    Outgoing features: 261
     """

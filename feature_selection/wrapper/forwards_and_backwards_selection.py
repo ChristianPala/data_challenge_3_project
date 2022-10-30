@@ -33,10 +33,10 @@ def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.a
                                     direction=direction,
                                     n_features_to_select='auto',
                                     scoring='f1',
-                                    cv=cv,
+                                    cv=2,
                                     tol=10 ** - 6,
                                     n_jobs=-1)
-    print(f'> performing feature selection\n. Method: {direction}')
+    print(f'> performing feature selection.\n Method: {direction}')
     sfs.fit(x_tr, y_tr)
     print(f'sfs_{direction} fitted')
     print(f'shape ({direction}):', sfs.transform(x_tr).shape)
@@ -73,7 +73,10 @@ if __name__ == '__main__':
     support_f = feature_selection(model, X_train, y_train, 'forward')
     e = time.time() - s
     print('time:', str(datetime.timedelta(seconds=e)))
+    # s = time.time()
     # support_b = feature_selection(model, X_train, y_train, 'backward')
+    # e = time.time() - s
+    # print('time:', str(datetime.timedelta(seconds=e)))
 
     # support_f = results[0]
     selected_f = feature_names[support_f]

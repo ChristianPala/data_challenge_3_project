@@ -40,7 +40,7 @@ if __name__ == '__main__':
     cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=2, random_state=42)
 
     # create the RFE object with automatic feature number selection and cross validation:
-    rfe = RFECV(estimator=model, step=1, cv=cv, scoring='f1', n_jobs=-1)
+    rfe = RFECV(estimator=model, step=1, cv=2, scoring='f1', n_jobs=-1)
 
     # fit the RFE object to the dataset:
     rfe.fit(X_train, y_train)

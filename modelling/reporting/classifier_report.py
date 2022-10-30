@@ -19,7 +19,7 @@ matplotlib.use('TkAgg')
 
 def report_model_results(model: XGBClassifier, x_train: pd.DataFrame, x_test: pd.DataFrame,
                          y_test: pd.Series, y_predicted: pd.Series, model_name: str,
-                         plot: bool = False, save: bool = False) -> None:
+                         plot: bool = False, save: bool = True) -> None:
     """
     Function to report the results of a model.
     @param model: the model to report the results for
@@ -33,7 +33,12 @@ def report_model_results(model: XGBClassifier, x_train: pd.DataFrame, x_test: pd
     :return: None
     """
     # evaluate:
-    print(classification_report(y_test, y_predicted))
+    # save the classification report in a dataframe, round the values to 3 decimals:
+    report = pd.DataFrame(classification_report(y_test, y_predicted, output_dict=True)).transpose().round(3)
+
+    # print the classification report:
+    print(tabulate(report, headers='keys', tablefmt='psql'))
+    # print the f1 score:
     print(f"f-score for the {model_name}: {f1_score(y_test, y_predicted): .3f}")
 
     # visualize initial features importance:
@@ -42,7 +47,6 @@ def report_model_results(model: XGBClassifier, x_train: pd.DataFrame, x_test: pd
     importance.sort_values(by='importance', ascending=False, inplace=True)
 
     if plot or save:
-
         # if no folder plots exists, creat it:
         if not Path('..', 'plots').exists():
             Path('..', 'plots').mkdir()
@@ -52,13 +56,13 @@ def report_model_results(model: XGBClassifier, x_train: pd.DataFrame, x_test: pd
 
         plt.figure(figsize=(10, 6))
         plt.bar(importance['feature'], importance['importance'])
-        plt.title('Random Forest Feature Importance')
+        plt.title('Embedded Feature Importance')
         plt.xlabel('Feature')
         plt.ylabel('Importance')
         plt.savefig(Path('..', 'plots', model_name, f'feature_importance_{model_name}.png'))
 
         # print the feature importance in a table:
-        print(tabulate(importance, headers='keys', tablefmt='psql'))
+        print(tabulate(importance, headers='keys', tablefmt='presto'))
 
         # plot the confusion matrix:
         display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix(y_test, y_predicted),
@@ -78,6 +82,14 @@ def report_model_results(model: XGBClassifier, x_train: pd.DataFrame, x_test: pd
         plt.savefig(Path('..', 'plots', model_name, f'roc_curve_{model_name}.png'))
 
         if save:
+            if not Path('..', '..', 'reports').exists():
+                Path('..', '..', 'reports').mkdir()
+
+            if not Path('..', '..', 'reports', model_name).exists():
+                Path('..', '..', 'reports', model_name).mkdir()
+
             # save the feature importance:
             importance.to_csv(Path('..', '..', 'data', f'feature_importance_{model_name}.csv'), index=False)
+            # save the classification report:
+            report.to_csv(Path('..', '..', 'reports', model_name, f'classification_report_{model_name}.csv'))
 

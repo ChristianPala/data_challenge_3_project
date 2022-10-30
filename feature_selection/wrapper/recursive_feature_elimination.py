@@ -36,8 +36,10 @@ if __name__ == '__main__':
     # create the model:
     model = XGBClassifier(n_estimators=500)
 
+    # create the cross validation object:
+    cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=2, random_state=42)
+
     # create the RFE object with automatic feature number selection and cross validation:
-    cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=3, random_state=42)
     rfe = RFECV(estimator=model, step=1, cv=cv, scoring='f1', n_jobs=-1)
 
     # fit the RFE object to the dataset:
@@ -50,7 +52,8 @@ if __name__ == '__main__':
     X = X[rfe_features]
 
     # save the dataset:
-    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset__fs_rfe.csv'))
+    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_rfe.csv'))
 
     # print the features selected by RFE:
     print(tabulate([rfe_features], headers='keys', tablefmt='psql'))
+

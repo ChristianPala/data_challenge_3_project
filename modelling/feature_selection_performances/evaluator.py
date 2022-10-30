@@ -32,6 +32,15 @@ def evaluate_csv(file_path: Path, file_name: str, fast: bool = False) -> None:
     # tune the model, fast tuning since the search space is so large, yields good results:
     best_params = tuner(X_train, y_train, X_val, y_val, fast=fast)
 
+    # save the best parameters to a file:
+    # create the path to the file:
+    path = Path('..', '..', 'data', 'best_params', f'{file_name}.txt')
+
+    # save the best parameters to the file:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, 'w') as file:
+        file.write(str(best_params))
+
     # define the model:
     model = XGBClassifier(**best_params, objective="binary:logistic", random_state=42, n_jobs=-1)
 
@@ -54,13 +63,15 @@ if __name__ == '__main__':
     forward_selection_path = Path('..', '..', 'data', 'online_sales_dataset_fs_forward_selection.csv')
     backward_selection_path = Path('..', '..', 'data', 'online_sales_dataset_fs_backwards_selection.csv')
     recursive_elimination_path = Path('..', '..', 'data', 'online_sales_dataset_fs_rfe.csv')
+    exhaustive_path = Path('..', '..', 'data', 'online_sales_dataset_fs_exhaustive.csv')
 
     # evaluate the models:
     evaluate_csv(full_features_path, 'all_fe_features', fast=True)
     evaluate_csv(variance_threshold_path, 'variance_threshold_fs', fast=True)
     evaluate_csv(mutual_info_path, 'mutual_information_fs', fast=True)
-    # evaluate_csv(forward_selection_path, 'forward_selection_fs', fast=True)
-    # evaluate_csv(backward_selection_path, 'backward_selection_fs', fast=True)
-    evaluate_csv(recursive_elimination_path, 'recursive_elimination_100_fs', fast=True)
+    evaluate_csv(forward_selection_path, 'forward_selection_fs', fast=True)
+    evaluate_csv(backward_selection_path, 'backward_selection_fs', fast=True)
+    evaluate_csv(recursive_elimination_path, 'recursive_elimination_fs', fast=True)
+    evaluate_csv(exhaustive_path, 'exhaustive_fs', fast=True)
 
 

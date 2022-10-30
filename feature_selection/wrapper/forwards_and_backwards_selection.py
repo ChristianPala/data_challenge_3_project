@@ -7,6 +7,7 @@ from pathlib import Path
 # Modelling:
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 from sklearn.feature_selection import SequentialFeatureSelector
+from sklearn.model_selection import RepeatedStratifiedKFold
 from xgboost import XGBClassifier
 
 # Time:
@@ -14,7 +15,6 @@ import time
 import datetime
 
 
-# Functions:
 def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.array:
     """
     Function to perform feature selection on a given direction, default is forward.
@@ -24,13 +24,19 @@ def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.a
     @param direction: either forward or backward
     @return: the mask of the selected features
     """
+    # create the cross validation object, since we have a binary classification problem with an
+    # imbalanced dataset, we use the repeated stratified k-fold cross validation:
+    cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=5, random_state=42)
+
+    # create the sequential feature selector object:
     sfs = SequentialFeatureSelector(estimator=estimator,
                                     direction=direction,
                                     n_features_to_select='auto',
                                     scoring='f1',
-                                    tol=0.0001, 
+                                    cv=cv,
+                                    tol=10 ** - 6,
                                     n_jobs=-1)
-    print(f'> performing feature selection. Method: {direction}')
+    print(f'> performing feature selection\n. Method: {direction}')
     sfs.fit(x_tr, y_tr)
     print(f'sfs_{direction} fitted')
     print(f'shape ({direction}):', sfs.transform(x_tr).shape)
@@ -42,17 +48,6 @@ if __name__ == '__main__':
     # import the dataset:
     X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_mutual_information.csv'))
     df_fs = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs.csv'))
-
-    # make sure the dataset from mutual information preserves the order
-    # of the dataset from feature selection
-    try:
-        # check that both df are sorted, so that customer ids match
-        assert X.loc[0, 'CustomerId'] == df_fs.loc[0, 'CustomerId'], \
-            'CustomerId are not matching (not sorted dataframes)'
-    except AssertionError:
-        # if not sorted, sort the dataframe and reset the index value
-        X.sort_values(by='CustomerId', inplace=True)
-        X.reset_index(inplace=True, drop=True)
 
     X.drop('CustomerId', axis=1, inplace=True)
     # import the label dataset:
@@ -78,26 +73,34 @@ if __name__ == '__main__':
     support_f = feature_selection(model, X_train, y_train, 'forward')
     e = time.time() - s
     print('time:', str(datetime.timedelta(seconds=e)))
-    support_b = feature_selection(model, X_train, y_train, 'backward')
+    # support_b = feature_selection(model, X_train, y_train, 'backward')
 
     # support_f = results[0]
     selected_f = feature_names[support_f]
     print(f"Features selected by SequentialFeatureSelector (forward): {selected_f}")
 
-    # support_b = results[1]
-    selected_b = feature_names[support_b]
-    print(f"\nFeatures selected by SequentialFeatureSelector (backward): {selected_b}")
+    # # support_b = results[1]
+    # selected_b = feature_names[support_b]
+    # print(f"\nFeatures selected by SequentialFeatureSelector (backward): {selected_b}")
+    #
+    # selected_b = np.append(selected_b, 'CustomerId')
+
+    # set the customer id as index:
 
     # saving the dataframe with only the selected features, depending on the selection method
-
     X.drop(X.columns.difference(selected_f), axis=1, inplace=True)
+    # add the customer id column:
+    X['CustomerId'] = df_fs['CustomerId']
+    # order the columns to have the customer id as first column:
+    X = X[['CustomerId'] + [col for col in X.columns if col != 'CustomerId']]
+
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_forward_selection.csv'), index=False)
 
-    X.drop(X.columns.difference(selected_b), axis=1, inplace=True)
-    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_backwards_selection.csv'), index=False)
-
-    VIP_features = np.isin(selected_f, selected_b)
-    # print(feature_names[VIP_features])
-    # saving the dataframe with only the selected features shared with both the selection methods
-    X.drop(X.columns.difference(selected_f[VIP_features]), axis=1, inplace=True)
-    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_forward_and_backward_selection.csv'), index=False)
+    # X.drop(X.columns.difference(selected_b), axis=1, inplace=True)
+    # X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_backwards_selection.csv'), index=False)
+    #
+    # VIP_features = np.isin(selected_f, selected_b)
+    # # print(feature_names[VIP_features])
+    # # saving the dataframe with only the selected features shared with both the selection methods
+    # X.drop(X.columns.difference(selected_f[VIP_features]), axis=1, inplace=True)
+    # X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_forward_and_backward_selection.csv'), index=False)

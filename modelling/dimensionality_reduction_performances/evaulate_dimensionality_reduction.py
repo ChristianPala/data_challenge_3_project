@@ -13,9 +13,9 @@ if __name__ == '__main__':
     pca = Path('..', '..', 'data', 'online_sales_dataset_dr_pca.csv')
     tsne = Path('..', '..', 'data', 'online_sales_dataset_dr_tsne.csv')
 
-    # evaluate the baseline:
-    evaluate_csv(baseline, 'baseline_dr')
+    # evaluate the dataset with all the features:
+    evaluate_csv(baseline, 'baseline_dr', fast=True)
     # evaluate the PCA dataset:
     evaluate_csv(pca, 'pca', fast=True)
     # evaluate the TSNE dataset:
-    evaluate_csv(tsne, 't-SNE')
+    evaluate_csv(tsne, 't-SNE', fast=True)

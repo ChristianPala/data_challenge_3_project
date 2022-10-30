@@ -15,12 +15,12 @@ matplotlib.use('tkagg')
 
 if __name__ == '__main__':
     # PCA and T-SNE visualizations:
-    t_sne = pd.read_csv(Path('..', 'data', 'online_sales_dataset_dr_tsne.csv'))
-    pca = pd.read_csv(Path('..', 'data', 'online_sales_dataset_dr_pca.csv'))
+    t_sne = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_dr_tsne.csv'))
+    pca = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_dr_pca.csv'))
 
     nr_comp = pca.shape[1]
 
-    target = pd.read_csv(Path('..', 'data', 'online_sales_labels_tsfel.csv'))
+    target = pd.read_csv(Path('../..', 'data', 'online_sales_labels_tsfel.csv'))
 
     df_subset = pd.DataFrame()
     df_subset['y'] = target.CustomerChurned

@@ -13,10 +13,10 @@ mpl.use('tkagg')
 # Driver:
 if __name__ == '__main__':
     # load the t-SNE dataset:
-    t_sne = pd.read_csv(Path('..', 'data', 'online_sales_dataset_dr_tsne.csv'), index_col=0)
+    t_sne = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_dr_tsne_full.csv'), index_col=0)
 
     # load the target:
-    target = pd.read_csv(Path('..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
+    target = pd.read_csv(Path('../..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
 
     # create a dataframe with the target and the t-SNE features:
     df_subset = pd.DataFrame()
@@ -38,6 +38,4 @@ if __name__ == '__main__':
     ax.set_title('t-SNE 3D Plot of the Online Sales Dataset')
     ax.legend(['Churned', 'Not Churned'], loc='upper left')
     plt.show()
-
-
 

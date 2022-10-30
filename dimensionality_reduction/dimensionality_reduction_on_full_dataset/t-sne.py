@@ -15,11 +15,11 @@ nr_of_components: int = 3
 # Driver:
 if __name__ == '__main__':
     # load the dataset for dimensionality reduction:
-    X = pd.read_csv(Path('..', 'data', 'online_sales_dataset_for_dr.csv'))
+    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs.csv'))
 
     # save the CustomerID column for later use, drop it from the dataset:
-    customer_id = X['CustomerID']
-    X.drop('CustomerID', axis=1, inplace=True)
+    customer_id = X['CustomerId']
+    X.drop('CustomerId', axis=1, inplace=True)
 
     # scale the data with the standard scaler:
     scaler = StandardScaler()
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     tsne_results_df = \
         pd.DataFrame(tsne_results, columns=[f'tsne_{nr_of_components}_f{i}'
                                             for i in range(1, nr_of_components + 1)])
-    tsne_results_df.insert(0, 'CustomerID', customer_id)
+    tsne_results_df.insert(0, 'CustomerId', customer_id)
 
     # save the results:
-    tsne_results_df.to_csv(Path('..', 'data', 'online_sales_dataset_dr_tsne.csv'), index=False)
+    tsne_results_df.to_csv(Path('..', '..', 'data', 'online_sales_dataset_dr_tsne_full.csv'), index=False)

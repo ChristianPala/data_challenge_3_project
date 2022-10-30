@@ -16,7 +16,7 @@ Threshold: float = 0.8
 # Driver:
 if __name__ == '__main__':
     # import the dataset for dimensionality reduction:
-    X = pd.read_csv(Path('..', 'data', 'online_sales_dataset_for_dr.csv'), index_col=0)
+    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs.csv'), index_col=0)
 
     # get the number of features:
     n_features = X.shape[1]
@@ -53,4 +53,4 @@ if __name__ == '__main__':
     principal_components_df.insert(0, 'CustomerID', X.index)
 
     # save the principal components:
-    principal_components_df.to_csv(Path('..', 'data', 'online_sales_dataset_dr_pca.csv'), index=False)
+    principal_components_df.to_csv(Path('..', '..', 'data', 'online_sales_dataset_dr_pca_full.csv'), index=False)

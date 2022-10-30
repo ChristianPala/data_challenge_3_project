@@ -33,7 +33,7 @@ Recency,0.4483233
     # rename the columns:
     X.rename(columns={'CustomerId': 'CustomerID',
                       'Recency': 'Recency',
-                      '1_Area under the curve': 'AverageDaysBetweenPurchaseAUC',
+                      '1_Area under the curve': 'AvgDaysBetweenPurchaseAUC',
                       '0_FFT mean coefficient_4': 'TotalSpentFFTMeanCoefficient4',
                       '62': 'CustomerGraphDeepwalkEmbedding62of128',
                       '85': 'CustomerGraphDeepwalkEmbedding85of128',

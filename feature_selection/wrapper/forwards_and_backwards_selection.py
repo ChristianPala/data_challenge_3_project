@@ -31,12 +31,12 @@ def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.a
     # create the sequential feature selector object:
     sfs = SequentialFeatureSelector(estimator=estimator,
                                     direction=direction,
-                                    n_features_to_select='auto',
+                                    n_features_to_select=20,  # with auto, only 6 are selected.
                                     scoring='f1',
                                     cv=cv,
                                     tol=10 ** - 6,
                                     n_jobs=-1)
-    print(f'> performing feature selection\n. Method: {direction}')
+    print(f'> performing feature selection. Method: {direction}')
     sfs.fit(x_tr, y_tr)
     print(f'sfs_{direction} fitted')
     print(f'shape ({direction}):', sfs.transform(x_tr).shape)

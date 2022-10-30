@@ -27,7 +27,7 @@ if __name__ == '__main__':
     model = XGBClassifier(objective="binary:logistic", random_state=42, n_jobs=-1)
 
     # create the EFS object:
-    efs = EFS(model, min_features=10, max_features=10, scoring='f1',
+    efs = EFS(model, min_features=3, max_features=3, scoring='f1',
               cv=2, n_jobs=-1, print_progress=True)
 
     # fit the EFS object to the dataset:

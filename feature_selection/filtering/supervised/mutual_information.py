@@ -11,7 +11,7 @@ from modelling.data_splitting.train_val_test_splitter import train_validation_te
 
 # Global variables:
 # set a threshold for the mutual information:
-threshold: float = 10 ** -2  # based on the model evaluation results.
+threshold: float = 10 ** -3  # based on the model evaluation results.
 
 # Driver:
 if __name__ == '__main__':
@@ -46,9 +46,9 @@ if __name__ == '__main__':
     print(f"Outgoing features: {X.shape[1]}")
 
     # save the dataset:
-    X.to_csv(Path('..', '..', '..', 'data', 'online_sales_dataset_fs_mutual_information.csv'))
+    X.to_csv(Path('..', '..', '..', 'data', f'online_sales_dataset_fs_mutual_information_{threshold}.csv'))
 
     """
     incoming features:  349
-    Outgoing features: 136
+    Outgoing features: 246
     """

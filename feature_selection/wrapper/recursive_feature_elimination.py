@@ -26,18 +26,18 @@ if __name__ == '__main__':
     # ravel the target variable, required by sklearn:
     y = np.ravel(y)
 
-    # take a small slice of the dataset for testing:
-    # X = X.iloc[:500, :]
-    # y = y[:500]
+    # separate the features from the target variable:
+    y = X['target']
+    X = X.drop('target', axis=1)
 
     # train test split:
     X_train, X_test, y_train, y_test = train_validation_test_split(X, y)
 
     # create the model:
-    model = XGBClassifier(n_estimators=500)
+    model = XGBClassifier()
 
     # create the cross validation object:
-    cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=2, random_state=42)
+    cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=42)
 
     # create the RFE object with automatic feature number selection and cross validation:
     rfe = RFECV(estimator=model, step=1, cv=2, scoring='f1', n_jobs=-1)
@@ -56,4 +56,7 @@ if __name__ == '__main__':
 
     # print the features selected by RFE:
     print(tabulate([rfe_features], headers='keys', tablefmt='psql'))
+
+    # print the ranking of the features:
+    print(tabulate([rfe.ranking_], headers='keys', tablefmt='psql'))
 

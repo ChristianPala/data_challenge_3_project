@@ -1,5 +1,6 @@
+# Library to perform data preprocessing on the Online Sales dataset
 # Libraries:
-import pandas as pd
+# Data manipulation:
 from pathlib import Path
 from data_imputation import customer_remover, missing_description_imputer, \
     stock_code_remover, stock_code_cleaner, parallelized_cancelling_order_imputer, \

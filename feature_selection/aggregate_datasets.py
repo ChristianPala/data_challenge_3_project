@@ -12,7 +12,8 @@ if __name__ == '__main__':
     # load the dataset for feature selection:
     X = pd.read_csv(Path('..', 'data', 'online_sales_dataset_for_fs.csv'))
 
-    # In this version we used the result of the forward selection with cross-validation:
+    # In this version we used the result of the forward selection with cross-validation and automatic
+    # number of features selected:
     best_features = \
         """
 CustomerId, index
@@ -29,9 +30,9 @@ Recency,0.4483233
     # keep only the features above in X:
     X = X[features]
 
-    # rename the columns old: new:
+    # rename the columns:
     X.rename(columns={'CustomerId': 'CustomerID',
-                      'Recency': 'recency',
+                      'Recency': 'Recency',
                       '1_Area under the curve': 'AverageDaysBetweenPurchaseAUC',
                       '0_FFT mean coefficient_4': 'TotalSpentFFTMeanCoefficient4',
                       '62': 'CustomerGraphDeepwalkEmbedding62of128',
@@ -39,4 +40,4 @@ Recency,0.4483233
                       '72': 'CustomerGraphDeepwalkEmbedding72of128'}, inplace=True)
 
     # save the dataset:
-    X.to_csv(Path('..', 'data', 'online_sales_dataset_for_dr.csv'), index=False)
+    X.to_csv(Path('..', 'data', 'online_sales_dataset_for_dr_fs_and_mi_0.1.csv'), index=False)

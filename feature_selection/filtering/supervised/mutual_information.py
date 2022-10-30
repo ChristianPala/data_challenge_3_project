@@ -46,7 +46,7 @@ if __name__ == '__main__':
     print(f"Outgoing features: {X.shape[1]}")
 
     # save the dataset:
-    X.to_csv(Path('..', '..', '..', 'data', 'online_sales_dataset_fs_mutual_information.csv'))
+    X.to_csv(Path('..', '..', '..', 'data', f'online_sales_dataset_fs_mutual_information_{threshold}.csv'))
 
     """
     incoming features:  349

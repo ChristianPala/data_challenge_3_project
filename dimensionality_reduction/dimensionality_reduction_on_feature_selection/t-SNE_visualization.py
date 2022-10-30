@@ -29,11 +29,12 @@ if __name__ == '__main__':
     # add the target:
     df_subset['y'] = target.CustomerChurned.astype(int)
 
-    if nr_of_features == 2:
+    if nr_of_features in (2, 3):
         # create a figure:
         fig = plt.figure(figsize=(16, 10))
         # create a 2D scatter plot:
-        sns.scatterplot(x='tsne_2_f1', y='tsne_2_f2', hue='y', data=df_subset, palette='viridis')
+        sns.scatterplot(x=f'tsne_{nr_of_features}_f1', y=f'tsne_{nr_of_features}_f2',
+                        hue='y', data=df_subset, palette='viridis')
         plt.title('t-SNE 2D Plot of the Online Sales Dataset')
 
         # save the figure:
@@ -45,7 +46,7 @@ if __name__ == '__main__':
             # save the figure:
             fig.savefig(Path('..', '..', 'plots', 't-SNE', 'online_sales_dataset_dr_tsne_2D.png'))
 
-    elif nr_of_features == 3:
+    if nr_of_features == 3:
         # create a figure:
         fig = plt.figure(figsize=(16, 10))
 
@@ -62,7 +63,7 @@ if __name__ == '__main__':
 
         # save the figure:
         try:
-            fig.savefig(Path('..' , '..', 'plots', 't-SNE', 'online_sales_dataset_dr_tsne_3D.png'))
+            fig.savefig(Path('..', '..', 'plots', 't-SNE', 'online_sales_dataset_dr_tsne_3D.png'))
         except FileNotFoundError:
             # create the directory:
             Path('..', '..', 'plots', 't-SNE').mkdir(parents=True, exist_ok=True)

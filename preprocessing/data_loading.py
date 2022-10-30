@@ -1,3 +1,4 @@
+# Auxiliary libray to load the Online Sales dataset:
 # Libraries:
 # Data manipulation:
 from pathlib import Path

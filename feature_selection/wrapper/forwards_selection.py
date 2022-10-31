@@ -68,21 +68,13 @@ if __name__ == '__main__':
     # perform feature selection:
     # --------------------------------------------------------------------------------------
     # Forward:
-    s = time.time()
+    s = time.perf_counter()
     support_f = feature_selection(model, X_train, y_train, 'forward')
-    e = time.time() - s
+    t = time.perf_counter() - s
 
-    print('time:', str(datetime.timedelta(seconds=e)))
+    print('time:', str(datetime.timedelta(seconds=t)))
     selected_f = feature_names[support_f]
     print(f"Features selected by SequentialFeatureSelector (forward): {selected_f}")
-
-    # Backward:
-    support_b = feature_selection(model, X_train, y_train, 'backward')
-    e = time.time() - s
-    print('time:', str(datetime.timedelta(seconds=e)))
-
-    selected_b = feature_names[support_b]
-    print(f"\nFeatures selected by SequentialFeatureSelector (backward): {selected_b}")
 
     # Save the results:
     # --------------------------------------------------------------------------------------
@@ -94,12 +86,3 @@ if __name__ == '__main__':
     X = X[['CustomerId'] + [col for col in X.columns if col != 'CustomerId']]
     # Save the dataset:
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_forward_selection.csv'), index=False)
-
-    # Backward:
-    X.drop(X.columns.difference(selected_b), axis=1, inplace=True)
-    # add the customer id column:
-    X['CustomerId'] = df_fs['CustomerId']
-    # order the columns to have the customer id as first column:
-    X = X[['CustomerId'] + [col for col in X.columns if col != 'CustomerId']]
-    # Save the dataset:
-    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_backward_selection.csv'), index=False)

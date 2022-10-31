@@ -1,15 +1,14 @@
 # Wrapper method for feature selection using RFE:
-import numpy as np
 # Libraries:
 # Data manipulation:
 import pandas as pd
 from pathlib import Path
-
-from sklearn.model_selection import RepeatedStratifiedKFold
+import numpy as np
 from tabulate import tabulate
 
 # Feature selection:
 from sklearn.feature_selection import RFECV
+from sklearn.model_selection import RepeatedStratifiedKFold
 
 # Modelling:
 from xgboost import XGBClassifier
@@ -24,22 +23,18 @@ if __name__ == '__main__':
     y = pd.read_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
 
     # ravel the target variable, required by sklearn:
-    y = np.ravel(y)
-
-    # separate the features from the target variable:
-    y = X['target']
-    X = X.drop('target', axis=1)
+    y = pd.Series(np.ravel(y))
 
     # train test split:
     X_train, X_test, y_train, y_test = train_validation_test_split(X, y)
 
-    # create the model:
-    model = XGBClassifier()
+    # define the model:
+    model = XGBClassifier(objective="binary:logistic", random_state=42, n_jobs=-1)
 
     # create the cross validation object:
     cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=5, random_state=42)
 
-    # create the RFE object with automatic feature number selection and cross validation:
+    # create the RFE object with automatic number of features selection and cross validation:
     rfe = RFECV(estimator=model, step=1, cv=cv, scoring='f1', n_jobs=-1)
 
     # fit the RFE object to the dataset:

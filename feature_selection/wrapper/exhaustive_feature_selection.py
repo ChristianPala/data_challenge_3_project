@@ -48,4 +48,4 @@ if __name__ == '__main__':
     # 1 feature: average days between purchases area under the curve.
     # 2 features: Recency, average days between purchases area under the curve.
 
-    # we conclude these 2 need to be selected.
+    # Strong assumption those 2 features should be selected.

@@ -11,17 +11,20 @@ from modelling.reporting.classifier_report import report_model_results
 from modelling.tuning.xgboost_tuner import tuner
 
 # Global variables:
-mutual_information_threshold: float = 10 ** -1
+threshold: float = 10 ** -3
 
 
 # Functions:
-def evaluate_csv(file_path: Path, file_name: str, fast: bool = False) -> None:
+def evaluate_csv(file_path: Path, file_name: str, fast: bool = False,
+                 max_evaluations=100, cross_validation: int = 5) -> None:
     """
     Evaluate the performance of the model on the dataset with the features selected by the csv file.
     @param file_path: the path to the csv file.
     @param file_name: the name of the feature selection method.
     @param fast: whether to use fast tuning or not.
-    :return: saves the results of the model in the plots folder.
+    @param max_evaluations: the maximum number of evaluations for the tuning.
+    @param cross_validation: the number of folds for cross-validation.
+    :return: None: saves the results of the model in the plots folder.
     """
     # read the aggregated dataset:
     X = pd.read_csv(file_path, index_col=0)
@@ -33,7 +36,8 @@ def evaluate_csv(file_path: Path, file_name: str, fast: bool = False) -> None:
     X_train, X_val, X_test, y_train, y_val, y_test = train_validation_test_split(X, y, validation=True)
 
     # tune the model, fast tuning since the search space is so large, yields good results:
-    best_params = tuner(X_train, y_train, X_val, y_val, fast=fast)
+    best_params = tuner(X_train, y_train, X_val, y_val, fast=fast, max_evaluations=max_evaluations,
+                        cross_validation=cross_validation)
 
     # save the best parameters to a file:
     # create the path to the file:
@@ -61,18 +65,19 @@ def evaluate_csv(file_path: Path, file_name: str, fast: bool = False) -> None:
 if __name__ == '__main__':
     # paths:
     full_features_path = Path('..', '..', 'data', 'online_sales_dataset_for_fs.csv')
-    variance_threshold_path = Path('..', '..', 'data', 'online_sales_dataset_fs_variance_threshold.csv')
+    variance_threshold_path = Path('..', '..', 'data',
+                                   f'online_sales_dataset_fs_variance_threshold_{threshold}.csv')
     mutual_info_path = Path('..', '..', 'data',
-                            f'online_sales_dataset_fs_mutual_information_{mutual_information_threshold}.csv')
+                            f'online_sales_dataset_fs_mutual_information_{threshold}.csv')
     forward_selection_path = Path('..', '..', 'data', 'online_sales_dataset_fs_forward_selection.csv')
     backward_selection_path = Path('..', '..', 'data', 'online_sales_dataset_fs_backwards_selection.csv')
     recursive_elimination_path = Path('..', '..', 'data', 'online_sales_dataset_fs_rfe.csv')
     exhaustive_path = Path('..', '..', 'data', 'online_sales_dataset_fs_exhaustive.csv')
 
     # evaluate the models:
-    evaluate_csv(full_features_path, 'all_fe_features')
-    # evaluate_csv(variance_threshold_path, 'variance_threshold_fs', fast=True)
-    # evaluate_csv(mutual_info_path, f'mutual_information_fs_{mutual_information_threshold}', fast=True)
+    # evaluate_csv(full_features_path, 'all_fe_features')
+    evaluate_csv(variance_threshold_path, f'variance_threshold_fs_{threshold}')
+    evaluate_csv(mutual_info_path, f'mutual_information_fs_{threshold}')
     # evaluate_csv(forward_selection_path, 'forward_selection_fs', fast=True)
     # evaluate_csv(backward_selection_path, 'backward_selection_fs', fast=True)
     # evaluate_csv(recursive_elimination_path, 'recursive_elimination_fs', fast=True)

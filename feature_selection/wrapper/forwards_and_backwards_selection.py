@@ -31,7 +31,7 @@ def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.a
     # create the sequential feature selector object:
     sfs = SequentialFeatureSelector(estimator=estimator,
                                     direction=direction,
-                                    n_features_to_select=20,  # with auto, only 6 are selected.
+                                    n_features_to_select='auto',
                                     scoring='f1',
                                     cv=cv,
                                     tol=10 ** - 6,
@@ -46,61 +46,60 @@ def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.a
 
 if __name__ == '__main__':
     # import the dataset:
-    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_mutual_information.csv'))
+    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_mutual_information_0.001.csv'))
     df_fs = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs.csv'))
 
+    # Drop the customer id:
     X.drop('CustomerId', axis=1, inplace=True)
+
     # import the label dataset:
     y = pd.read_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
 
-    # X = X[:50]  # slice for debugging
-    # y = y[:50]  # slice for debugging
-
+    # get the feature names:
     feature_names = np.array(X.columns)
-    # print(feature_names)
 
     # perform the train test split:
     X_train, X_test, y_train, y_test = \
         train_validation_test_split(X, y)
 
-    # best = tuner(X_train, y_train, X_validation, y_validation, cross_validation=5)
-
     # define the model:
     model = XGBClassifier(objective="binary:logistic", random_state=42, n_jobs=-1)
 
     # perform feature selection:
+    # --------------------------------------------------------------------------------------
+    # Forward:
     s = time.time()
     support_f = feature_selection(model, X_train, y_train, 'forward')
     e = time.time() - s
-    print('time:', str(datetime.timedelta(seconds=e)))
-    # support_b = feature_selection(model, X_train, y_train, 'backward')
 
-    # support_f = results[0]
+    print('time:', str(datetime.timedelta(seconds=e)))
     selected_f = feature_names[support_f]
     print(f"Features selected by SequentialFeatureSelector (forward): {selected_f}")
 
-    # # support_b = results[1]
-    # selected_b = feature_names[support_b]
-    # print(f"\nFeatures selected by SequentialFeatureSelector (backward): {selected_b}")
-    #
-    # selected_b = np.append(selected_b, 'CustomerId')
+    # Backward:
+    support_b = feature_selection(model, X_train, y_train, 'backward')
+    e = time.time() - s
+    print('time:', str(datetime.timedelta(seconds=e)))
 
-    # set the customer id as index:
+    selected_b = feature_names[support_b]
+    print(f"\nFeatures selected by SequentialFeatureSelector (backward): {selected_b}")
 
-    # saving the dataframe with only the selected features, depending on the selection method
+    # Save the results:
+    # --------------------------------------------------------------------------------------
+    # Forward:
     X.drop(X.columns.difference(selected_f), axis=1, inplace=True)
     # add the customer id column:
     X['CustomerId'] = df_fs['CustomerId']
     # order the columns to have the customer id as first column:
     X = X[['CustomerId'] + [col for col in X.columns if col != 'CustomerId']]
-
+    # Save the dataset:
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_forward_selection.csv'), index=False)
 
-    # X.drop(X.columns.difference(selected_b), axis=1, inplace=True)
-    # X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_backwards_selection.csv'), index=False)
-    #
-    # VIP_features = np.isin(selected_f, selected_b)
-    # # print(feature_names[VIP_features])
-    # # saving the dataframe with only the selected features shared with both the selection methods
-    # X.drop(X.columns.difference(selected_f[VIP_features]), axis=1, inplace=True)
-    # X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_forward_and_backward_selection.csv'), index=False)
+    # Backward:
+    X.drop(X.columns.difference(selected_b), axis=1, inplace=True)
+    # add the customer id column:
+    X['CustomerId'] = df_fs['CustomerId']
+    # order the columns to have the customer id as first column:
+    X = X[['CustomerId'] + [col for col in X.columns if col != 'CustomerId']]
+    # Save the dataset:
+    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_backward_selection.csv'), index=False)

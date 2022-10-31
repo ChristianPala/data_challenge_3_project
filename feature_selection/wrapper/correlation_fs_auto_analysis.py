@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
-    df = pd.read_csv(Path('..', '..', '..', 'data', 'online_sales_dataset_for_dr_fs.csv'), index_col=0)
+    df = pd.read_csv(Path('../filtering', '..', '..', 'data', 'online_sales_dataset_for_dr_fs.csv'), index_col=0)
 
     # shorten the column names:
     df.columns = [col.replace('DeepwalkEmbedding', 'DWEmb') for col in df.columns]
@@ -23,4 +23,4 @@ if __name__ == '__main__':
     # The correlation matrix confirms the features selected are not correlated very correlated with each other.
 
     # save the correlation matrix:
-    df.corr('pearson').to_csv(Path('..', '..', '..', 'plots', 'automated_forwad_selection_correlation_matrix.csv'))
+    df.corr('pearson').to_csv(Path('../filtering', '..', '..', 'plots', 'automated_forwad_selection_correlation_matrix.csv'))

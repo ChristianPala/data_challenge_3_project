@@ -40,15 +40,12 @@ if __name__ == '__main__':
     mi_features = list(X_train.columns[mi > threshold])
     X = X[mi_features]
 
-    # print the features selected by mutual information:
-    print(tabulate.tabulate([mi_features], headers='keys', tablefmt='psql'))
-
     print(f"Outgoing features: {X.shape[1]}")
 
     # save the dataset:
     X.to_csv(Path('..', '..', '..', 'data', f'online_sales_dataset_fs_mutual_information_{threshold}.csv'))
 
     """
-    incoming features:  349
-    Outgoing features: 246
+    incoming features: 174
+    Outgoing features: 138
     """

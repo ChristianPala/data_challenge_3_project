@@ -4,8 +4,12 @@
 from pathlib import Path
 import pandas as pd
 
+# Timing:
+from auxiliary.method_timer import measure_time
+
 
 # Functions:
+@measure_time
 def load_and_save_data() -> pd.DataFrame:
     """
     Load the two datasets and save the combined dataset.
@@ -24,7 +28,8 @@ def load_and_save_data() -> pd.DataFrame:
 
     # If they are not available, load the original Excel sheet:
     except FileNotFoundError:
-        dict_df = pd.read_excel(Path('..', 'data', 'online_sales_dataset.xlsx'), sheet_name=['Year 2009-2010', 'Year 2010-2011'])
+        dict_df = pd.read_excel(Path('..', 'data', 'online_sales_dataset.xlsx'),
+                                sheet_name=['Year 2009-2010', 'Year 2010-2011'])
 
         df_09 = dict_df.get('Year 2009-2010')
         df_10 = dict_df.get('Year 2010-2011')
@@ -35,10 +40,9 @@ def load_and_save_data() -> pd.DataFrame:
     # fix the date, works for both windows and ubuntu:
     try:
         # windows:
-        df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%d/%m/%Y %H:%M:%S')
+        df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%d/%m/%Y %H:%M')
     except ValueError:
         # ubuntu:
-        df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%Y-%m-%d %H:%M:%S')
+        df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'], format='%Y-%m-%d %H:%M')
 
     return df
-

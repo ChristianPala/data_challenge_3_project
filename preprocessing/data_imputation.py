@@ -214,7 +214,7 @@ def price_imputer(df: pd.DataFrame) -> pd.DataFrame:
     # get rows with price 0 or lower:
     zero_price_rows = df[df['Price'] <= 0.00]
     # check if there are rows with the same stock code, but different prices:
-    for row in zero_price_rows.itertuples():
+    for row in tqdm(zero_price_rows.itertuples(), total=len(zero_price_rows)):
         # get all the rows with the same stock code:
         same_stock_code_rows = df[df['StockCode'] == row.StockCode]
         # get the unique prices of the rows with the same stock code:

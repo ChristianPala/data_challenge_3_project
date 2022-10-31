@@ -4,7 +4,7 @@ import pandas as pd
 from pathlib import Path
 
 # Modelling:
-from sklearn.model_selection import cross_val_score, train_test_split
+from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import RepeatedStratifiedKFold
 from xgboost import XGBClassifier
 from sklearn.metrics import f1_score
@@ -39,16 +39,20 @@ if __name__ == '__main__':
     # print the score means and standard deviations:
     print(f"f1 score: {scores.mean():.3f}, standard deviation: {scores.std():.3f}")
     # The base model already has a decent accuracy score, and it's quite stable.
+    """
+    f1 score: 0.695, standard deviation: 0.029
+    """
 
     # save the results:
     try:
-        with open(Path('..', 'reports', 'base model cross validation', 'base_model_cross_validation.txt'), 'w') as f:
+        with open(Path('..', '..', 'reports', 'base model cross validation', 'base_model_cross_validation.txt'), 'w') as f:
             f.write(f"f1 score: {scores.mean():.3f}, standard deviation: {scores.std():.3f}")
     except FileNotFoundError:
-        # create the reports folder:
-        Path('..', 'reports', 'base model cross validation').mkdir(parents=True, exist_ok=True)
+        # create the reports' folder:
+        Path('..', '..', 'reports', 'base model cross validation').mkdir(parents=True, exist_ok=True)
         # save the results:
-        with open(Path('..', 'reports', 'base_model_cross_validation.txt'), 'w') as f:
+        with open(Path('..', '..', 'reports', 'base model cross validation', 'base_model_cross_validation.txt'),
+                  'w') as f:
             f.write(f"f1 score: {scores.mean():.3f}, standard deviation: {scores.std():.3f}")
 
 

@@ -17,7 +17,7 @@ threshold: float = 10 ** -3  # based on the model evaluation results.
 if __name__ == '__main__':
     # import the dataset for feature selection, filteres by variance threshold:
     X = pd.read_csv(Path('..', '..', '..', 'data',
-                         'online_sales_dataset_fs_variance_threshold.csv'), index_col=0)
+                         f'online_sales_dataset_fs_variance_threshold_{threshold}.csv'), index_col=0)
 
     print(f"Incoming features: {X.shape[1]}")
 

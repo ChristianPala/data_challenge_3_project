@@ -31,13 +31,13 @@ Recency,0.4483233
     X = X[features]
 
     # rename the columns:
-    X.rename(columns={'CustomerId': 'CustomerID',
+    X.rename(columns={'CustomerId': 'CustomerId',
                       'Recency': 'Recency',
-                      '1_Area under the curve': 'AvgDaysBetweenPurchaseAUC',
+                      '1_Area under the curve': 'AverageDaysBetweenPurchaseAUC',
                       '0_FFT mean coefficient_4': 'TotalSpentFFTMeanCoefficient4',
                       '62': 'CustomerGraphDeepwalkEmbedding62of128',
                       '85': 'CustomerGraphDeepwalkEmbedding85of128',
                       '72': 'CustomerGraphDeepwalkEmbedding72of128'}, inplace=True)
 
     # save the dataset:
-    X.to_csv(Path('..', 'data', 'online_sales_dataset_for_dr_fs_and_mi_0.1.csv'), index=False)
+    X.to_csv(Path('..', 'data', 'online_sales_dataset_for_dr.csv'), index=False)

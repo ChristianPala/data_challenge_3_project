@@ -21,7 +21,7 @@ if __name__ == '__main__':
         train_validation_test_split(X, y, validation=True)
 
     # tune xgboost for time series data:
-    best = tuner(X_train, y_train, X_validation, y_validation, fast=True)
+    best = tuner(X_train, y_train, X_validation, y_validation, cross_validation=5)
 
     # define the model:
     model = XGBClassifier(**best, objective="binary:logistic", random_state=42, n_jobs=-1)

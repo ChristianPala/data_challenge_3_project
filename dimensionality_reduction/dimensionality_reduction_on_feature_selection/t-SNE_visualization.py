@@ -34,17 +34,18 @@ if __name__ == '__main__':
         fig = plt.figure(figsize=(16, 10))
         # create a 2D scatter plot:
         sns.scatterplot(x=f'tsne_{nr_of_features}_f1', y=f'tsne_{nr_of_features}_f2',
-                        hue='y', data=df_subset, palette='viridis')
+                        hue='y', data=df_subset, palette='coolwarm', s=20, alpha=0.8, edgecolors='k')
         plt.title('t-SNE 2D Plot of the Online Sales Dataset')
+        plt.legend(['Churned', 'Not Churned'], loc='upper left')
 
         # save the figure:
         try:
-            fig.savefig(Path('..', '..', 'plots', 't-SNE', 'online_sales_dataset_dr_tsne_2D.png'))
+            fig.savefig(Path('..', '..', 'plots', 't-SNE-PCA-init', 'online_sales_dataset_dr_tsne_2D.png'))
         except FileNotFoundError:
             # create the directory:
-            Path('..', '..', 'plots', 't-SNE').mkdir(parents=True, exist_ok=True)
+            Path('..', '..', 'plots', 't-SNE-PCA-init').mkdir(parents=True, exist_ok=True)
             # save the figure:
-            fig.savefig(Path('..', '..', 'plots', 't-SNE', 'online_sales_dataset_dr_tsne_2D.png'))
+            fig.savefig(Path('..', '..', 'plots', 't-SNE-PCA-init', 'online_sales_dataset_dr_tsne_2D.png'))
 
     if nr_of_features == 3:
         # create a figure:
@@ -63,10 +64,10 @@ if __name__ == '__main__':
 
         # save the figure:
         try:
-            fig.savefig(Path('..', '..', 'plots', 't-SNE', 'online_sales_dataset_dr_tsne_3D.png'))
+            fig.savefig(Path('..', '..', 'plots', 't-SNE-PCA-init', 'online_sales_dataset_dr_tsne_3D.png'))
         except FileNotFoundError:
             # create the directory:
-            Path('..', '..', 'plots', 't-SNE').mkdir(parents=True, exist_ok=True)
+            Path('..', '..', 'plots', 't-SNE-PCA-init').mkdir(parents=True, exist_ok=True)
             # save the figure:
             fig.savefig(Path('..', '..', 'plots', 't-SNE', 'online_sales_dataset_dr_tsne_3D.png'))
 

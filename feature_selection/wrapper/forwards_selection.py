@@ -35,7 +35,7 @@ def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.a
                                     direction=direction,
                                     n_features_to_select='auto',
                                     scoring='f1',
-                                    cv=2,
+                                    cv=cv,
                                     n_jobs=4)
     print(f'> performing feature selection. Method: {direction}')
     sfs.fit(x_tr, y_tr)

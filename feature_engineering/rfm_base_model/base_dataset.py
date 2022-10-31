@@ -23,8 +23,9 @@ if __name__ == '__main__':
     df_agg = df_agg[df_agg['TotalSpent'] > 0]
 
     # aggregate the other columns:
-    df_agg[['NumberOfPurchases', 'Description', 'LastPurchase', 'Country']] = \
-        df.groupby('CustomerId').agg({'Invoice': 'count', 'Description': lambda x: ' '.join(x), 'InvoiceDate': 'max',
+    df_agg[['NumberOfPurchases', 'NumberOfProducts', 'Description', 'LastPurchase', 'Country']] = \
+        df.groupby('CustomerId').agg({'Invoice': 'count', 'StockCode': 'nunique',
+                                      'Description': lambda x: ' '.join(x), 'InvoiceDate': 'max',
                                       'Country': lambda x: x.value_counts().index[0]})
 
     # Use the above for our first definition of churn, costumers that have not purchased in the last @timeframe months:

@@ -12,26 +12,16 @@ from modelling.reporting.classifier_report import report_model_results
 
 if __name__ == '__main__':
     # import the  tsfel dataset:
-    df_ts = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_tsfel.csv'))
+    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel_for_fs.csv'), index_col=0)
     # import the label dataset:
-    y = pd.read_csv(Path('../..', 'data', 'online_sales_labels_tsfel.csv'))
-
-    # remove all columns with NaN values:
-    df_ts = df_ts.dropna(axis=1)
-
-    # add the features we used in the base model:
-    # df_ts["NumberOfPurchases"] = df_agg["NumberOfPurchases"].astype(int)
-    # df_ts["TotalSpent"] = df_agg["TotalSpent"]
-    # df_ts["TotalQuantity"] = df_agg["TotalQuantity"]
-    # df_ts["Country"] = df_agg["Country"]
-    # df_ts["Recency"] = df_agg["Recency"]
+    y = pd.read_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
 
     # perform the train test split:
     X_train, X_validation, X_test, y_train, y_validation, y_test = \
-        train_validation_test_split(df_ts, y, validation=True)
+        train_validation_test_split(X, y, validation=True)
 
     # tune xgboost for time series data:
-    best = tuner(X_train, y_train, X_validation, y_validation, cross_validation=5)
+    best = tuner(X_train, y_train, X_validation, y_validation, fast=True)
 
     # define the model:
     model = XGBClassifier(**best, objective="binary:logistic", random_state=42, n_jobs=-1)
@@ -43,4 +33,4 @@ if __name__ == '__main__':
     y_pred = model.predict(X_test)
 
     # evaluate:
-    report_model_results(model, X_train, X_test, y_test, y_pred, "Time series enriched RFM model", save=True)
+    report_model_results(model, X_train, X_test, y_test, y_pred, "Time series model", save=True)

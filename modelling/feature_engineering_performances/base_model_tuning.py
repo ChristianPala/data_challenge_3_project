@@ -13,10 +13,10 @@ from modelling.reporting.classifier_report import report_model_results
 # Functions:
 if __name__ == '__main__':
     # read the aggregated dataset:
-    df_agg = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_agg.csv'))
+    df_agg = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
 
-    # select the features: number of purchases, total price spent, total quantity ordered and country:
-    X = df_agg[['NumberOfPurchases', 'TotalSpent', 'TotalQuantity', 'Country', 'Recency']]
+    # select the features for the model:
+    X = df_agg[['Recency', 'NumberOfPurchases', 'NumberOfProducts', 'TotalSpent', 'TotalQuantity', 'Country']]
     y = df_agg['CustomerChurned']
 
     # train test split:
@@ -28,6 +28,10 @@ if __name__ == '__main__':
     # print the best parameters:
     print('Best parameters:')
     print(best_parameters)
+
+    # save the best parameters:
+    pd.DataFrame(best_parameters, index=[0]).to_csv(Path('..', '..', 'data', 'best_params', 'base_model.csv'),
+                                                    index=False)
 
     # train the model with the best parameters:
     model = XGBClassifier(**best_parameters, objective="binary:logistic", random_state=42, n_jobs=-1)

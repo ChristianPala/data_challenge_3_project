@@ -124,6 +124,11 @@ if __name__ == '__main__':
     # check the results:
     print_results(X_train, X_test)
 
+    # Add a feature measuring the length of the description for each customer, with the idea that possibly the longer
+    # the description, the more likely the customer is not to churn:
+    X_train['DescriptionLength'] = X_train['Description'].apply(lambda x: len(x))
+    X_test['DescriptionLength'] = X_test['Description'].apply(lambda x: len(x))
+
     # save the new datasets:
     X_train.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_train.csv'), index=False)
     X_test.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_test.csv'), index=False)

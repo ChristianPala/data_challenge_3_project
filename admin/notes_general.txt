@@ -31,7 +31,8 @@ also, ci mette una vita a fare il feature extraction per ogni customer...
 
 [Done]: modding copiato.
 
-todo:
-- Graph feature extraction, working on pagerank, consider other graph features
-- NLP performance improvement
-- Time series explore which features were extracted automatically.
+[Done]: Graph feature extraction
+
+[Done]: Feature selection
+
+[Done]: Dimensionality reduction

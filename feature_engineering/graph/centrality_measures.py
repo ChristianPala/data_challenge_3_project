@@ -25,7 +25,7 @@ def main(graph_type_name: str, only_pagerank: bool = True) -> None:
         # extract the pagerank centrality measures:
         centrality = nx.pagerank(G)
         # convert the dictionary to a dataframe:
-        df_centrality = pd.DataFrame.from_dict(centrality, orient='index', columns=['pagerank'])
+        df_centrality = pd.DataFrame.from_dict(centrality, orient='index', columns=['PageRank'])
 
     else:
         # Calculate the centrality measures:
@@ -67,4 +67,4 @@ def main(graph_type_name: str, only_pagerank: bool = True) -> None:
 
 # Driver:
 if __name__ == '__main__':
-    main(graph_type_name='product', only_pagerank=True)
+    main(graph_type_name='product', only_pagerank=False)

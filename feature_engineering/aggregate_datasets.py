@@ -21,6 +21,7 @@ if __name__ == '__main__':
     # check how many customers are in the aggregated dataset and not in the time series dataset:
     print(f"Number of customers in the aggregated dataset and not in the time series dataset: "
           f"{df.shape[0] - df_ts.shape[0]}")
+    # Since we are losing few customers, we will proceed with the merge:
 
     # remove customer id's in the aggregated dataset that are not in the time series dataset:
     df = df[df['CustomerId'].isin(df_ts['CustomerId'])]

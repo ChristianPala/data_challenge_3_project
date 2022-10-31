@@ -15,10 +15,10 @@ from modelling.data_splitting.train_val_test_splitter import train_validation_te
 # Driver:
 if __name__ == '__main__':
     # read the aggregated dataset:
-    df_agg = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_agg.csv'))
+    df_agg = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
 
     # select the features: number of purchases, total price spent, total quantity ordered and country:
-    X = df_agg[['Recency', 'NumberOfPurchases', 'TotalSpent', 'TotalQuantity', 'Country']]
+    X = df_agg[['Recency', 'NumberOfPurchases', 'NumberOfProducts', 'TotalSpent', 'TotalQuantity', 'Country']]
     y = df_agg['CustomerChurned']
 
     # split the dataset into train and test with the usual seed:
@@ -38,6 +38,17 @@ if __name__ == '__main__':
 
     # print the score means and standard deviations:
     print(f"f1 score: {scores.mean():.3f}, standard deviation: {scores.std():.3f}")
-
     # The base model already has a decent accuracy score, and it's quite stable.
+
+    # save the results:
+    try:
+        with open(Path('..', 'reports', 'base model cross validation', 'base_model_cross_validation.txt'), 'w') as f:
+            f.write(f"f1 score: {scores.mean():.3f}, standard deviation: {scores.std():.3f}")
+    except FileNotFoundError:
+        # create the reports folder:
+        Path('..', 'reports', 'base model cross validation').mkdir(parents=True, exist_ok=True)
+        # save the results:
+        with open(Path('..', 'reports', 'base_model_cross_validation.txt'), 'w') as f:
+            f.write(f"f1 score: {scores.mean():.3f}, standard deviation: {scores.std():.3f}")
+
 

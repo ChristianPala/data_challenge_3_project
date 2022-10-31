@@ -15,6 +15,7 @@ if __name__ == '__main__':
     df_customer_deepwalk = pd.read_csv(Path('..', '..', 'data', 'customer_deepwalk_embeddings.csv'), index_col=0)
     df_customer_country_deepwalk = pd.read_csv(Path('..', '..', 'data', 'customer_country_deepwalk_embeddings.csv'),
                                                index_col=0)
+    # We do not include the product graph deepwalk, as we found a lot of missing values in the embeddings.
 
     # merge the centrality and deepwalk measures:
     df_customer = pd.concat([df_customer_centrality, df_customer_deepwalk], axis=1)
@@ -36,8 +37,16 @@ if __name__ == '__main__':
     # create a list of customers with their product purchases:
     df = df.groupby('CustomerId').agg({'StockCode': lambda x: list(x)})
 
-    # based on the product purchases, create an average value of the pagerank for each customer:
-    df['ProductPagerank'] = df['StockCode'].apply(lambda x: np.mean([df_product_centrality.loc[product, 'pagerank']
+    # based on the product purchases, create an average value of the centrality measures for each customer:
+    df['ProductDegreeCentrality'] = df['StockCode'].apply(
+        lambda x: np.mean([df_product_centrality.loc[product, 'DegreeCentrality'] for product in x]))
+    df['ProductClosenessCentrality'] = df['StockCode'].apply(
+        lambda x: np.mean([df_product_centrality.loc[product, 'ClosenessCentrality'] for product in x]))
+    df['ProductBetweennessCentrality'] = df['StockCode'].apply(
+        lambda x: np.mean([df_product_centrality.loc[product, 'BetweennessCentrality'] for product in x]))
+    df['ProductEigenvectorCentrality'] = df['StockCode'].apply(
+        lambda x: np.mean([df_product_centrality.loc[product, 'EigenvectorCentrality'] for product in x]))
+    df['ProductPagerank'] = df['StockCode'].apply(lambda x: np.mean([df_product_centrality.loc[product, 'PageRank']
                                                                      for product in x]))
 
     # merge the customer graph features with the dataset:

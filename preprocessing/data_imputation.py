@@ -15,7 +15,7 @@ missing_counter = 0
 # Functions:
 def sort_by_date_given_reference(df: pd.DataFrame, reference_date) -> pd.DataFrame:
     """
-    Auxiliary function for cancelling_order_imputer() to sort the dataframe by the date given a reference date.
+    Auxiliary function for cancelling_order_imputer() to sort the dataframe by date given a reference date.
     @param df: the dataframe to be sorted.
     @param reference_date: the reference date to sort the dataframe by.
     :return: the sorted dataframe.
@@ -24,7 +24,8 @@ def sort_by_date_given_reference(df: pd.DataFrame, reference_date) -> pd.DataFra
     df['DateDiff'] = abs(df['InvoiceDate'] - reference_date)
     df.sort_values(by=['DateDiff'], inplace=True)
     df.drop(columns=['DateDiff'], inplace=True)
-    return df.copy()
+
+    return df
 
 
 def missing_description_imputer(df: pd.DataFrame) -> pd.DataFrame:
@@ -44,6 +45,7 @@ def missing_description_imputer(df: pd.DataFrame) -> pd.DataFrame:
     df = df[~df['Description'].str.startswith('Manual')]
     # impute the missing values in the description column:
     df['Description'] = df['Description'].fillna(df['StockCode'])
+
     return df
 
 
@@ -81,6 +83,7 @@ def customer_remover(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
     # delete the missing customer ids:
     df.drop(df[df['Customer ID'].isna()].index, inplace=True)
+
     return df
 
 

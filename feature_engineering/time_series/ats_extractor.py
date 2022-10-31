@@ -8,12 +8,15 @@ import pandas as pd
 import tsfel
 # Timing:
 from tqdm import tqdm
+from auxiliary.method_timer import measure_time
 # Warning Handling:
 import warnings
 # suppress warnings during feature extraction:
 warnings.filterwarnings("ignore")
 
 
+# Functions:
+@measure_time
 def feature_extractor(data: pd.DataFrame, features, customer) -> pd.DataFrame:
     """
     Extracts the time series features from the time series data.

@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 
+
 # Modelling:
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 from sklearn.feature_selection import SequentialFeatureSelector
@@ -11,10 +12,11 @@ from sklearn.model_selection import RepeatedStratifiedKFold
 from xgboost import XGBClassifier
 
 # Time:
-import time
-import datetime
+from auxiliary.method_timer import measure_time
 
 
+# Functions:
+@measure_time
 def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.array:
     """
     Function to perform feature selection on a given direction, default is forward.
@@ -34,7 +36,6 @@ def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.a
                                     n_features_to_select='auto',
                                     scoring='f1',
                                     cv=cv,
-                                    tol=10 ** - 6,
                                     n_jobs=-1)
     print(f'> performing feature selection. Method: {direction}')
     sfs.fit(x_tr, y_tr)
@@ -58,6 +59,10 @@ if __name__ == '__main__':
     # get the feature names:
     feature_names = np.array(X.columns)
 
+    # small slice for testing:
+    # X = X.iloc[:100, :]
+    # y = y.iloc[:100, :]
+
     # perform the train test split:
     X_train, X_test, y_train, y_test = \
         train_validation_test_split(X, y)
@@ -67,18 +72,12 @@ if __name__ == '__main__':
 
     # perform feature selection:
     # --------------------------------------------------------------------------------------
-    # Forward:
-    s = time.perf_counter()
     support_f = feature_selection(model, X_train, y_train, 'forward')
-    t = time.perf_counter() - s
-
-    print('time:', str(datetime.timedelta(seconds=t)))
     selected_f = feature_names[support_f]
     print(f"Features selected by SequentialFeatureSelector (forward): {selected_f}")
 
     # Save the results:
     # --------------------------------------------------------------------------------------
-    # Forward:
     X.drop(X.columns.difference(selected_f), axis=1, inplace=True)
     # add the customer id column:
     X['CustomerId'] = df_fs['CustomerId']

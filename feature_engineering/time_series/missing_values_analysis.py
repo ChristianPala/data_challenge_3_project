@@ -22,7 +22,6 @@ if __name__ == '__main__':
     print(f"Number of features with missing values: {len(missing_values_columns)}")
 
     # for each column with missing values, fill the missing values with the median of the column:
-    # Todo: check if this is the best way to fill the missing values
     for col in df_dropped.columns:
         if df_dropped[col].isnull().sum() > 0:
             df_dropped[col].fillna(df_dropped[col].median(), inplace=True)

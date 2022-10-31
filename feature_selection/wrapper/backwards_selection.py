@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 
+from auxiliary.method_timer import measure_time
 # Feature selection:
 from forwards_selection import feature_selection
 
@@ -12,9 +13,6 @@ from forwards_selection import feature_selection
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 from xgboost import XGBClassifier
 
-# Time:
-import time
-import datetime
 
 
 # Driver:
@@ -41,11 +39,7 @@ if __name__ == '__main__':
 
     # perform feature selection:
     # --------------------------------------------------------------------------------------
-    s = time.perf_counter()
     support_b = feature_selection(model, X_train, y_train, 'backward')
-    t = time.perf_counter() - s
-    print('time:', str(datetime.timedelta(seconds=t)))
-
     selected_b = feature_names[support_b]
     print(f"\nFeatures selected by SequentialFeatureSelector (backward): {selected_b}")
 

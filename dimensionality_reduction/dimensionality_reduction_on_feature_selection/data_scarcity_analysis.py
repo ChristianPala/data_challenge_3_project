@@ -9,7 +9,7 @@ from pathlib import Path
 # Driver:
 if __name__ == '__main__':
     # import the dataset for dimensionality reduction:
-    df = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_for_dr.csv'),
+    df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_dr.csv'),
                      index_col=0)
 
     # convert the dataframe to a SparseArray

@@ -11,6 +11,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
 # Global variables:
+# number of components to keep based on the explained variance ratio:
 Threshold: float = 0.8
 
 # Driver:
@@ -53,4 +54,4 @@ if __name__ == '__main__':
     principal_components_df.insert(0, 'CustomerID', X.index)
 
     # save the principal components:
-    principal_components_df.to_csv(Path('../..', 'data', 'online_sales_dataset_dr_pca.csv'), index=False)
+    principal_components_df.to_csv(Path('..', '..', 'data', 'online_sales_dataset_dr_pca.csv'), index=False)

@@ -27,8 +27,11 @@ if __name__ == '__main__':
     model = XGBClassifier(objective="binary:logistic", random_state=42, n_jobs=-1)
 
     # create the EFS object:
-    efs = EFS(model, min_features=1, max_features=3, scoring='f1',
-              cv=2, n_jobs=-1, print_progress=True, clone_estimator=True)
+    efs = EFS(model, min_features=5, max_features=5, scoring='f1',
+              cv=2, n_jobs=-1, print_progress=True, fixed_features=(X.columns.get_loc('Recency'),
+                                                                    X.columns.get_loc('1_Area under the curve'),
+                                                                    X.columns.get_loc('85'),
+                                                                    X.columns.get_loc('92')))
 
     # fit the EFS object to the dataset:
     efs.fit(X_train, y_train)
@@ -47,5 +50,12 @@ if __name__ == '__main__':
     print(efs.best_feature_names_)
     # 1 feature: average days between purchases area under the curve.
     # 2 features: Recency, average days between purchases area under the curve.
-
     # Strong assumption those 2 features should be selected.
+
+    # Complementary:
+    # 3 85
+    # 4 92
+    # 5 62
+
+    # Similar results to automatic feature selection on the mutual information filtered dataset.
+

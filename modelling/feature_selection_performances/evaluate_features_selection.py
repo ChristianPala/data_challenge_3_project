@@ -82,5 +82,5 @@ if __name__ == '__main__':
     evaluate_csv(backward_selection_path, 'backward_selection_fs', fast=True)
     evaluate_csv(recursive_elimination_path, 'recursive_elimination_fs', fast=True)
     evaluate_csv(exhaustive_path, 'exhaustive_fs', fast=True)
-
+    evaluate_csv(exhaustive_path, 'exhaustive_fs', fast=True)
 

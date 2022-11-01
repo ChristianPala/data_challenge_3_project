@@ -5,7 +5,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
-    df = pd.read_csv(Path('../filtering', '..', '..', 'data', 'online_sales_dataset_for_dr_fs.csv'), index_col=0)
+    # load the dataset with the features selected by forward selection:
+    df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_dr_fs.csv'), index_col=0)
 
     # shorten the column names for readability:
     df.columns = [col.replace('DeepwalkEmbedding', 'DWEmb') for col in df.columns]
@@ -23,7 +24,7 @@ if __name__ == '__main__':
     corr[mask] = np.nan
     # get the column values:
     y_tick = corr.columns.values
-    # replace Recency with empty string:
+    # replace Recency with empty string in the y ticks:
     y_tick = [col.replace('Recency', '') for col in y_tick]
 
     # plot:
@@ -47,4 +48,4 @@ if __name__ == '__main__':
     # to the model.
 
     # save the correlation matrix:
-    corr.to_csv(Path('../filtering', '..', '..', 'plots', 'automated_forward_selection_correlation_matrix.csv'))
+    corr.to_csv(Path('..', '..', 'plots', 'automated_forward_selection_correlation_matrix.csv'))

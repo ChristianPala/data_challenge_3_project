@@ -46,5 +46,5 @@ if __name__ == '__main__':
     # save the dataset, the first row is the header:
     df.to_csv(Path('', '..', 'data', 'online_sales_dataset_for_fs.csv'), index=False)
     # print the number of features:
-    print(f"Number of features: {df.shape[1]}")
+    print(f"Number of features: {df.shape[1] -1}")
 

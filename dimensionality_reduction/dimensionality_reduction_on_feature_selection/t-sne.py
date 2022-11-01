@@ -10,7 +10,10 @@ from sklearn.manifold import TSNE
 from sklearn.preprocessing import StandardScaler
 
 # Global variables:
+# Dimension for the t-SNE:
 nr_of_components: int = 3
+# Initialization for the t-SNE:
+initialization: str = 'pca'
 
 # Driver:
 if __name__ == '__main__':
@@ -27,7 +30,7 @@ if __name__ == '__main__':
 
     # initialize the TSNE, since PCA is performing well. and it's advised in the documentation, we will
     # use the PCA initialization:
-    tsne = TSNE(n_components=nr_of_components, init='pca', verbose=1, perplexity=40,  learning_rate='auto')
+    tsne = TSNE(n_components=nr_of_components, init=initialization, verbose=1, perplexity=40,  learning_rate='auto')
     # fit
     tsne_results = tsne.fit_transform(X_scaled)
 
@@ -37,5 +40,11 @@ if __name__ == '__main__':
                                             for i in range(1, nr_of_components + 1)])
     tsne_results_df.insert(0, 'CustomerId', customer_id)
 
-    # save the results:
-    tsne_results_df.to_csv(Path('..', '..', 'data', 'online_sales_dataset_dr_tsne_embedded.csv'), index=False)
+    if not initialization:
+        # save the results:
+        tsne_results_df.to_csv(Path('..', '..', 'data', 'online_sales_dataset_dr_tsne.csv'), index=False)
+
+    else:
+        # save the results:
+        tsne_results_df.to_csv(Path('..', '..', 'data', f'online_sales_dataset_dr_tsne_{initialization}.csv'),
+                               index=False)

@@ -98,8 +98,8 @@ if __name__ == '__main__':
         plt.savefig(Path('..', 'plots', 'error_analysis', f'fn_{i}.png'))
         plt.close()
 
-    # plot a success case:
-    # get a true positive:
+    # plot some success case:
+    # get some true positive:
     tp_idxs = np.where((y_test == 1) & (y_pred == 1))[0][0:5]
     # plot the force plot:
     for tp in tp_idxs:
@@ -110,6 +110,20 @@ if __name__ == '__main__':
         plt.subplots_adjust(left=0.4, right=0.9, top=0.9, bottom=0.2)
         plt.subplots_adjust(left=0.4, right=0.9, top=0.9, bottom=0.2)
         plt.savefig(Path('..', 'plots', 'error_analysis', f'tp_{tp}.png'))
+        plt.close()
+
+    # plot some true negatives:
+    # get some true negative:
+    tn_idxs = np.where((y_test == 0) & (y_pred == 0))[0][0:5]
+    # plot the force plot:
+    for tn in tn_idxs:
+        shap.waterfall_plot(shap.Explanation(values=shap_values[tn],
+                                             base_values=explainer.expected_value, data=X_test.iloc[tn],
+                                             feature_names=X.columns), show=False)
+        # give more space for the y-axis:
+        plt.subplots_adjust(left=0.4, right=0.9, top=0.9, bottom=0.2)
+        plt.subplots_adjust(left=0.4, right=0.9, top=0.9, bottom=0.2)
+        plt.savefig(Path('..', 'plots', 'error_analysis', f'tn_{tn}.png'))
         plt.close()
 
     # Conclusions:

@@ -2,6 +2,8 @@
 # and to check how the model performs with a smaller number of features
 # Libraries:
 # Data manipulation:
+import math
+
 import pandas as pd
 from pathlib import Path
 
@@ -13,7 +15,8 @@ from sklearn.preprocessing import StandardScaler
 # Dimension for the t-SNE:
 nr_of_components: int = 3
 # Initialization for the t-SNE:
-initialization: str = 'pca'
+initialization = 'warn'
+perplexity: int = 40
 
 # Driver:
 if __name__ == '__main__':
@@ -30,7 +33,11 @@ if __name__ == '__main__':
 
     # initialize the TSNE, since PCA is performing well. and it's advised in the documentation, we will
     # use the PCA initialization:
-    tsne = TSNE(n_components=nr_of_components, init=initialization, verbose=1, perplexity=40,  learning_rate='auto')
+    tsne = TSNE(n_components=nr_of_components, init=initialization, verbose=1, perplexity=perplexity,
+                learning_rate='auto')
+    # tested perplexity based on this article: https://distill.pub/2016/misread-tsne/
+    # tried 5, 30, 40 and 50 and N^0.5, where N is the number of samples, 40 gave the best visual results
+
     # fit
     tsne_results = tsne.fit_transform(X_scaled)
 
@@ -40,9 +47,9 @@ if __name__ == '__main__':
                                             for i in range(1, nr_of_components + 1)])
     tsne_results_df.insert(0, 'CustomerId', customer_id)
 
-    if not initialization:
+    if initialization == "warn":
         # save the results:
-        tsne_results_df.to_csv(Path('..', '..', 'data', 'online_sales_dataset_dr_tsne.csv'), index=False)
+        tsne_results_df.to_csv(Path('..', '..', 'data', f'online_sales_dataset_dr_tsne.csv'), index=False)
 
     else:
         # save the results:

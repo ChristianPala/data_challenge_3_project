@@ -11,8 +11,9 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
 # Global variables:
-# number of components to keep based on the explained variance ratio:
-Threshold: float = 0.8
+# number of components to keep based on the explained variance ratio, for the performance evaluation of PCA
+# with regularization:
+Threshold: float = 0.9
 
 # Driver:
 if __name__ == '__main__':

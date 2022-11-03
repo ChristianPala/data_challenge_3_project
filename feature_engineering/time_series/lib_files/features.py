@@ -475,7 +475,7 @@ def hist(signal, nbins=10, r=1):
         The values of the histogram
 
     """
-    histsig, bin_edges = np.histogram(signal, bins=nbins, range=[-r, r])  # TODO:subsampling parameter
+    histsig, bin_edges = np.histogram(signal, bins=nbins, range=[-r, r])
 
     return tuple(histsig)
 

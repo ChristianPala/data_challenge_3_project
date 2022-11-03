@@ -48,3 +48,4 @@ def load_and_save_data() -> pd.DataFrame:
     print(f'Loaded {df.shape[0]} rows and {df.shape[1]} columns.')
 
     return df
+

@@ -48,9 +48,10 @@ if __name__ == '__main__':
 
     # add feature to the aggregated dataset and convert to days:
     df_agg['Recency'] = df.groupby('CustomerId').agg({'Recency': 'min'})
-    df_agg['Recency'] = df_agg['Recency'].dt.days
     # substitute missing values with an arbitrary large number * the max recency:
     df_agg['Recency'].fillna(df_agg['Recency'].max() * 100, inplace=True)
+    # convert to days:
+    df_agg['Recency'] = df_agg['Recency'].dt.days
 
     # check how many churned costumers we have:
     print(f'Number of churned costumers: {df_agg["CustomerChurned"].sum()}')

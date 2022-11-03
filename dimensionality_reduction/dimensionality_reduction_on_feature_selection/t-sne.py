@@ -1,8 +1,7 @@
-# use T-sne to reduce the dimensions of the dataset, both as a visualization tool
+# use t-SNE to reduce the dimensions of the dataset, both as a visualization tool
 # and to check how the model performs with a smaller number of features
 # Libraries:
 # Data manipulation:
-import math
 
 import pandas as pd
 from pathlib import Path
@@ -15,7 +14,7 @@ from sklearn.preprocessing import StandardScaler
 # Dimension for the t-SNE:
 nr_of_components: int = 3
 # Initialization for the t-SNE:
-initialization = 'warn'
+initialization = 'pca'
 perplexity: int = 40
 
 # Driver:

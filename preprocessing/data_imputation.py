@@ -81,9 +81,14 @@ def customer_remover(df: pd.DataFrame) -> pd.DataFrame:
     """
 
     df = df.copy()
+    # get the initial number of rows:
+    initial_rows = len(df)
     # delete the missing customer ids:
     df.drop(df[df['Customer ID'].isna()].index, inplace=True)
-
+    # get the final number of rows:
+    final_rows = len(df)
+    # print the number of rows removed:
+    print(f"Removed {initial_rows - final_rows} rows with missing customer ids.")
     return df
 
 

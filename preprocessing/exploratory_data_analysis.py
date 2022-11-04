@@ -1,6 +1,7 @@
 # Auxiliary library to perform the exploratory data analysis on the online sales dataset.
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 # Libraries:
@@ -40,7 +41,7 @@ if __name__ == '__main__':
     - Price is not saved as a float.
     """
     # cast the price column to float:
-    df['Price'] = df['Price'].str.replace(',', '.').astype(float)
+    df['Price'] = df['Price'].replace(',', '.').astype(float)
 
     # check the min and max values for the price column:
     print(f"Min price: {df['Price'].min()}")
@@ -78,14 +79,14 @@ if __name__ == '__main__':
 
     # distribution of the quantity column:
     plt.figure(figsize=(10, 10))
-    sns.distplot(df['Quantity'], kde=False)
+    sns.displot(df['Quantity'], kde=False)
     plt.title('Distribution of the quantity column')
     plt.savefig(Path('EDA', 'distribution_quantity.png'))
     plt.close()
 
     # distribution of the price column:
     plt.figure(figsize=(10, 10))
-    sns.distplot(df['Price'], kde=False)
+    sns.displot(df['Price'], kde=False)
     plt.title('Distribution of the price column')
     plt.savefig(Path('EDA', 'distribution_price.png'))
     plt.close()
@@ -154,4 +155,43 @@ if __name__ == '__main__':
     plt.savefig(Path('EDA', 'count_plot_invoice_hour.png'))
     plt.close()
     # we have a standard distribution of sales throughout the day, with a peak at 12:00.
+
+    # import the cleaned dataset:
+    # df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_cleaned.csv'))
+
+    # create the aggregated costumer dataset:
+    # df_agg = df.groupby('InvoiceDate').agg(
+    #     {'Invoice': 'count', 'Quantity': 'sum', 'Price': 'sum'})
+    # df_agg.rename(columns={'Invoice': 'NumberOfPurchases', 'Quantity': 'TotalQuantity', 'Price': 'TotalSpent'},
+    #               inplace=True)
+    # df_agg.index = pd.to_datetime(df_agg.index)
+    #
+    # # show the plots for number of purchases and total money spent
+    # x = df_agg.index
+    # # df_agg.drop(df_agg[df_agg['TotalSpent'] < 0].index, inplace=True)
+    #
+    # plt.scatter(x=x, y=df_agg['NumberOfPurchases'], marker='.')
+    # mean_n_purch = np.mean(df_agg['NumberOfPurchases']).astype(int)
+    # npurch = df_agg['NumberOfPurchases']
+    # y_average1 = npurch.rolling(window=mean_n_purch).mean()
+    # plt.plot(x, y_average1, label='Rolling mean', linestyle='-', c='orange')  # mean line
+    # plt.xlabel('datetime')
+    # plt.ylabel('number of purchases')
+    # plt.legend()
+    # plt.grid(True)
+    # plt.savefig(Path('EDA', 'nr_purchases_trend.png'))
+    # plt.close()
+    #
+    # plt.scatter(x, df_agg['TotalSpent'], marker='.', vmin=0)
+    # mean_tot_spend = np.mean(df_agg['TotalSpent']).astype(int)
+    # tot_spend = df_agg['TotalSpent']
+    # y_average2 = tot_spend.rolling(window=mean_tot_spend).mean()
+    # plt.plot(x, y_average2, label='Rolling mean', linestyle='-', c='orange')  # mean line
+    # plt.xlabel('datetime')
+    # plt.ylabel('money spent')
+    # plt.grid(True)
+    # plt.savefig(Path('EDA', 'total_spent_trend.png'))
+    # plt.close()
+
+
 

@@ -53,7 +53,7 @@ if __name__ == '__main__':
     dates = df.copy()
 
     # calculate the difference between each date in days
-    # (the .shift method will offset the rows, play around with this to understand how it works
+    # the .shift method will offset the rows
     # - We apply this to every customer using a groupby
     df2 = dates.groupby("CustomerId").apply(lambda x: (x.InvoiceDate - x.InvoiceDate.shift(1)).dt.days).reset_index()
     df2 = df2.rename(columns={'InvoiceDate': 'AvgDays'})
@@ -66,7 +66,6 @@ if __name__ == '__main__':
     grouped = dates.groupby("CustomerId").agg({"AvgDays": "mean"})
 
     # rename columns per your original specification
-    # grouped.columns = grouped.columns.get_level_values(0) + grouped.columns.get_level_values(1)
     dates = grouped.rename(columns={'AvgDays': 'avgTimeBetweenPurchases'})
 
     dates = dates[dates.index.isin(customers)]

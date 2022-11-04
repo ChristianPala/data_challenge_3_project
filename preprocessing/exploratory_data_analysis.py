@@ -7,12 +7,12 @@ import pandas as pd
 # Libraries:
 # Data manipulation:
 from data_loading import load_and_save_data
-# EDA:
-import scipy
+
 # Plotting:
 import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
+
 # matplotlib.use('tkagg')
 
 # Driver:
@@ -54,11 +54,14 @@ if __name__ == '__main__':
     We also have negative values for price. We will solve it in the data cleaning phase.
     """
 
+    # check the missing values:
+    print(df.isnull().sum())
+
     # Numerical variables:
     # --------------------------------------------------------------
 
     # plot the correlation matrix, excluding the CustomerId column:
-    plt.figure(figsize=(10, 10))
+    plt.figure(figsize=(5, 5))
     corr_matrix = df.drop('Customer ID', axis=1).corr(numeric_only=True)
     sns.heatmap(corr_matrix, annot=True, cmap='coolwarm')
     plt.title('Correlation matrix')
@@ -98,8 +101,13 @@ if __name__ == '__main__':
 
     # Categorical variables:
     # --------------------------------------------------------------
-    # cast the country column to categorical:
-    df['Country'] = df['Country'].astype('category')
+    # check the number of unique values for the country column as a percentage of the total number of rows:
+    print(f"Percentage of unique values for the country column: {df['Country'].nunique() / df.shape[0] * 100}")
+    print(df['Country'].value_counts())
+
+    # check the stock codes:
+    print(f"Number of unique values for the stock code column: {df['StockCode'].nunique()}")
+    print(df['StockCode'].value_counts())
 
     # plot the count plot for the country column:
     plt.figure(figsize=(10, 10))
@@ -111,16 +119,16 @@ if __name__ == '__main__':
     plt.savefig(Path('EDA', 'count_plot_country.png'))
     plt.close()
 
-    # the dataset is dominated by UK customers, check the distribution without the UK:
-    plt.figure(figsize=(10, 10))
-    sns.countplot(x=df[df['Country'] != 'United Kingdom']['Country'])
+    # plot the sales of the top 10 countries:
+    plt.figure(figsize=(7, 7))
+    sns.countplot(x=df['Country'], order=df['Country'].value_counts().iloc[1:11].index, color='blue')
     plt.xticks(rotation=90)
     # give more space to the x_labels:
     plt.subplots_adjust(bottom=0.3)
-    plt.title('Count plot for the country column without UK')
-    plt.savefig(Path('EDA', 'count_plot_country_without_uk.png'))
-    plt.close()
-    # We mostly have european customers, with australia being the largest non-european group.
+    # y label:
+    plt.ylabel('Number of sales')
+    plt.title('Top 10 sales by country, excluding the UK')
+    plt.savefig(Path('EDA', 'count_plot_country_top_10.png'))
 
     # Invoice number and date:
     # --------------------------------------------------------------
@@ -128,33 +136,35 @@ if __name__ == '__main__':
     df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'])
 
     # plot the count plot for the invoice month column:
-    plt.figure(figsize=(10, 10))
-    sns.countplot(x=df['InvoiceDate'].dt.month)
-    plt.title('Count plot for the invoice month column')
+    plt.figure(figsize=(7, 7))
+    sns.countplot(x=df['InvoiceDate'].dt.month, color='blue')
+    plt.title('Yearly number of sales')
+    plt.xticks(np.arange(0, 12), ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
     plt.savefig(Path('EDA', 'count_plot_invoice_month.png'))
     plt.close()
     # we have more sales in november and december for this dataset, to consider when we decide the train/test split.
 
     # plot the count plot for the invoice day column:
-    plt.figure(figsize=(10, 10))
-    sns.countplot(x=df['InvoiceDate'].dt.day)
-    plt.title('Count plot for the invoice day column')
+    plt.figure(figsize=(7, 7))
+    sns.countplot(x=df['InvoiceDate'].dt.day, color='blue')
+    plt.title('Monthly number of sales')
     plt.savefig(Path('EDA', 'count_plot_invoice_day.png'))
     plt.close()
     # there is no clear pattern in the day of the month.
 
-    # plot the count plot for the invoice day of week column:
-    plt.figure(figsize=(10, 10))
-    sns.countplot(x=df['InvoiceDate'].dt.dayofweek)
-    plt.title('Count plot for the invoice day of week column')
+    # plot the count plot for the invoice day of week column, change the labels to the day of week:
+    plt.figure(figsize=(7, 7))
+    sns.countplot(x=df['InvoiceDate'].dt.dayofweek, color='blue')
+    plt.title('Weekly number of sales')
+    plt.xticks(ticks=[0, 1, 2, 3, 4, 5, 6], labels=['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],)
     plt.savefig(Path('EDA', 'count_plot_invoice_day_of_week.png'))
     plt.close()
     # surprisingly for an online store, we have no sales on saturday, not sure how to interpret this.
 
     # plot the count plot for the invoice hour column:
-    plt.figure(figsize=(10, 10))
-    sns.countplot(x=df['InvoiceDate'].dt.hour)
-    plt.title('Count plot for the invoice hour column')
+    plt.figure(figsize=(7, 7))
+    sns.countplot(x=df['InvoiceDate'].dt.hour, color='blue')
+    plt.title('Hourly number of sales')
     plt.savefig(Path('EDA', 'count_plot_invoice_hour.png'))
     plt.close()
     # we have a standard distribution of sales throughout the day, with a peak at 12:00.
@@ -199,6 +209,3 @@ if __name__ == '__main__':
     plt.grid(True)
     plt.savefig(Path('EDA', 'total_spent_trend.png'))
     plt.close()
-
-
-

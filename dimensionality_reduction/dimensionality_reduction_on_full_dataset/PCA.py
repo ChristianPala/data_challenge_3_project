@@ -1,56 +1,62 @@
-# perform PCA on the dataset with the features selected by the wrapper method:
-# Libraries:
 # Data manipulation:
+import matplotlib
 import pandas as pd
+import numpy as np
 from pathlib import Path
 
-# Dimensionality reduction:
-from sklearn.decomposition import PCA
+# Data visualization
+import matplotlib.pyplot as plt
+import matplotlib
+from mpl_toolkits.mplot3d import Axes3D
+import seaborn as sns
 
-# Scaling:
-from sklearn.preprocessing import StandardScaler
+matplotlib.use('tkagg')
 
-# Global variables:
-Threshold: float = 0.8
 
-# Driver:
 if __name__ == '__main__':
-    # import the dataset for dimensionality reduction:
-    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs.csv'), index_col=0)
+    # PCA visualizations:
+    pca = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_dr_pca.csv'), index_col=0)
 
-    # get the number of features:
-    n_features = X.shape[1]
+    nr_comp = pca.shape[1]
 
-    # Scale the data before performing PCA:
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
+    target = pd.read_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
 
-    pca = PCA(n_components=n_features)
-    # fit
-    principal_components = pca.fit_transform(X_scaled)
+    # build the visualization dataframe:
+    df_subset = pd.DataFrame()
+    df_subset[f'pca-1'] = pca.iloc[:, 0]
+    df_subset[f'pca-2'] = pca.iloc[:, 1]
+    df_subset[f'pca-3'] = pca.iloc[:, 2]
+    df_subset['y'] = target.CustomerChurned.astype(int)
 
-    # from 1 to the feature number, get the explained variance ratio:
-    explained_variance_ratio = pca.explained_variance_ratio_
-    # get the number of components needed to explain more than 80% of the variance:
-    n_components = next(i for i, v in enumerate(explained_variance_ratio.cumsum(), 1) if v > Threshold)
-    print(f"Threshold {Threshold} required {n_components} components "
-          f"to explain {explained_variance_ratio.cumsum()[n_components - 1]:.2%} of the variance.")
+    # 2D visualization:
+    sns.scatterplot(
+        x=f'pca-1', y=f'pca-2',
+        hue='y',
+        palette=sns.color_palette('hls', 2),
+        data=df_subset,
+        legend='full'
+    )
+    plt.title('2D PCA visualization with 80% variance explained')
 
-    # print the explained variance ratio for each component:
-    print(f"Explained variance ratio for each component: {explained_variance_ratio}")
+    # 3D visualization:
+    ax = plt.figure(figsize=(16, 10)).gca(projection='3d')
+    ax.scatter(
+        xs=df_subset['pca-1'],
+        ys=df_subset['pca-2'],
+        zs=df_subset['pca-3'],
+        c=df_subset['y'],
+        cmap=plt.cm.rainbow
+    )
+    ax.set_xlabel(f'pca-1')
+    ax.set_ylabel(f'pca-2')
+    ax.set_zlabel(f'pca-3')
+    ax.legend(['Churned', 'Not churned'])
+    title = f'3D PCA visualization with 80% variance explained'
+    plt.title(title)
 
-    # keep 112 components to explain more than .8 of the variance:
-    # initialize the selector:
-    pca = PCA(n_components=n_components)
-    # fit
-    principal_components_final = pca.fit_transform(X_scaled)
-
-    # cast the principal components to a dataframe:
-    principal_components_df = pd.DataFrame(principal_components_final,
-                                           columns=[f"PC{i}" for i in range(1, n_components + 1)])
-
-    # Add the CustomerID column as the first column:
-    principal_components_df.insert(0, 'CustomerID', X.index)
-
-    # save the principal components:
-    principal_components_df.to_csv(Path('..', '..', 'data', 'online_sales_dataset_dr_pca_full.csv'), index=False)
+    try:
+        plt.savefig(Path('..', '..', 'plots', 'PCA', 'pca_visualization3D.png'))
+    except FileNotFoundError:
+        Path('..', '..', 'plots', 'PCA').mkdir(parents=True, exist_ok=True)
+        plt.savefig(Path('..', '..', 'plots', 'PCA', 'pca_visualization3D.png'))
+    plt.show()

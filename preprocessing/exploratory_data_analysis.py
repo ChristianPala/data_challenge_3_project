@@ -13,7 +13,7 @@ import scipy
 import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
-matplotlib.use('tkagg')
+# matplotlib.use('tkagg')
 
 # Driver:
 if __name__ == '__main__':
@@ -82,14 +82,14 @@ if __name__ == '__main__':
 
     # distribution of the quantity column:
     plt.figure(figsize=(10, 10))
-    sns.displot(df['Quantity'], kde=False)
+    sns.distplot(df['Quantity'], kde=False)
     plt.title('Distribution of the quantity column')
     plt.savefig(Path('EDA', 'distribution_quantity.png'))
     plt.close()
 
     # distribution of the price column:
     plt.figure(figsize=(10, 10))
-    sns.displot(df['Price'], kde=False)
+    sns.distplot(df['Price'], kde=False)
     plt.title('Distribution of the price column')
     plt.savefig(Path('EDA', 'distribution_price.png'))
     plt.close()
@@ -171,8 +171,8 @@ if __name__ == '__main__':
 
     # show the plots for number of purchases and total money spent
     x = df_agg.index
-    # df_agg.drop(df_agg[df_agg['TotalSpent'] < 0].index, inplace=True)
 
+    plt.figure(figsize=(10, 10))
     plt.scatter(x=x, y=df_agg['NumberOfPurchases'], marker='.')
     mean_n_purch = np.mean(df_agg['NumberOfPurchases']).astype(int)
     npurch = df_agg['NumberOfPurchases']
@@ -180,18 +180,22 @@ if __name__ == '__main__':
     plt.plot(x, y_average1, label='Rolling mean', linestyle='-', c='orange')  # mean line
     plt.xlabel('datetime')
     plt.ylabel('number of purchases')
+    plt.ylim(0, 800)
     plt.legend()
     plt.grid(True)
     plt.savefig(Path('EDA', 'nr_purchases_trend.png'))
     plt.close()
 
-    plt.scatter(x, df_agg['TotalSpent'], marker='.', vmin=0)
+    plt.figure(figsize=(10, 10))
+    plt.scatter(x, df_agg['TotalSpent'], marker='.')
     mean_tot_spend = np.mean(df_agg['TotalSpent']).astype(int)
     tot_spend = df_agg['TotalSpent']
     y_average2 = tot_spend.rolling(window=mean_tot_spend).mean()
     plt.plot(x, y_average2, label='Rolling mean', linestyle='-', c='orange')  # mean line
+    plt.ylim(0, 10000)
     plt.xlabel('datetime')
     plt.ylabel('money spent')
+    plt.legend()
     plt.grid(True)
     plt.savefig(Path('EDA', 'total_spent_trend.png'))
     plt.close()

@@ -160,38 +160,38 @@ if __name__ == '__main__':
     # df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_cleaned.csv'))
 
     # create the aggregated costumer dataset:
-    # df_agg = df.groupby('InvoiceDate').agg(
-    #     {'Invoice': 'count', 'Quantity': 'sum', 'Price': 'sum'})
-    # df_agg.rename(columns={'Invoice': 'NumberOfPurchases', 'Quantity': 'TotalQuantity', 'Price': 'TotalSpent'},
-    #               inplace=True)
-    # df_agg.index = pd.to_datetime(df_agg.index)
-    #
-    # # show the plots for number of purchases and total money spent
-    # x = df_agg.index
-    # # df_agg.drop(df_agg[df_agg['TotalSpent'] < 0].index, inplace=True)
-    #
-    # plt.scatter(x=x, y=df_agg['NumberOfPurchases'], marker='.')
-    # mean_n_purch = np.mean(df_agg['NumberOfPurchases']).astype(int)
-    # npurch = df_agg['NumberOfPurchases']
-    # y_average1 = npurch.rolling(window=mean_n_purch).mean()
-    # plt.plot(x, y_average1, label='Rolling mean', linestyle='-', c='orange')  # mean line
-    # plt.xlabel('datetime')
-    # plt.ylabel('number of purchases')
-    # plt.legend()
-    # plt.grid(True)
-    # plt.savefig(Path('EDA', 'nr_purchases_trend.png'))
-    # plt.close()
-    #
-    # plt.scatter(x, df_agg['TotalSpent'], marker='.', vmin=0)
-    # mean_tot_spend = np.mean(df_agg['TotalSpent']).astype(int)
-    # tot_spend = df_agg['TotalSpent']
-    # y_average2 = tot_spend.rolling(window=mean_tot_spend).mean()
-    # plt.plot(x, y_average2, label='Rolling mean', linestyle='-', c='orange')  # mean line
-    # plt.xlabel('datetime')
-    # plt.ylabel('money spent')
-    # plt.grid(True)
-    # plt.savefig(Path('EDA', 'total_spent_trend.png'))
-    # plt.close()
+    df_agg = df.groupby('InvoiceDate').agg(
+        {'Invoice': 'count', 'Quantity': 'sum', 'Price': 'sum'})
+    df_agg.rename(columns={'Invoice': 'NumberOfPurchases', 'Quantity': 'TotalQuantity', 'Price': 'TotalSpent'},
+                  inplace=True)
+    df_agg.index = pd.to_datetime(df_agg.index)
+
+    # show the plots for number of purchases and total money spent
+    x = df_agg.index
+    # df_agg.drop(df_agg[df_agg['TotalSpent'] < 0].index, inplace=True)
+
+    plt.scatter(x=x, y=df_agg['NumberOfPurchases'], marker='.')
+    mean_n_purch = np.mean(df_agg['NumberOfPurchases']).astype(int)
+    npurch = df_agg['NumberOfPurchases']
+    y_average1 = npurch.rolling(window=mean_n_purch).mean()
+    plt.plot(x, y_average1, label='Rolling mean', linestyle='-', c='orange')  # mean line
+    plt.xlabel('datetime')
+    plt.ylabel('number of purchases')
+    plt.legend()
+    plt.grid(True)
+    plt.savefig(Path('EDA', 'nr_purchases_trend.png'))
+    plt.close()
+
+    plt.scatter(x, df_agg['TotalSpent'], marker='.', vmin=0)
+    mean_tot_spend = np.mean(df_agg['TotalSpent']).astype(int)
+    tot_spend = df_agg['TotalSpent']
+    y_average2 = tot_spend.rolling(window=mean_tot_spend).mean()
+    plt.plot(x, y_average2, label='Rolling mean', linestyle='-', c='orange')  # mean line
+    plt.xlabel('datetime')
+    plt.ylabel('money spent')
+    plt.grid(True)
+    plt.savefig(Path('EDA', 'total_spent_trend.png'))
+    plt.close()
 
 
 

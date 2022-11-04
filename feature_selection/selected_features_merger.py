@@ -11,7 +11,6 @@ if __name__ == '__main__':
     backward_sel = pd.read_csv(Path('..', 'data', 'online_sales_dataset_fs_backward_selection.csv'))
     recursive_sel = pd.read_csv(Path('..', 'data', 'online_sales_dataset_fs_rfe.csv'))
 
-    # todo remove, in my case it was missing
     if 'CustomerId' not in backward_sel.columns:
         backward_sel['CustomerId'] = forward_sel['CustomerId']
 

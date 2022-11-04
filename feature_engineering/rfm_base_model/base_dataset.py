@@ -59,6 +59,10 @@ if __name__ == '__main__':
     # check the number of customers:
     print(f'Number of customers: {df_agg.shape[0]}')
 
+    # place the target variable at the end of the dataset:
+    df_agg = df_agg[['Recency', 'NumberOfPurchases', 'TotalSpent', 'TotalQuantity', 'NumberOfProducts',
+                     'Description', 'Country', 'CustomerChurned']]
+
     # save the dataset:
     df_agg.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
 

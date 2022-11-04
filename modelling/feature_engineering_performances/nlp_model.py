@@ -16,6 +16,15 @@ if __name__ == '__main__':
     # get the target from the aggregated dataset:
     y = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))['CustomerChurned']
 
+    # load the aggregated dataset:
+    df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'), index_col=0)
+
+    # match the two on the customer id:
+    X = df.merge(X, on='CustomerId')
+
+    # exclude the target and the description:
+    X = X.drop(['CustomerChurned', 'Description'], axis=1)
+
     # split the train set into train and validation sets:
     X_train, X_val, X_test, y_train, y_val, y_test = train_validation_test_split(X, y, validation=True)
 

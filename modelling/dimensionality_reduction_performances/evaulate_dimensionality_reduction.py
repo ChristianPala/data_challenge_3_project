@@ -19,7 +19,7 @@ if __name__ == '__main__':
     # tsne_full = Path('..', '..', 'data', 'online_sales_dataset_dr_tsne_full.csv')
 
     # evaluate the baseline:
-    # evaluate_csv(baseline, 'baseline_fs_auto', fast=True)
+    evaluate_csv(baseline, 'baseline_fs_auto', fast=True)
     # evaluate the PCA fs dataset:
     # evaluate_csv(pca_fs, 'pca', fast=True)
     # # evaluate the TSNE fs dataset:

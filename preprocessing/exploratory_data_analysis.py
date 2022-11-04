@@ -40,8 +40,11 @@ if __name__ == '__main__':
     - We have negative values for quantity. We will solve it in the data cleaning phase.
     - Price is not saved as a float.
     """
-    # cast the price column to float:
-    df['Price'] = df['Price'].replace(',', '.').astype(float)
+
+    # Replace the comma with a dot in the price column:
+    df['Price'] = df['Price'].astype(str).str.replace(',', '.')
+    # Cast the price column to float:
+    df['Price'] = df['Price'].astype(float)
 
     # check the min and max values for the price column:
     print(f"Min price: {df['Price'].min()}")

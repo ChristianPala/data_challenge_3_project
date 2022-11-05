@@ -88,7 +88,7 @@ if __name__ == '__main__':
                                      for i in x.split(',')]))
 
     # cast the ClusterId as a set of floats:
-    df_clusters['ClusterId'] = df_clusters['ClusterId'].apply(lambda x: set([float(i) for i in x[0:-1].split(',')]))
+    df_clusters['ClusterId'] = df_clusters['ClusterId'].apply(lambda x: tuple(set([float(i) for i in x[0:-1].split(',')])))
     df_clusters['ClusterSize'] = df_clusters['ClusterId'].apply(lambda x: len(x))
     df_clusters.drop('CustomerId', axis=1, inplace=True)
 

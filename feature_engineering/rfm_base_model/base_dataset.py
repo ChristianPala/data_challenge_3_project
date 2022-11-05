@@ -38,21 +38,6 @@ if __name__ == '__main__':
     # Delete the variable last purchase as it is a proxy for the target variable:
     df_agg.drop('LastPurchase', axis=1, inplace=True)
 
-    # With the number of purchases and the total spent, we have a frequency and a monetary value.
-    # Since we defined a churned customer as a customer who has not made a purchase after
-    # 2011-12-10 - timeframe, we will take that as the reference date for the recency calculation:
-
-    df['Recency'] = churn_date - pd.to_datetime(df['InvoiceDate'])
-    # if the recency is negative, multiply by -1:
-    df['Recency'] = df['Recency'].apply(lambda x: x.days if x.days > 0 else x.days * -1)
-
-    # add feature to the aggregated dataset and convert to days:
-    df_agg['Recency'] = df.groupby('CustomerId').agg({'Recency': 'min'})
-    # convert to datetime:
-    df_agg['Recency'] = pd.to_timedelta(df_agg['Recency'], unit='D')
-    # convert to days:
-    df_agg['Recency'] = df_agg['Recency'].dt.days
-
     # check how many churned costumers we have:
     print(f'Number of churned costumers: {df_agg["CustomerChurned"].sum()}')
 
@@ -60,7 +45,7 @@ if __name__ == '__main__':
     print(f'Number of customers: {df_agg.shape[0]}')
 
     # place the target variable at the end of the dataset:
-    df_agg = df_agg[['Recency', 'NumberOfPurchases', 'TotalSpent', 'TotalQuantity', 'NumberOfProducts',
+    df_agg = df_agg[['NumberOfPurchases', 'TotalSpent', 'TotalQuantity', 'NumberOfProducts',
                      'Description', 'Country', 'CustomerChurned']]
 
     # save the dataset:

@@ -46,6 +46,6 @@ if __name__ == '__main__':
     X.to_csv(Path('..', '..', '..', 'data', f'online_sales_dataset_fs_mutual_information_{threshold}.csv'))
 
     """
-    incoming features: 174
+    incoming features: 173
     Outgoing features: 138
     """

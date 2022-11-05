@@ -39,7 +39,7 @@ if __name__ == '__main__':
 
     # We removed features which would likely not add information to the model.
     """
-    Number of features incoming: 414
-    Number of features outgoing: 174
+    Number of features incoming: 413
+    Number of features outgoing: 173
     """
 

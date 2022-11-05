@@ -75,11 +75,11 @@ if __name__ == '__main__':
     exhaustive_path = Path('..', '..', 'data', 'online_sales_dataset_fs_exhaustive.csv')
 
     # evaluate the models:
-    # evaluate_csv(full_features_path, 'all_fe_features', fast=True)
-    # evaluate_csv(variance_threshold_path, f'variance_threshold_fs_{threshold}', fast=True)
-    # evaluate_csv(mutual_info_path, f'mutual_information_fs_{threshold}', fast=True)
+    evaluate_csv(full_features_path, 'all_fe_features', fast=True)
+    evaluate_csv(variance_threshold_path, f'variance_threshold_fs_{threshold}', fast=True)
+    evaluate_csv(mutual_info_path, f'mutual_information_fs_{threshold}', fast=True)
     # evaluate_csv(forward_selection_path, 'forward_selection_fs', fast=True)
     # evaluate_csv(backward_selection_path, 'backward_selection_fs', fast=True)
-    evaluate_csv(recursive_elimination_path, 'recursive_elimination_fs', fast=True)
+    # evaluate_csv(recursive_elimination_path, 'recursive_elimination_fs', fast=True)
     # evaluate_csv(exhaustive_path, 'exhaustive_fs', fast=True)
 

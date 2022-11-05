@@ -14,7 +14,7 @@ if __name__ == '__main__':
     df_agg = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
 
     # select the features: number of purchases, total price spent, total quantity ordered and country:
-    X = df_agg[['Recency', 'NumberOfPurchases', 'NumberOfProducts', 'TotalSpent',
+    X = df_agg[['NumberOfPurchases', 'NumberOfProducts', 'TotalSpent',
                 'TotalQuantity', 'Country']]
     y = df_agg['CustomerChurned']
 

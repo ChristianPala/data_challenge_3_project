@@ -15,7 +15,7 @@ from modelling.data_splitting.train_val_test_splitter import train_validation_te
 # Driver:
 if __name__ == '__main__':
     # load the mutual information filtered dataset:
-    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_mutual_information.csv'), index_col=0)
+    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_mutual_information_0.001.csv'), index_col=0)
 
     # get the time series labels from the dataset:
     y = pd.read_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
@@ -28,10 +28,10 @@ if __name__ == '__main__':
 
     # create the EFS object:
     efs = EFS(model, min_features=5, max_features=5, scoring='f1',
-              cv=2, n_jobs=-1, print_progress=True, fixed_features=(X.columns.get_loc('Recency'),
-                                                                    X.columns.get_loc('1_Area under the curve'),
-                                                                    X.columns.get_loc('85'),
-                                                                    X.columns.get_loc('92')))
+              cv=2, n_jobs=-1, print_progress=True, fixed_features=(X.columns.get_loc('1_Area under the curve'),
+                                                                    X.columns.get_loc('Recency'),
+                                                                    X.columns.get_loc('EigenvectorCentrality_country'),
+                                                                    X.columns.get_loc('69')))
 
     # fit the EFS object to the dataset:
     efs.fit(X_train, y_train)
@@ -49,13 +49,12 @@ if __name__ == '__main__':
     # print the features selected by EFS:
     print(efs.best_feature_names_)
     # 1 feature: average days between purchases area under the curve.
-    # 2 features: Recency, average days between purchases area under the curve.
-    # Strong assumption those 2 features should be selected.
+    # 2 feature: Recency
 
     # Complementary:
-    # 3 85
-    # 4 92
-    # 5 62
+    # 3 EigenvectorCentrality_country
+    # 4 69
+    # 5 11
 
     # Similar results to automatic feature selection on the mutual information filtered dataset.
 

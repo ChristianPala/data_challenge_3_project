@@ -35,7 +35,7 @@ def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.a
                                     direction=direction,
                                     n_features_to_select='auto',
                                     scoring='f1',
-                                    cv=cv,
+                                    cv=2,
                                     n_jobs=4)
     print(f'> performing feature selection. Method: {direction}')
     sfs.fit(x_tr, y_tr)
@@ -68,7 +68,7 @@ if __name__ == '__main__':
         train_validation_test_split(X, y)
 
     # define the model:
-    model = XGBClassifier(objective="binary:logistic", random_state=42, n_jobs=4)
+    model = XGBClassifier(objective="binary:logistic", random_state=42, n_jobs=-1)
 
     # perform feature selection:
     # --------------------------------------------------------------------------------------

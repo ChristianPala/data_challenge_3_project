@@ -113,8 +113,3 @@ if __name__ == '__main__':
         plt.close()
 
     # Conclusions:
-    # Recency and AUC on the purchases are very important when low, they are used by the model
-    # to predict that the customer will churn.
-    # When they are not low, the model uses the other features to predict.
-    # For false negatives, the recency pointing at a churner is overruled by the one or more of the
-    # other features, which point to a non-churner.

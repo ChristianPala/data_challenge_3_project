@@ -24,8 +24,6 @@ if __name__ == '__main__':
     corr[mask] = np.nan
     # get the column values:
     y_tick = corr.columns.values
-    # replace Recency with empty string in the y ticks:
-    y_tick = [col.replace('Recency', '') for col in y_tick]
 
     # plot:
     plt.figure(figsize=(20, 15))

@@ -29,7 +29,6 @@ if __name__ == '__main__':
     # create the EFS object:
     efs = EFS(model, min_features=5, max_features=5, scoring='f1',
               cv=2, n_jobs=-1, print_progress=True, fixed_features=(X.columns.get_loc('1_Area under the curve'),
-                                                                    X.columns.get_loc('Recency'),
                                                                     X.columns.get_loc('EigenvectorCentrality_country'),
                                                                     X.columns.get_loc('69')))
 
@@ -49,7 +48,6 @@ if __name__ == '__main__':
     # print the features selected by EFS:
     print(efs.best_feature_names_)
     # 1 feature: average days between purchases area under the curve.
-    # 2 feature: Recency
 
     # Complementary:
     # 3 EigenvectorCentrality_country

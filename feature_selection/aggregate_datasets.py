@@ -17,7 +17,6 @@ if __name__ == '__main__':
     best_features = \
         """
 CustomerId, index
-Recency,0.4483233
 1_Area under the curve,0.37265098
 0_FFT mean coefficient_4,0.05259183
 62,0.05008799
@@ -32,7 +31,6 @@ Recency,0.4483233
 
     # rename the columns:
     X.rename(columns={'CustomerId': 'CustomerId',
-                      'Recency': 'Recency',
                       '1_Area under the curve': 'AverageDaysBetweenPurchaseAUC',
                       '0_FFT mean coefficient_4': 'TotalSpentFFTMeanCoefficient4',
                       '62': 'CustomerGraphDeepwalkEmbedding62of128',

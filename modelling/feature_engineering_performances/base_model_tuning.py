@@ -24,6 +24,7 @@ if __name__ == '__main__':
 
     # tune the model with bayesian optimization:
     best_parameters = tuner(X_train, y_train, X_val, y_val, fast=True)
+    # fast=True means we do 2 cross validations, we needed this setting to speed up the process.
 
     # print the best parameters:
     print('Best parameters:')

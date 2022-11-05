@@ -26,7 +26,7 @@ if __name__ == '__main__':
     df_subset[f'pca-1'] = pca.iloc[:, 0]
     df_subset[f'pca-2'] = pca.iloc[:, 1]
     df_subset[f'pca-3'] = pca.iloc[:, 2]
-    df_subset['y'] = target.CustomerChurned.astype(int)
+    df_subset['y'] = target.CustomerChurned
 
     # 2D visualization:
     sns.scatterplot(
@@ -35,11 +35,12 @@ if __name__ == '__main__':
         hue='y', hue_order=[1, 0],
         palette=sns.color_palette('hls', 2),
         data=df_subset,
-        legend='full',
+        legend=False,
         alpha=0.8,
         s=20,
         edgecolors='k'
     )
+    plt.legend(loc='upper left', labels=['Churner', 'Not churner'])
     plt.title('2D PCA visualization')
 
     try:

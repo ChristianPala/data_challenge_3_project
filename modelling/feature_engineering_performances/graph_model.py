@@ -21,7 +21,7 @@ if __name__ == '__main__':
         train_validation_test_split(X, y, validation=True)
 
     # tune the model with bayesian optimization:
-    best_parameters = tuner(X_train, y_train, X_val, y_val, cross_validation=5)
+    best_parameters = tuner(X_train, y_train, X_val, y_val, fast=True)
 
     # save the best parameters:
     pd.DataFrame(best_parameters, index=[0]).to_csv(Path('..', '..', 'data', 'best_params', 'graph_model.csv'),

@@ -44,7 +44,7 @@ def report_model_results(model: XGBClassifier, x_train: pd.DataFrame, x_test: pd
     print(f"precision for the {model_name}: {precision_score(y_test, y_predicted): .3f}")
     # print recall:
     print(f"recall for the {model_name}: {recall_score(y_test, y_predicted): .3f}")
-    
+
     # visualize initial features importance:
     importance = pd.DataFrame({'feature': x_train.columns, 'importance': model.feature_importances_})
     # sort by importance:

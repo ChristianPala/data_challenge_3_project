@@ -29,7 +29,8 @@ if __name__ == '__main__':
     X_train, X_val, X_test, y_train, y_val, y_test = train_validation_test_split(X, y, validation=True)
 
     # tune xgboost for the base plus nlp data:
-    best_params = tuner(X_train, y_train, X_val, y_val, cross_validation=5)
+    best_params = tuner(X_train, y_train, X_val, y_val, fast=True)
+    # fast=True means we do 2 cross validations, we needed this setting to speed up the process.
 
     # save the best parameters:
     pd.DataFrame(best_params, index=[0]).to_csv(Path('..', '..', 'data', 'best_params', 'nlp_model.csv'),

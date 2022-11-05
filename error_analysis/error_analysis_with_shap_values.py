@@ -7,20 +7,22 @@ from pathlib import Path
 # Error analysis:
 import shap
 # Modelling:
-from xgboost import XGBClassifier
-from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 # Plotting:
 import matplotlib.pyplot as plt
 # evaluate the model:
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from xgboost import XGBClassifier
+from modelling.tuning.xgboost_tuner import tuner
+
+from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 
 # Driver:
 if __name__ == '__main__':
     # load the dataset:
-    X = pd.read_csv(Path('../feature_selection/filtering', '..', '..', 'data', 'online_sales_dataset_for_dr_fs.csv'),
-                    index_col=0)
+    X = pd.read_csv(Path('..', 'data', 'online_sales_dataset_for_dr.csv'), index_col=0)
+
     # load the labels:
-    y = pd.read_csv(Path('../feature_selection/filtering', '..', '..', 'data', 'online_sales_labels_tsfel.csv'),
+    y = pd.read_csv(Path('..', 'data', 'online_sales_labels_tsfel.csv'),
                     index_col=0)['CustomerChurned']
 
     # shorten the column names for readability:
@@ -34,12 +36,10 @@ if __name__ == '__main__':
     # will use the test set for the error analysis:
     X_train, X_val, X_test, y_train, y_val, y_test = train_validation_test_split(X, y, validation=True)
 
-    # load the best parameters for the model:
-    with open(Path('../feature_selection/filtering', '..', '..', 'data', 'best_params', 'forward_selection_fs.txt'),
-              'r') as file:
-        best_params = eval(file.read())
+    # tune the model:
+    best_params = tuner(X_train, y_train, X_val, y_val)
 
-    # train the model:
+    # instantiate the model:
     model = XGBClassifier(**best_params, objective="binary:logistic", random_state=42, n_jobs=-1)
 
     # fit the model:
@@ -60,14 +60,6 @@ if __name__ == '__main__':
     explainer = shap.TreeExplainer(model)
     shap_values = explainer.shap_values(X_test)
 
-    # plot the shap values:
-    # shap.summary_plot(shap_values, X_train, feature_names=X.columns, plot_type="bar")
-    # shap.summary_plot(shap_values, X_train, feature_names=X.columns, plot_type="violin")
-
-    # dependency plots:
-    # for i in range(6):
-    #    shap.dependence_plot(i, shap_values, X_train, feature_names=X.columns)
-
     # error analysis:
     shap.summary_plot(shap_values, X_test.values, feature_names=X_test.columns, show=False)
 
@@ -78,15 +70,9 @@ if __name__ == '__main__':
     # get the index of the false negatives:
     fn_idx = np.where((y_test == 1) & (y_pred == 0))[0]
 
-    # get the decision plot for the false negatives:
-    # for i in range(len(fn_idx)):
-    #    shap.decision_plot(explainer.expected_value, shap_values[fn_idx[i]], X_test.iloc[fn_idx[i]])
-
     # create path if it does not exist:
     if not Path('..', 'plots', 'error_analysis').exists():
         Path('..', 'plots', 'error_analysis').mkdir(parents=True)
-
-    # give the plot a larger size:
 
     # Save the force plots of the false negatives:
     for i in fn_idx:

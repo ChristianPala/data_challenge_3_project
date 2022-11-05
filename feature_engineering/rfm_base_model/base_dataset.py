@@ -42,16 +42,18 @@ if __name__ == '__main__':
     # Since we defined a churned customer as a customer who has not made a purchase after
     # 2011-12-10 - timeframe, we will take that as the reference date for the recency calculation:
 
-    # exclude all invoice dates after the reference date - timeframe and compute recency:
-    df = df[pd.to_datetime(df['InvoiceDate']) <= churn_date]
     df['Recency'] = churn_date - pd.to_datetime(df['InvoiceDate'])
+    # if the recency is negative, multiply by -1:
+    df['Recency'] = df['Recency'].apply(lambda x: x.days if x.days > 0 else x.days * -1)
 
     # add feature to the aggregated dataset and convert to days:
     df_agg['Recency'] = df.groupby('CustomerId').agg({'Recency': 'min'})
-    # substitute missing values with an arbitrary large number * the max recency:
-    df_agg['Recency'].fillna(df_agg['Recency'].max() * 100, inplace=True)
+    # convert to datetime:
+    df_agg['Recency'] = pd.to_timedelta(df_agg['Recency'], unit='D')
     # convert to days:
     df_agg['Recency'] = df_agg['Recency'].dt.days
+
+    # check for missing values.
 
     # check how many churned costumers we have:
     print(f'Number of churned costumers: {df_agg["CustomerChurned"].sum()}')

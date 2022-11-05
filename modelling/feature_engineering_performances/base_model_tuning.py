@@ -23,7 +23,7 @@ if __name__ == '__main__':
     X_train, X_val, X_test, y_train, y_val, y_test = train_validation_test_split(X, y, validation=True)
 
     # tune the model with bayesian optimization:
-    best_parameters = tuner(X_train, y_train, X_val, y_val, cross_validation=5)
+    best_parameters = tuner(X_train, y_train, X_val, y_val, fast=True)
 
     # print the best parameters:
     print('Best parameters:')

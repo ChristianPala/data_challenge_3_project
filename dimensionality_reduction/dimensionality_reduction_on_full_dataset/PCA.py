@@ -11,7 +11,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
 # Global variables:
-Threshold: float = 0.8
+Threshold: float = 0.9
 
 # Driver:
 if __name__ == '__main__':

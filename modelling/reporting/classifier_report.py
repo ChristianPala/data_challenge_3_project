@@ -9,7 +9,7 @@ from tabulate import tabulate
 # Modelling:
 from matplotlib import pyplot as plt
 from sklearn.metrics import classification_report, f1_score, confusion_matrix, ConfusionMatrixDisplay, \
-    PrecisionRecallDisplay, RocCurveDisplay
+    PrecisionRecallDisplay, RocCurveDisplay, precision_score, recall_score
 from xgboost import XGBClassifier
 
 # Plotting:
@@ -40,7 +40,11 @@ def report_model_results(model: XGBClassifier, x_train: pd.DataFrame, x_test: pd
     print(tabulate(report, headers='keys', tablefmt='psql'))
     # print the f1 score:
     print(f"f-score for the {model_name}: {f1_score(y_test, y_predicted): .3f}")
-
+    # print precision:
+    print(f"precision for the {model_name}: {precision_score(y_test, y_predicted): .3f}")
+    # print recall:
+    print(f"recall for the {model_name}: {recall_score(y_test, y_predicted): .3f}")
+    
     # visualize initial features importance:
     importance = pd.DataFrame({'feature': x_train.columns, 'importance': model.feature_importances_})
     # sort by importance:

@@ -53,19 +53,6 @@ if __name__ == '__main__':
     # convert to days:
     df_agg['Recency'] = df_agg['Recency'].dt.days
 
-    # create a feature for the loyalty of the customer, the number of days since the first purchase, up to the
-    # reference date, if the customer bought after the reference date, we invert
-    # the sign of the days:
-    df["Loyalty"] = churn_date - pd.to_datetime(df["InvoiceDate"])
-    # if it is negative, multiply by -1:
-    df["Loyalty"] = df["Loyalty"].apply(lambda x: x.days if x.days > 0 else x.days * -1)
-    # add feature to the aggregated dataset and convert to days:
-    df_agg["Loyalty"] = df.groupby("CustomerId").agg({"Loyalty": "max"})
-    # convert to datetime:
-    df_agg["Loyalty"] = pd.to_timedelta(df_agg["Loyalty"], unit="D")
-    # convert to days:
-    df_agg["Loyalty"] = df_agg["Loyalty"].dt.days
-
     # check how many churned costumers we have:
     print(f'Number of churned costumers: {df_agg["CustomerChurned"].sum()}')
 
@@ -74,7 +61,7 @@ if __name__ == '__main__':
 
     # place the target variable at the end of the dataset:
     df_agg = df_agg[['Recency', 'NumberOfPurchases', 'TotalSpent', 'TotalQuantity', 'NumberOfProducts',
-                     'Description', 'Country', 'Loyalty', 'CustomerChurned']]
+                     'Description', 'Country', 'CustomerChurned']]
 
     # save the dataset:
     df_agg.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))

@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     # select the features: number of purchases, total price spent, total quantity ordered and country:
     X = df_agg[['Recency', 'NumberOfPurchases', 'NumberOfProducts', 'TotalSpent',
-                'TotalQuantity', 'Country', 'Loyalty']]
+                'TotalQuantity', 'Country']]
     y = df_agg['CustomerChurned']
 
     # train test split:

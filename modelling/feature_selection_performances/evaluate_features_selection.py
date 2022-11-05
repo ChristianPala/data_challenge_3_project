@@ -70,7 +70,7 @@ if __name__ == '__main__':
     mutual_info_path = Path('..', '..', 'data',
                             f'online_sales_dataset_fs_mutual_information_{threshold}.csv')
     forward_selection_path = Path('..', '..', 'data', 'online_sales_dataset_fs_forward_selection.csv')
-    backward_selection_path = Path('..', '..', 'data', 'online_sales_dataset_fs_backwards_selection.csv')
+    backward_selection_path = Path('..', '..', 'data', 'online_sales_dataset_fs_backward_selection.csv')
     recursive_elimination_path = Path('..', '..', 'data', 'online_sales_dataset_fs_rfe.csv')
     exhaustive_path = Path('..', '..', 'data', 'online_sales_dataset_fs_exhaustive.csv')
 
@@ -81,6 +81,5 @@ if __name__ == '__main__':
     evaluate_csv(forward_selection_path, 'forward_selection_fs', fast=True)
     evaluate_csv(backward_selection_path, 'backward_selection_fs', fast=True)
     evaluate_csv(recursive_elimination_path, 'recursive_elimination_fs', fast=True)
-    evaluate_csv(exhaustive_path, 'exhaustive_fs', fast=True)
     evaluate_csv(exhaustive_path, 'exhaustive_fs', fast=True)
 

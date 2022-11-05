@@ -40,7 +40,7 @@ if __name__ == '__main__':
         fig = plt.figure(figsize=(16, 10))
         # create a 2D scatter plot:
         sns.scatterplot(x=f'tsne_{nr_of_features}_f1', y=f'tsne_{nr_of_features}_f2',
-                        hue='y', data=df_subset, palette='coolwarm', s=20, alpha=0.8, edgecolors='k')
+                        hue='y', data=df_subset, cmap=plt.cm.rainbow, s=20, alpha=0.8, edgecolors='k')
         plt.title('t-SNE 2D Plot of the Online Sales Dataset')
         plt.legend(['Churned', 'Not Churned'], loc='upper left')
 

@@ -32,3 +32,8 @@ if __name__ == '__main__':
     # # evaluate the TSNE dataset with all the features:
     # evaluate_csv(tsne_full, 't-SNE_full', fast=True)
     # Dimensionality reduction works better once we feature select the dataset.
+    """
+    Note we evaluated the performances to check if dimensionality reduction works better once 
+    we feature select the dataset or not, scores obtained transforming the whole dataset cannot be
+    compared with those obtained via a train test split.
+    """

@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     # keep only the recency and 1_AUC features:
     df = pd.read_csv(fs_dataset, index_col=0)
-    df = df[['Recency', 'AverageDaysBetweenPurchaseAUC']]
+    df = df[['AverageDaysBetweenPurchaseAUC']]
 
     # save the dataset:
     df.to_csv(Path('../..', 'data', 'online_sales_dataset_vip_features.csv'))
@@ -23,4 +23,4 @@ if __name__ == '__main__':
     vip_path = Path('../..', 'data', 'online_sales_dataset_vip_features.csv')
 
     # evaluate the features:
-    evaluate_csv(vip_path, 'Recency and AverageDaysBetweenPurchaseAUC')
+    evaluate_csv(vip_path, 'AverageDaysBetweenPurchaseAUC')

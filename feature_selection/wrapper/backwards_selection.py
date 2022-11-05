@@ -13,8 +13,6 @@ from forwards_selection import feature_selection
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 from xgboost import XGBClassifier
 
-
-
 # Driver:
 if __name__ == '__main__':
     # import the dataset:

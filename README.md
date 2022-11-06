@@ -1,6 +1,6 @@
 # Data Challenge 3 project, SUPSI
 
-Repository for the first data challenge 3 project, SUPSI DS &amp; AI course.
+Repository for the first data challenge 3, project 1, SUPSI DS &amp; AI course.
 
 ### Important notes
 

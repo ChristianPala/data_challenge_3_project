@@ -30,6 +30,7 @@ ProductClosenessCentrality,0.00773604
 DegreeCentrality,0.00553207
 EigenvectorCentrality,0.0050479
 """
+
     # select the features above:
     features = [x.split(',')[0] for x in best_features.split('\n') if x]
 

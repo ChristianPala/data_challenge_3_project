@@ -4,11 +4,11 @@ Repository for the first data challenge 3, project 1, SUPSI DS &amp; AI course.
 
 ### Important notes
 
-**We recommend to use this project with the python version 3.10.**
-There is the possibility to run the files manually, or to run a main file and wait to complete. If you want to do the latter,
-please run the file named "main.py" located in the "main_with_functions" branch.
+**We recommend python version 3.10 to run this project.**
+Files can be run manually, or a main file to execute the whole pipeline can be started. If you want the latter solution,
+please run the file named "main.py" located in the "main_with_functions" repository branch.
 
-Please check that all the required libraries are installed (chapter at the end of this file).
+Please check that all the required libraries are installed.
 For the correct functioning of this project please copy the file located in the ./main/mod directory called "
 features.py"
 to the source files of the TSFEL library.
@@ -24,7 +24,7 @@ Linux: `~/anaconda3/envs/<environment name>/lib/python3.10/site-packages/tsfel/f
 
 Run these commands to install all the required libraries:
 
-If you have mambaforge installed we recommend to use that, as it is much faster than conda.
+If you have mambaforge installed we recommend it, as it is much faster than conda.
 `mamba install scikit-learn xgboost pandas matplotlib seaborn hyperopt tabulate numpy nltk scipy igraph tqdm networkx karateclub shap mlxtend openpyxl`
 Other libraries not available with conda or mamba:
 `pip install tsfel`

@@ -36,13 +36,20 @@ def graph():
 
 
 def main():
+    print('\n> checking nltk downloadable')
     check_nltk()
+    print('\n> creating base dataset')
     base()
+    print('\n> creating graph datasets')
     graph()
+    print('\n> calculating embeddings')
     embeddings()
+    print('\n> creating nlp datasets')
     nlp()
+    print('\n> creating time series datasets')
     ats_extr()
     missing_values()
+    print('\n> aggregating datasets')
     fe_aggreagtor()
 
 

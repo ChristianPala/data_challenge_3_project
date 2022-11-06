@@ -7,11 +7,17 @@ from modelling.feature_engineering_performances.nlp_model import main as nlp_mod
 
 
 def main():
+    print('\n> Running base model')
     base_model()
+    print('\n> Running base model with cross validation')
     base_model_cv()
+    print('\n> Running base model tuned')
     base_model_tuned()
+    print('\n> Running time series model')
     time_series_model()
+    print('\n> Running NLP model')
     nlp_model()
+    print('\n> Running graph model')
     graph_model()
 
 

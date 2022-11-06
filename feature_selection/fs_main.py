@@ -10,16 +10,23 @@ from feature_selection.wrapper.recursive_feature_elimination import main as rfe
 
 
 def main(run_wrappers=False, run_correlation=False):
+    print('\n> creating variance threshold dataset')
     variance_t()
+    print('\n> creating mutual information dataset')
     mi()
     if run_wrappers:
         if run_correlation:
             corr()
+        print('\n> creating forward dataset')
         forward()
+        print('\n> creating backward dataset')
         backward()
+        print('\n> creating exhaustive dataset')
         efs()
+        print('\n> creating recursive elimination dataset')
         rfe()
         merger()
+    print('\n> aggregating dataset')
     fs_aggregator()
 
 

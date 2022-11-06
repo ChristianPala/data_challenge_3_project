@@ -37,20 +37,28 @@ def main(preprocessing_only=True,
     @return: None
     """
 
+    print('\n> creating missing directories')
     create_directories()
+    print('\n> preprocessing phase')
     prepro(preprocessing_only=preprocessing_only)
+    print('\n> feature extraction phase')
     fe()
+    print('\n> feature selection phase')
     fs(run_wrappers=run_wrap_methods, run_correlation=False)
+    print('\n> dimensionality reduction phase')
     dr(run_full=run_dr_on_full_dataset, run_dsa=run_data_scarcity_analysis)
 
     if run_model:
+        print('\n> Running models')
         run_models()
 
     if run_error_analysis:
+        print('\n> Running error analysis')
         ea()
 
 
 if __name__ == '__main__':
+    print('> Starting main procedure')
     main(preprocessing_only=True,
          run_error_analysis=False,
          run_model=False,

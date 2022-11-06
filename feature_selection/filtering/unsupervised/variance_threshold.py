@@ -23,7 +23,7 @@ if __name__ == '__main__':
     X_scaled = scaler.fit_transform(X)
 
     # initialize the selector:
-    selector = VarianceThreshold(threshold=0.01)
+    selector = VarianceThreshold(threshold=threshold)
     # fit
     selector.fit(X_scaled)
     # leave selected features in the original dataframe:
@@ -40,6 +40,6 @@ if __name__ == '__main__':
     # We removed features which would likely not add information to the model.
     """
     Number of features incoming: 413
-    Number of features outgoing: 173
+    Number of features outgoing: 308
     """
 

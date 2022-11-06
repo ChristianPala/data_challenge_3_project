@@ -27,10 +27,10 @@ if __name__ == '__main__':
     model = XGBClassifier(objective="binary:logistic", random_state=42, n_jobs=-1)
 
     # create the EFS object:
-    efs = EFS(model, min_features=5, max_features=5, scoring='f1',
-              cv=2, n_jobs=-1, print_progress=True, fixed_features=(X.columns.get_loc('1_Area under the curve'),
-                                                                    X.columns.get_loc('EigenvectorCentrality_country'),
-                                                                    X.columns.get_loc('69')))
+    efs = EFS(model, min_features=1, max_features=1, scoring='f1',
+              cv=2, n_jobs=-1, print_progress=True, fixed_features=())
+
+    # X.columns.get_loc('1_Area under the curve')
 
     # fit the EFS object to the dataset:
     efs.fit(X_train, y_train)

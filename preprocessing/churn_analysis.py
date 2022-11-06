@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 
-if __name__ == '__main__':
+def main():
 
     # import the cleaned dataset:
     df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_for_fe.csv'))
@@ -35,3 +35,7 @@ if __name__ == '__main__':
     # Considering as churners all customers that have not made a purchase in the last 365 days from the last
     # available purchase date in the dataset seems like a reasonable threshold.
     # We will use this as a hard threshold for the churned customers.
+
+
+if __name__ == '__main__':
+    main()

@@ -14,9 +14,7 @@ from sklearn.preprocessing import StandardScaler
 # number of components to keep based on the explained variance ratio, for the performance evaluation of PCA
 # with regularization:
 Threshold: float = 0.9
-
-# Driver:
-if __name__ == '__main__':
+def main():
     # import the dataset for dimensionality reduction:
     X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_dr.csv'), index_col=0)
 
@@ -56,3 +54,8 @@ if __name__ == '__main__':
 
     # save the principal components:
     principal_components_df.to_csv(Path('..', '..', 'data', 'online_sales_dataset_dr_pca.csv'), index=False)
+
+
+# Driver:
+if __name__ == '__main__':
+    main()

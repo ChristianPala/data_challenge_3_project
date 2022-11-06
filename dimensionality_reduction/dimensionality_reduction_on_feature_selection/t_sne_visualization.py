@@ -10,9 +10,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 mpl.use('tkagg')
 
-
-# Driver:
-if __name__ == '__main__':
+def main():
     # load the t-SNE dataset:
     t_sne_path = Path('..', '..', 'data', 'online_sales_dataset_dr_tsne_pca.csv')
     t_sne = pd.read_csv(t_sne_path, index_col=0)
@@ -81,3 +79,6 @@ if __name__ == '__main__':
         print('The t-SNE visualization is only available for 2D and 3D plots.')
 
 
+# Driver:
+if __name__ == '__main__':
+    main()

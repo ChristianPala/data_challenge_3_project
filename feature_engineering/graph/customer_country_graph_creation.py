@@ -9,7 +9,7 @@ import networkx as nx
 # Timing:
 from tqdm import tqdm
 
-if __name__ == '__main__':
+def main():
 
     # import the aggregated dataset:
     df_agg = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'), index_col=0)
@@ -34,3 +34,6 @@ if __name__ == '__main__':
 
     # save the graph:
     nx.write_gpickle(G, Path('saved_graphs', 'customer_country_graph.gpickle'))
+
+if __name__ == '__main__':
+    main()

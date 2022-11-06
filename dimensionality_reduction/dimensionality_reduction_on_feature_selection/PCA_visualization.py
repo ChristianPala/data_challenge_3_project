@@ -13,7 +13,7 @@ import seaborn as sns
 matplotlib.use('tkagg')
 
 
-if __name__ == '__main__':
+def main():
     # PCA visualizations:
     pca = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_dr_pca.csv'), index_col=0)
 
@@ -71,3 +71,7 @@ if __name__ == '__main__':
         Path('..', '..', 'plots', 'PCA').mkdir(parents=True, exist_ok=True)
         plt.savefig(Path('..', '..', 'plots', 'PCA', 'pca_visualization3D.png'))
     plt.show()
+
+
+if __name__ == '__main__':
+    main()

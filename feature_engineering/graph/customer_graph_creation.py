@@ -6,8 +6,7 @@ from tqdm import tqdm
 # Graph:
 import networkx as nx
 
-
-if __name__ == '__main__':
+def main():
     # import the feature engineering dataset:
     df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
 
@@ -46,3 +45,7 @@ if __name__ == '__main__':
 
     # save the graph:
     nx.write_gpickle(G, Path('saved_graphs', 'customer_graph.gpickle'))
+
+
+if __name__ == '__main__':
+    main()

@@ -13,10 +13,9 @@ import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
 
-# matplotlib.use('tkagg')
 
-# Driver:
-if __name__ == '__main__':
+# matplotlib.use('tkagg')
+def main():
     # load the dataset:
     df = load_and_save_data()
 
@@ -156,7 +155,7 @@ if __name__ == '__main__':
     plt.figure(figsize=(7, 7))
     sns.countplot(x=df['InvoiceDate'].dt.dayofweek, color='blue')
     plt.title('Weekly number of sales')
-    plt.xticks(ticks=[0, 1, 2, 3, 4, 5, 6], labels=['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],)
+    plt.xticks(ticks=[0, 1, 2, 3, 4, 5, 6], labels=['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], )
     plt.savefig(Path('EDA', 'count_plot_invoice_day_of_week.png'))
     plt.close()
     # surprisingly for an online store, we have no sales on saturday, not sure how to interpret this.
@@ -209,3 +208,8 @@ if __name__ == '__main__':
     plt.grid(True)
     plt.savefig(Path('EDA', 'total_spent_trend.png'))
     plt.close()
+
+
+# Driver:
+if __name__ == '__main__':
+    main()

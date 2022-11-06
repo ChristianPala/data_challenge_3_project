@@ -6,8 +6,7 @@
 import pandas as pd
 from pathlib import Path
 
-# Driver:
-if __name__ == '__main__':
+def main():
     # import the dataset for dimensionality reduction:
     df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_dr.csv'),
                      index_col=0)
@@ -19,3 +18,8 @@ if __name__ == '__main__':
     """
     The dataset is basically full, PCA should work well as opposed to TSVD for dimensionality reduction.
     """
+
+
+# Driver:
+if __name__ == '__main__':
+    main()

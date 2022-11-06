@@ -10,8 +10,8 @@ from sklearn.preprocessing import MinMaxScaler
 # Global variables:
 threshold = 10 ** -3  # using variance as a proxy for information in the column.
 
-# Driver:
-if __name__ == '__main__':
+
+def main():
 
     # import the dataset for feature selection:
     X = pd.read_csv(Path('..', '..', '..', 'data', 'online_sales_dataset_for_fs.csv'), index_col=0)
@@ -43,3 +43,7 @@ if __name__ == '__main__':
     Number of features outgoing: 308
     """
 
+
+# Driver:
+if __name__ == '__main__':
+    main()

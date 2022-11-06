@@ -32,7 +32,7 @@ def feature_extractor(data: pd.DataFrame, features, customer) -> pd.DataFrame:
     return features_data
 
 
-if __name__ == '__main__':
+def main():
 
     agg = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
 
@@ -118,3 +118,7 @@ if __name__ == '__main__':
     # save the features:
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel.csv'), index=False)
     y.to_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index=False)
+
+
+if __name__ == '__main__':
+    main()

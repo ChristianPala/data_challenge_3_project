@@ -4,8 +4,8 @@ import pandas as pd
 from pathlib import Path
 from datetime import datetime, timedelta
 
-# Driver:
-if __name__ == '__main__':
+
+def main():
     # import the cleaned dataset:
     df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
 
@@ -69,3 +69,8 @@ if __name__ == '__main__':
     else:
         print("Consistency check passed, customer dataset and dataset for feature engineering have the same number of "
               "customers.")
+
+
+# Driver:
+if __name__ == '__main__':
+    main()

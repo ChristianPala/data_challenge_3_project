@@ -3,10 +3,11 @@ import pandas as pd
 from pathlib import Path
 import matplotlib
 from matplotlib import pyplot as plt
+
 matplotlib.use('TkAgg')
 
-if __name__ == '__main__':
 
+def main():
     similarity_threshold = 0.8
 
     # read the dataset:
@@ -30,3 +31,5 @@ if __name__ == '__main__':
     # for the feature selection step in case it's useful for some marginal improvement.
 
 
+if __name__ == '__main__':
+    main()

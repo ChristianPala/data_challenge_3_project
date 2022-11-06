@@ -13,11 +13,9 @@ from sklearn.model_selection import RepeatedStratifiedKFold
 # Modelling:
 from xgboost import XGBClassifier
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
-
-# Driver:
-if __name__ == '__main__':
+def main():
     # get the dataset from the mutual information filtering:
-    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_mutual_information.csv'), index_col=0)
+    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_mutual_information_0.001.csv'), index_col=0)
 
     # get the time series labels from the dataset:
     y = pd.read_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
@@ -55,3 +53,7 @@ if __name__ == '__main__':
     # print the ranking of the features:
     print(tabulate([rfe.ranking_], headers='keys', tablefmt='psql'))
 
+
+# Driver:
+if __name__ == '__main__':
+    main()

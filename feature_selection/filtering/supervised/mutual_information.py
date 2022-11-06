@@ -13,8 +13,7 @@ from modelling.data_splitting.train_val_test_splitter import train_validation_te
 # set a threshold for the mutual information:
 threshold: float = 10 ** -3  # based on the model evaluation results.
 
-# Driver:
-if __name__ == '__main__':
+def main():
     # import the dataset for feature selection, filteres by variance threshold:
     X = pd.read_csv(Path('..', '..', '..', 'data',
                          f'online_sales_dataset_fs_variance_threshold_{threshold}.csv'), index_col=0)
@@ -49,3 +48,8 @@ if __name__ == '__main__':
     incoming features: 303
     Outgoing features: 206
     """
+
+
+# Driver:
+if __name__ == '__main__':
+    main()

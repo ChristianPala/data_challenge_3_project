@@ -13,8 +13,8 @@ from forwards_selection import feature_selection
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 from xgboost import XGBClassifier
 
-# Driver:
-if __name__ == '__main__':
+
+def main(cv=2, n_jobs=4):
     # import the dataset:
     X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_mutual_information_0.001.csv'))
     df_fs = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs.csv'))
@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
     # perform feature selection:
     # --------------------------------------------------------------------------------------
-    support_b = feature_selection(model, X_train, y_train, 'backward')
+    support_b = feature_selection(model, X_train, y_train, 'backward', cv=cv, n_jobs=n_jobs)
     selected_b = feature_names[support_b]
     print(f"\nFeatures selected by SequentialFeatureSelector (backward): {selected_b}")
 
@@ -50,3 +50,8 @@ if __name__ == '__main__':
     X = X[['CustomerId'] + [col for col in X.columns if col != 'CustomerId']]
     # Save the dataset:
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_backward_selection.csv'), index=False)
+
+
+# Driver:
+if __name__ == '__main__':
+    main()

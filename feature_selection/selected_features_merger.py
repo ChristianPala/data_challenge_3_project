@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 
-if __name__ == '__main__':
+def main():
 
     # load data
     forward_sel = pd.read_csv(Path('..', 'data', 'online_sales_dataset_fs_forward_selection.csv'))
@@ -40,3 +40,7 @@ if __name__ == '__main__':
     print(f'Recursive feature elimination shape: {recursive_sel.shape}')
     print(f'Merged dataset shape: {merged.shape}')
     print(f'Intersected dataset shape: {intersected.shape}')
+
+
+if __name__ == '__main__':
+    main()

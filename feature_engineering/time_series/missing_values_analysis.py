@@ -2,9 +2,7 @@
 import pandas as pd
 from pathlib import Path
 
-
-# Driver:
-if __name__ == '__main__':
+def main():
     # load the dataset:
     df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel.csv'))
 
@@ -41,3 +39,8 @@ if __name__ == '__main__':
 
     # save the dataset:
     df_dropped.to_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel_for_fs.csv'), index=False)
+
+
+# Driver:
+if __name__ == '__main__':
+    main()

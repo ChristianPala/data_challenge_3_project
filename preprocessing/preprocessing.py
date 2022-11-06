@@ -7,8 +7,8 @@ from data_imputation import customer_remover, missing_description_imputer, \
     price_imputer
 from data_loading import load_and_save_data
 
-# Driver code:
-if __name__ == '__main__':
+
+def main():
     # Data Loading:
     # --------------------------------------------------------------
     df = load_and_save_data()
@@ -65,3 +65,8 @@ if __name__ == '__main__':
     print(f"Number of unique products: {df['StockCode'].unique().size}")
     print(f"Number of unique descriptions: {df['Description'].unique().size}")
     print(f"Number of unique countries: {df['Country'].unique().size}")
+
+
+# Driver code:
+if __name__ == '__main__':
+    main()

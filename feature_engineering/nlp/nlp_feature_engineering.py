@@ -45,7 +45,7 @@ def print_results(training_set: pd.DataFrame, testing_set: pd.DataFrame) -> None
     print(testing_set.filter(regex='Cd_').sum().sum())
 
 
-if __name__ == '__main__':
+def main():
 
     # import the aggregated dataset:
     df_agg = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
@@ -136,3 +136,6 @@ if __name__ == '__main__':
     y_test.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_test_labels.csv'), index=False)
 
     # Unfortunately the clustering does not affect a large number of customers.
+
+if __name__ == '__main__':
+    main()

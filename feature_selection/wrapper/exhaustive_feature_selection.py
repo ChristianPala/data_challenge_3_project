@@ -11,9 +11,7 @@ from mlxtend.feature_selection import ExhaustiveFeatureSelector as EFS
 # Modelling:
 from xgboost import XGBClassifier
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
-
-# Driver:
-if __name__ == '__main__':
+def main():
     # load the mutual information filtered dataset:
     X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_mutual_information_0.001.csv'), index_col=0)
 
@@ -56,3 +54,7 @@ if __name__ == '__main__':
 
     # Similar results to automatic feature selection on the mutual information filtered dataset.
 
+
+# Driver:
+if __name__ == '__main__':
+    main()

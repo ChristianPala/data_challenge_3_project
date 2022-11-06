@@ -17,26 +17,25 @@ from auxiliary.method_timer import measure_time
 
 # Functions:
 @measure_time
-def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.array:
+def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward', cv=2, n_jobs=4) -> np.array:
     """
     Function to perform feature selection on a given direction, default is forward.
+    @param n_jobs: number of jobs to run in parallel
+    @param cv: cross validation object or int
     @param estimator: the model used to predict the target
     @param x_tr: train split of the X dataframe
     @param y_tr: train split of the target dataframe
     @param direction: either forward or backward
     @return: the mask of the selected features
     """
-    # create the cross validation object, since we have a binary classification problem with an
-    # imbalanced dataset, we use the repeated stratified k-fold cross validation:
-    cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=5, random_state=42)
 
     # create the sequential feature selector object:
     sfs = SequentialFeatureSelector(estimator=estimator,
                                     direction=direction,
                                     n_features_to_select='auto',
                                     scoring='f1',
-                                    cv=2,
-                                    n_jobs=4)
+                                    cv=cv,
+                                    n_jobs=n_jobs)
     print(f'> performing feature selection. Method: {direction}')
     sfs.fit(x_tr, y_tr)
     print(f'sfs_{direction} fitted')
@@ -45,7 +44,7 @@ def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward') -> np.a
     return support
 
 
-if __name__ == '__main__':
+def main():
     # import the dataset:
     X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_mutual_information_0.001.csv'))
     df_fs = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs.csv'))
@@ -70,9 +69,13 @@ if __name__ == '__main__':
     # define the model:
     model = XGBClassifier(objective="binary:logistic", random_state=42, n_jobs=-1)
 
+    # create the cross validation object, since we have a binary classification problem with an
+    # imbalanced dataset, we use the repeated stratified k-fold cross validation:
+    cvo = RepeatedStratifiedKFold(n_splits=10, n_repeats=5, random_state=42)
+
     # perform feature selection:
     # --------------------------------------------------------------------------------------
-    support_f = feature_selection(model, X_train, y_train, 'forward')
+    support_f = feature_selection(model, X_train, y_train, 'forward', cvo, 4)
     selected_f = feature_names[support_f]
     print(f"Features selected by SequentialFeatureSelector (forward): {selected_f}")
 
@@ -85,3 +88,7 @@ if __name__ == '__main__':
     X = X[['CustomerId'] + [col for col in X.columns if col != 'CustomerId']]
     # Save the dataset:
     X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_forward_selection.csv'), index=False)
+
+
+if __name__ == '__main__':
+    main()

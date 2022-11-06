@@ -4,7 +4,8 @@ from pathlib import Path
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-if __name__ == '__main__':
+
+def main():
     # load the dataset with the features selected by forward selection:
     df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_dr_fs.csv'), index_col=0)
 
@@ -49,3 +50,7 @@ if __name__ == '__main__':
 
     # save the correlation matrix:
     corr.to_csv(Path('..', '..', 'plots', 'automated_forward_selection_correlation_matrix.csv'))
+
+
+if __name__ == '__main__':
+    main()

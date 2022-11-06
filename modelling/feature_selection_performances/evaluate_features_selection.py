@@ -1,11 +1,12 @@
 # Libraries:
 
-# Data manipulation:
-import pandas as pd
 from pathlib import Path
 
+# Data manipulation:
+import pandas as pd
 # Modelling:
 from xgboost import XGBClassifier
+
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 from modelling.reporting.classifier_report import report_model_results
 from modelling.tuning.xgboost_tuner import tuner
@@ -30,7 +31,7 @@ def evaluate_csv(file_path: Path, file_name: str, fast: bool = False,
     X = pd.read_csv(file_path, index_col=0)
 
     # get the labels from tsfel:
-    y = pd.read_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
+    y = pd.read_csv(Path('data', 'online_sales_labels_tsfel.csv'), index_col=0)
 
     # train test split:
     X_train, X_val, X_test, y_train, y_val, y_test = train_validation_test_split(X, y, validation=True)
@@ -41,7 +42,7 @@ def evaluate_csv(file_path: Path, file_name: str, fast: bool = False,
 
     # save the best parameters to a file:
     # create the path to the file:
-    path = Path('..', '..', 'data', 'best_params', f'{file_name}.txt')
+    path = Path('data', 'best_params', f'{file_name}.txt')
 
     # save the best parameters to the file:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -64,15 +65,15 @@ def evaluate_csv(file_path: Path, file_name: str, fast: bool = False,
 # Driver:
 if __name__ == '__main__':
     # paths:
-    full_features_path = Path('..', '..', 'data', 'online_sales_dataset_for_fs.csv')
-    variance_threshold_path = Path('..', '..', 'data',
+    full_features_path = Path('data', 'online_sales_dataset_for_fs.csv')
+    variance_threshold_path = Path('data',
                                    f'online_sales_dataset_fs_variance_threshold_{threshold}.csv')
-    mutual_info_path = Path('..', '..', 'data',
+    mutual_info_path = Path('data',
                             f'online_sales_dataset_fs_mutual_information_{threshold}.csv')
-    forward_selection_path = Path('..', '..', 'data', 'online_sales_dataset_fs_forward_selection.csv')
-    backward_selection_path = Path('..', '..', 'data', 'online_sales_dataset_fs_backward_selection.csv')
-    recursive_elimination_path = Path('..', '..', 'data', 'online_sales_dataset_fs_rfe.csv')
-    exhaustive_path = Path('..', '..', 'data', 'online_sales_dataset_fs_exhaustive.csv')
+    forward_selection_path = Path('data', 'online_sales_dataset_fs_forward_selection.csv')
+    backward_selection_path = Path('data', 'online_sales_dataset_fs_backward_selection.csv')
+    recursive_elimination_path = Path('data', 'online_sales_dataset_fs_rfe.csv')
+    exhaustive_path = Path('data', 'online_sales_dataset_fs_exhaustive.csv')
 
     # evaluate the models:
     # evaluate_csv(full_features_path, 'all_fe_features', fast=True)
@@ -82,4 +83,3 @@ if __name__ == '__main__':
     evaluate_csv(backward_selection_path, 'backward_selection_fs', fast=True)
     # evaluate_csv(recursive_elimination_path, 'recursive_elimination_fs', fast=True)
     # evaluate_csv(exhaustive_path, 'exhaustive_fs', fast=True)
-

@@ -1,9 +1,10 @@
 # Libraries:
 # Data manipulation:
-import pandas as pd
 from pathlib import Path
+
 # Graph:
 import networkx as nx
+import pandas as pd
 
 
 # Functions:
@@ -62,7 +63,7 @@ def main(graph_type_name: str, only_pagerank: bool = True) -> None:
         df_centrality.index.name = 'StockCode'
 
     # save the extracted features to a csv file:
-    df_centrality.to_csv(Path('..', '..', 'data', d_name))
+    df_centrality.to_csv(Path('data', d_name))
 
 
 # Driver:

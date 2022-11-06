@@ -1,14 +1,15 @@
 # Libraries:
-import pandas as pd
 from pathlib import Path
-from tqdm import tqdm
 
 # Graph:
 import networkx as nx
+import pandas as pd
+from tqdm import tqdm
+
 
 def main():
     # import the feature engineering dataset:
-    df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
+    df = pd.read_csv(Path('data', 'online_sales_dataset_for_fe.csv'))
 
     # create a column with the future weights of the graph, round to 2 decimals:
     df['Weight'] = (df['Quantity'] * df['Price']).round(2)

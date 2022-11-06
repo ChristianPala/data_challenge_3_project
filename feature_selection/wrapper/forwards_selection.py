@@ -1,18 +1,17 @@
 # Libraries:
 # Data manipulation:
-import numpy as np
-import pandas as pd
 from pathlib import Path
 
-
-# Modelling:
-from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
+import numpy as np
+import pandas as pd
 from sklearn.feature_selection import SequentialFeatureSelector
 from sklearn.model_selection import RepeatedStratifiedKFold
 from xgboost import XGBClassifier
 
 # Time:
 from auxiliary.method_timer import measure_time
+# Modelling:
+from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 
 
 # Functions:
@@ -46,14 +45,14 @@ def feature_selection(estimator, x_tr, y_tr, direction: str = 'forward', cv=2, n
 
 def main():
     # import the dataset:
-    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_mutual_information_0.001.csv'))
-    df_fs = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs.csv'))
+    X = pd.read_csv(Path('data', 'online_sales_dataset_fs_mutual_information_0.001.csv'))
+    df_fs = pd.read_csv(Path('data', 'online_sales_dataset_for_fs.csv'))
 
     # Drop the customer id:
     X.drop('CustomerId', axis=1, inplace=True)
 
     # import the label dataset:
-    y = pd.read_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
+    y = pd.read_csv(Path('data', 'online_sales_labels_tsfel.csv'), index_col=0)
 
     # get the feature names:
     feature_names = np.array(X.columns)
@@ -87,7 +86,7 @@ def main():
     # order the columns to have the customer id as first column:
     X = X[['CustomerId'] + [col for col in X.columns if col != 'CustomerId']]
     # Save the dataset:
-    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_fs_forward_selection.csv'), index=False)
+    X.to_csv(Path('data', 'online_sales_dataset_fs_forward_selection.csv'), index=False)
 
 
 if __name__ == '__main__':

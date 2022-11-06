@@ -1,9 +1,10 @@
 # Libraries:
-import pandas as pd
-from pathlib import Path
-from karateclub import DeepWalk
-import networkx as nx
 from multiprocessing import cpu_count
+from pathlib import Path
+
+import networkx as nx
+import pandas as pd
+from karateclub import DeepWalk
 
 
 # Functions:
@@ -30,18 +31,17 @@ def main(graph_type_name: str, walk_length: int = 100, dimensions: int = 128) ->
     df_embeddings = pd.DataFrame(embeddings)
 
     # add the CustomerId to the dataframe:
-    customer_ids = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))['CustomerId']
+    customer_ids = pd.read_csv(Path('data', 'online_sales_dataset_agg.csv'))['CustomerId']
     df_embeddings['CustomerId'] = customer_ids
 
     # set the CustomerId as index:
     df_embeddings.set_index('CustomerId', inplace=True)
 
     # save the embeddings to a csv file:
-    df_embeddings.to_csv(Path('..', '..', 'data', f'{graph_type_name}_deepwalk_embeddings.csv'))
+    df_embeddings.to_csv(Path('data', f'{graph_type_name}_deepwalk_embeddings.csv'))
 
 
 if __name__ == '__main__':
     main('customer')
     main('customer_country')
     main('product')
-

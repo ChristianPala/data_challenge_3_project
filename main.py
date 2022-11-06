@@ -21,10 +21,10 @@ def create_directories():
 
 def main(run_error_analysis=False, run_model=False):
     create_directories()
-    prepro(preprocessing_only=True)
+    prepro(preprocessing_only=False)
     fe()
     fs(run_wrappers=False, run_correlation=False)
-    dr(run_full=False, run_dsa=False)
+    dr(run_full=False, run_dsa=True)
 
     if run_model:
         run_models()

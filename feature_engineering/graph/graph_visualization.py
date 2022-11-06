@@ -3,12 +3,12 @@
 # Data manipulation:
 from pathlib import Path
 
+import matplotlib
 # Graph:
 import networkx as nx
-
 # Plotting:
 from matplotlib import pyplot as plt
-import matplotlib
+
 matplotlib.use('TkAgg')
 
 # Driver:

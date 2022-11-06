@@ -2,17 +2,19 @@
 # Libraries:
 # Data Manipulation:
 from pathlib import Path
-import pandas as pd
 
 # Visualization:
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import pandas as pd
 import seaborn as sns
+
 mpl.use('tkagg')
+
 
 def main():
     # load the t-SNE dataset:
-    t_sne_path = Path('..', '..', 'data', 'online_sales_dataset_dr_tsne_pca.csv')
+    t_sne_path = Path('data', 'online_sales_dataset_dr_tsne_pca.csv')
     t_sne = pd.read_csv(t_sne_path, index_col=0)
 
     initializer = ""
@@ -23,7 +25,7 @@ def main():
     nr_of_features = len(t_sne.columns)
 
     # load the target:
-    target = pd.read_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
+    target = pd.read_csv(Path('data', 'online_sales_labels_tsfel.csv'), index_col=0)
 
     # create a dataframe with the target and the t-SNE features:
     df_subset = pd.DataFrame()
@@ -44,12 +46,12 @@ def main():
 
         # save the figure:
         try:
-            fig.savefig(Path('..', '..', 'plots', 't-SNE-PCA-init', 'online_sales_dataset_dr_tsne_2D.png'))
+            fig.savefig(Path('plots', 't-SNE-PCA-init', 'online_sales_dataset_dr_tsne_2D.png'))
         except FileNotFoundError:
             # create the directory:
-            Path('..', '..', 'plots', f't-SNE{initializer}').mkdir(parents=True, exist_ok=True)
+            Path('plots', f't-SNE{initializer}').mkdir(parents=True, exist_ok=True)
             # save the figure:
-            fig.savefig(Path('..', '..', 'plots', f't-SNE{initializer}', 'online_sales_dataset_dr_tsne_2D.png'))
+            fig.savefig(Path('plots', f't-SNE{initializer}', 'online_sales_dataset_dr_tsne_2D.png'))
 
     if nr_of_features == 3:
         # create a figure:
@@ -68,12 +70,12 @@ def main():
 
         # save the figure:
         try:
-            fig.savefig(Path('..', '..', 'plots', f't-SNE{initializer}', 'online_sales_dataset_dr_tsne_3D.png'))
+            fig.savefig(Path('plots', f't-SNE{initializer}', 'online_sales_dataset_dr_tsne_3D.png'))
         except FileNotFoundError:
             # create the directory:
-            Path('..', '..', 'plots', f't-SNE{initializer}').mkdir(parents=True, exist_ok=True)
+            Path('plots', f't-SNE{initializer}').mkdir(parents=True, exist_ok=True)
             # save the figure:
-            fig.savefig(Path('..', '..', 'plots', 't-SNE', 'online_sales_dataset_dr_tsne_3D.png'))
+            fig.savefig(Path('plots', 't-SNE', 'online_sales_dataset_dr_tsne_3D.png'))
 
     else:
         print('The t-SNE visualization is only available for 2D and 3D plots.')

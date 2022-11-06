@@ -2,14 +2,16 @@
 # based on feature commonality and performance with the tuned XGB model
 # with embedded methods based on feature importance.
 
+from pathlib import Path
+
 # Libraries:
 # Data manipulation:
 import pandas as pd
-from pathlib import Path
+
 
 def main():
     # load the dataset for feature selection:
-    X = pd.read_csv(Path('..', 'data', 'online_sales_dataset_for_fs.csv'))
+    X = pd.read_csv(Path('data', 'online_sales_dataset_for_fs.csv'))
 
     # In this version we used the result of the forward selection with cross-validation and automatic
     # number of features selected:
@@ -37,7 +39,7 @@ CustomerId, index
                       '72': 'CustomerGraphDeepwalkEmbedding72of128'}, inplace=True)
 
     # save the dataset:
-    X.to_csv(Path('..', 'data', 'online_sales_dataset_for_dr.csv'), index=False)
+    X.to_csv(Path('data', 'online_sales_dataset_for_dr.csv'), index=False)
 
 
 # Driver:

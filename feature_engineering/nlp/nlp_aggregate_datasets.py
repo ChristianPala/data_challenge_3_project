@@ -1,13 +1,14 @@
 # Auxiliary library to collect the nlp features:
 
-import pandas as pd
 from pathlib import Path
+
+import pandas as pd
 
 # Driver:
 if __name__ == '__main__':
     # load the nlp features:
-    df_train = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_train.csv'), index_col=0)
-    df_test = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_test.csv'), index_col=0)
+    df_train = pd.read_csv(Path('data', 'online_sales_dataset_agg_nlp_train.csv'), index_col=0)
+    df_test = pd.read_csv(Path('data', 'online_sales_dataset_agg_nlp_test.csv'), index_col=0)
 
     # if there are missing values raise an exception:
     if df_train.isnull().sum().sum() > 0:
@@ -25,4 +26,4 @@ if __name__ == '__main__':
     df_final['DescriptionLength'] = df['DescriptionLength']
 
     # save the dataset:
-    df_final.to_csv(Path('..', '..', 'data', 'online_sales_dataset_nlp_for_fs.csv'))
+    df_final.to_csv(Path('data', 'online_sales_dataset_nlp_for_fs.csv'))

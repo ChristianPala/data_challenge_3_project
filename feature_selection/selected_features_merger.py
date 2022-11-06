@@ -1,15 +1,16 @@
 # Libraries
 # Data manipulation
-import numpy as np
-import pandas as pd
 from pathlib import Path
 
-def main():
+import numpy as np
+import pandas as pd
 
+
+def main():
     # load data
-    forward_sel = pd.read_csv(Path('..', 'data', 'online_sales_dataset_fs_forward_selection.csv'))
-    backward_sel = pd.read_csv(Path('..', 'data', 'online_sales_dataset_fs_backward_selection.csv'))
-    recursive_sel = pd.read_csv(Path('..', 'data', 'online_sales_dataset_fs_rfe.csv'))
+    forward_sel = pd.read_csv(Path('data', 'online_sales_dataset_fs_forward_selection.csv'))
+    backward_sel = pd.read_csv(Path('data', 'online_sales_dataset_fs_backward_selection.csv'))
+    recursive_sel = pd.read_csv(Path('data', 'online_sales_dataset_fs_rfe.csv'))
 
     if 'CustomerId' not in backward_sel.columns:
         backward_sel['CustomerId'] = forward_sel['CustomerId']
@@ -20,7 +21,7 @@ def main():
     # remove duplicate features:
     merged = merged.loc[:, ~merged.columns.duplicated()]
     # save the dataset:
-    merged.to_csv(Path('..', 'data', 'online_sales_dataset_fs_wrapper_union.csv'), index=False)
+    merged.to_csv(Path('data', 'online_sales_dataset_fs_wrapper_union.csv'), index=False)
 
     # get the column names:
     forward_sel_cols = forward_sel.columns
@@ -32,7 +33,7 @@ def main():
     # keep only the common features in the merged dataset:
     intersected = merged[common_features]
     # save the dataset:
-    intersected.to_csv(Path('..', 'data', 'online_sales_dataset_fs_wrapper_intersection.csv'), index=False)
+    intersected.to_csv(Path('data', 'online_sales_dataset_fs_wrapper_intersection.csv'), index=False)
 
     # print the shapes of the datasets:
     print(f'Forward selection shape: {forward_sel.shape}')

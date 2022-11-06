@@ -2,9 +2,9 @@
 # and to check how the model performs with a smaller number of features
 # Libraries:
 # Data manipulation:
-import pandas as pd
 from pathlib import Path
 
+import pandas as pd
 # Dimensionality reduction:
 from sklearn.manifold import TSNE
 from sklearn.preprocessing import StandardScaler
@@ -12,9 +12,10 @@ from sklearn.preprocessing import StandardScaler
 # Global variables:
 nr_of_components: int = 3
 
+
 def main():
     # load the dataset for dimensionality reduction:
-    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_dr.csv'))
+    X = pd.read_csv(Path('data', 'online_sales_dataset_for_dr.csv'))
 
     # save the CustomerId column for later use, drop it from the dataset:
     customer_id = X['CustomerId']
@@ -37,7 +38,7 @@ def main():
     tsne_results_df.insert(0, 'CustomerId', customer_id)
 
     # save the results:
-    tsne_results_df.to_csv(Path('..', '..', 'data', 'online_sales_dataset_dr_tsne_embedded.csv'), index=False)
+    tsne_results_df.to_csv(Path('data', 'online_sales_dataset_dr_tsne_embedded.csv'), index=False)
 
 
 # Driver:

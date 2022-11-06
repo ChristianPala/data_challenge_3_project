@@ -1,20 +1,22 @@
 # implement feature selection with the SHAP package:
 # Libraries:
-import numpy as np
-# Data manipulation:
-import pandas as pd
 from pathlib import Path
-# Error analysis:
-import shap
+
 # Modelling:
 # Plotting:
 import matplotlib.pyplot as plt
+import numpy as np
+# Data manipulation:
+import pandas as pd
+# Error analysis:
+import shap
 # evaluate the model:
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from xgboost import XGBClassifier
-from modelling.tuning.xgboost_tuner import tuner
 
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
+from modelling.tuning.xgboost_tuner import tuner
+
 
 def main():
     # load the dataset:
@@ -63,15 +65,15 @@ def main():
     shap.summary_plot(shap_values, X_test.values, feature_names=X_test.columns, show=False)
 
     # save the plot:
-    plt.savefig(Path('..', 'plots', 'shap_summary_plot.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(Path('plots', 'shap_summary_plot.png'), dpi=300, bbox_inches='tight')
     plt.close()
 
     # get the index of the false negatives:
     fn_idx = np.where((y_test == 1) & (y_pred == 0))[0]
 
     # create path if it does not exist:
-    if not Path('..', 'plots', 'error_analysis').exists():
-        Path('..', 'plots', 'error_analysis').mkdir(parents=True)
+    if not Path('plots', 'error_analysis').exists():
+        Path('plots', 'error_analysis').mkdir(parents=True)
 
     # Save the force plots of the false negatives:
     for i in fn_idx:
@@ -80,7 +82,7 @@ def main():
                                              feature_names=X.columns), show=False)
         # give more space for the y-axis:
         plt.subplots_adjust(left=0.4, right=0.9, top=0.9, bottom=0.2)
-        plt.savefig(Path('..', 'plots', 'error_analysis', f'fn_{i}.png'))
+        plt.savefig(Path('plots', 'error_analysis', f'fn_{i}.png'))
         plt.close()
 
     # plot some success case:
@@ -94,7 +96,7 @@ def main():
         # give more space for the y-axis:
         plt.subplots_adjust(left=0.4, right=0.9, top=0.9, bottom=0.2)
         plt.subplots_adjust(left=0.4, right=0.9, top=0.9, bottom=0.2)
-        plt.savefig(Path('..', 'plots', 'error_analysis', f'tp_{tp}.png'))
+        plt.savefig(Path('plots', 'error_analysis', f'tp_{tp}.png'))
         plt.close()
 
     # plot some true negatives:
@@ -108,7 +110,7 @@ def main():
         # give more space for the y-axis:
         plt.subplots_adjust(left=0.4, right=0.9, top=0.9, bottom=0.2)
         plt.subplots_adjust(left=0.4, right=0.9, top=0.9, bottom=0.2)
-        plt.savefig(Path('..', 'plots', 'error_analysis', f'tn_{tn}.png'))
+        plt.savefig(Path('plots', 'error_analysis', f'tn_{tn}.png'))
         plt.close()
 
     # Conclusions:

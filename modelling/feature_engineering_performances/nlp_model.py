@@ -1,23 +1,25 @@
 # Libraries:
 # data manipulation:
 from pathlib import Path
-import pandas as pd
 
+import pandas as pd
 # modelling:
 from xgboost import XGBClassifier
+
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
-from modelling.tuning.xgboost_tuner import tuner
 from modelling.reporting.classifier_report import report_model_results
+from modelling.tuning.xgboost_tuner import tuner
+
 
 def main():
     # load the nlp features:
-    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_nlp_for_fs.csv'), index_col=0)
+    X = pd.read_csv(Path('data', 'online_sales_dataset_nlp_for_fs.csv'), index_col=0)
 
     # get the target from the aggregated dataset:
-    y = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))['CustomerChurned']
+    y = pd.read_csv(Path('data', 'online_sales_dataset_agg.csv'))['CustomerChurned']
 
     # load the aggregated dataset:
-    df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'), index_col=0)
+    df = pd.read_csv(Path('data', 'online_sales_dataset_agg.csv'), index_col=0)
 
     # match the two on the customer id:
     X = df.merge(X, on='CustomerId')
@@ -33,7 +35,7 @@ def main():
     # fast=True means we do 2 cross validations, we needed this setting to speed up the process.
 
     # save the best parameters:
-    pd.DataFrame(best_params, index=[0]).to_csv(Path('..', '..', 'data', 'best_params', 'nlp_model.csv'),
+    pd.DataFrame(best_params, index=[0]).to_csv(Path('data', 'best_params', 'nlp_model.csv'),
                                                 index=False)
 
     # define the model:

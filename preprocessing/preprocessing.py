@@ -2,10 +2,11 @@
 # Libraries:
 # Data manipulation:
 from pathlib import Path
-from data_imputation import customer_remover, missing_description_imputer, \
+
+from preprocessing.data_imputation import customer_remover, missing_description_imputer, \
     stock_code_remover, stock_code_cleaner, parallelized_cancelling_order_imputer, \
     price_imputer
-from data_loading import load_and_save_data
+from preprocessing.data_loading import load_and_save_data
 
 
 def main():
@@ -56,7 +57,7 @@ def main():
     print(f"{df.isna().sum()}")
 
     # save the dataset:
-    df.to_csv(Path("..", "data", "online_sales_dataset_for_fe.csv"), index=False)
+    df.to_csv(Path("data", "online_sales_dataset_for_fe.csv"), index=False)
 
     # check the size of the dataset:
     print(f"Number of rows in the dataset: {df.shape[0]}")

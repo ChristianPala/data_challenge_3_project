@@ -1,15 +1,15 @@
 # Libraries:
-import pandas as pd
 from pathlib import Path
-from tqdm import tqdm
 
 # networkx
 import networkx as nx
+import pandas as pd
+from tqdm import tqdm
 
 
 def main():
     # load the dataset for feature engineering:
-    df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
+    df = pd.read_csv(Path('data', 'online_sales_dataset_for_fe.csv'))
 
     # aggregate over the stock code, keeping a list of invoice numbers which contain the stock code:
     df_agg = df.groupby('StockCode').agg({'Invoice': lambda x: list(x)})

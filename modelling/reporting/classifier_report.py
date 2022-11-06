@@ -1,19 +1,19 @@
 # auxiliary library to report model results:
 
+from pathlib import Path
+
+# Plotting:
+import matplotlib
 # Libraries:
 # Data manipulation:
 import pandas as pd
-from pathlib import Path
-from tabulate import tabulate
-
 # Modelling:
 from matplotlib import pyplot as plt
 from sklearn.metrics import classification_report, f1_score, confusion_matrix, ConfusionMatrixDisplay, \
     PrecisionRecallDisplay, RocCurveDisplay, precision_score, recall_score
+from tabulate import tabulate
 from xgboost import XGBClassifier
 
-# Plotting:
-import matplotlib
 matplotlib.use('TkAgg')
 
 
@@ -52,18 +52,18 @@ def report_model_results(model: XGBClassifier, x_train: pd.DataFrame, x_test: pd
 
     if plot or save:
         # if no folder plots exists, creat it:
-        if not Path('..', 'plots').exists():
-            Path('..', 'plots').mkdir()
+        if not Path('plots').exists():
+            Path('plots').mkdir()
         # if no folder model_name exists in plots, create it:
-        if not Path('..', 'plots', model_name).exists():
-            Path('..', 'plots', model_name).mkdir()
+        if not Path('plots', model_name).exists():
+            Path('plots', model_name).mkdir()
 
         plt.figure(figsize=(10, 6))
         plt.bar(importance['feature'], importance['importance'])
         plt.title('Embedded Feature Importance')
         plt.xlabel('Feature')
         plt.ylabel('Importance')
-        plt.savefig(Path('..', 'plots', model_name, f'feature_importance_{model_name}.png'))
+        plt.savefig(Path('plots', model_name, f'feature_importance_{model_name}.png'))
 
         # print the feature importance in a table:
         print(tabulate(importance, headers='keys', tablefmt='presto'))
@@ -72,28 +72,27 @@ def report_model_results(model: XGBClassifier, x_train: pd.DataFrame, x_test: pd
         display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix(y_test, y_predicted),
                                          display_labels=model.classes_)
         display.plot(cmap=plt.cm.Blues)
-        display.figure_.savefig(Path('..', 'plots', model_name, f'confusion_matrix_{model_name}.png'))
+        display.figure_.savefig(Path('plots', model_name, f'confusion_matrix_{model_name}.png'))
 
         # plot the precision recall curve:
         display = PrecisionRecallDisplay.from_estimator(model, x_test, y_test, name=model_name)
         display.ax_.set_title(f'Precision-Recall curve {model_name}')
-        display.figure_.savefig(Path('..', 'plots', model_name, f'precision_recall_curve_{model_name}.png'))
+        display.figure_.savefig(Path('plots', model_name, f'precision_recall_curve_{model_name}.png'))
 
         # plot the ROC curve:
         display = RocCurveDisplay.from_estimator(model, x_test, y_test, name=model_name)
         display.ax_.set_title(f'ROC curve {model_name}')
         plt.title(f'ROC curve {model_name}')
-        plt.savefig(Path('..', 'plots', model_name, f'roc_curve_{model_name}.png'))
+        plt.savefig(Path('plots', model_name, f'roc_curve_{model_name}.png'))
 
         if save:
-            if not Path('..', '..', 'reports').exists():
-                Path('..', '..', 'reports').mkdir()
+            if not Path('reports').exists():
+                Path('reports').mkdir()
 
-            if not Path('..', '..', 'reports', model_name).exists():
-                Path('..', '..', 'reports', model_name).mkdir()
+            if not Path('reports', model_name).exists():
+                Path('reports', model_name).mkdir()
 
             # save the feature importance:
-            importance.to_csv(Path('..', '..', 'data', f'feature_importance_{model_name}.csv'), index=False)
+            importance.to_csv(Path('data', f'feature_importance_{model_name}.csv'), index=False)
             # save the classification report:
-            report.to_csv(Path('..', '..', 'reports', model_name, f'classification_report_{model_name}.csv'))
-
+            report.to_csv(Path('reports', model_name, f'classification_report_{model_name}.csv'))

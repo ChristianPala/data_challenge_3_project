@@ -1,7 +1,7 @@
 # Auxiliary library to tune the xgboost model:
 # Libraries:
 # Data manipulation:
-from typing import Dict, Any
+from typing import Any
 
 import pandas as pd
 # Modelling:
@@ -55,7 +55,7 @@ def objective(space, x_train: pd.DataFrame, y_train: pd.DataFrame, x_test: pd.Da
     f1 = cross_val_score(model, X, y, scoring=metric, cv=cv, n_jobs=-1).mean()
 
     # return the loss, 1 - f1 score since we want to maximize the f1 score:
-    return {'loss': 1-f1, 'status': STATUS_OK}
+    return {'loss': 1 - f1, 'status': STATUS_OK}
 
 
 def tuner(x_train: pd.DataFrame, y_train: pd.DataFrame,

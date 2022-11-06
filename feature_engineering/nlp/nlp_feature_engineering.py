@@ -1,15 +1,15 @@
 # Libraries:
 # Data manipulation:
-import pandas as pd
+from pathlib import Path
 
+import pandas as pd
 # Modelling:
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-from pathlib import Path
-from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
-
 # Auxiliary:
 from tqdm import tqdm
+
+from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 
 # global variables:
 similarity_threshold = 0.8
@@ -46,9 +46,8 @@ def print_results(training_set: pd.DataFrame, testing_set: pd.DataFrame) -> None
 
 
 def main():
-
     # import the aggregated dataset:
-    df_agg = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
+    df_agg = pd.read_csv(Path('data', 'online_sales_dataset_agg.csv'))
 
     # tokenize the description column:
     df_agg['Description'] = df_agg['Description'].apply(word_tokenize)
@@ -83,12 +82,13 @@ def main():
                 columns=['CustomerId', 'ClusterId'])], ignore_index=True)
 
     # for each cluster, compute the shared description:
-    df_clusters['Description'] = df_clusters['ClusterId']\
+    df_clusters['Description'] = df_clusters['ClusterId'] \
         .apply(lambda x: set.union(*[X_train.loc[X_train['CustomerId'] == int(float(i))]['Description'].iloc[0]
                                      for i in x.split(',')]))
 
     # cast the ClusterId as a set of floats:
-    df_clusters['ClusterId'] = df_clusters['ClusterId'].apply(lambda x: tuple(set([float(i) for i in x[0:-1].split(',')])))
+    df_clusters['ClusterId'] = df_clusters['ClusterId'].apply(
+        lambda x: tuple(set([float(i) for i in x[0:-1].split(',')])))
     df_clusters['ClusterSize'] = df_clusters['ClusterId'].apply(lambda x: len(x))
     df_clusters.drop('CustomerId', axis=1, inplace=True)
 
@@ -104,7 +104,7 @@ def main():
     df_clusters['ClusterPurity'] = df_clusters['Churned'].apply(lambda x: 1 if x == 0 or x == 1 else 0)
 
     # save the clusters to a csv file:
-    df_clusters.to_csv(Path('..', '..', 'data', f'online_sales_dataset_clusters_{similarity_threshold}.csv'),
+    df_clusters.to_csv(Path('data', f'online_sales_dataset_clusters_{similarity_threshold}.csv'),
                        index=False)
 
     # for each cluster create a feature in the train dataset, that indicates if the customer is in the cluster:
@@ -112,7 +112,7 @@ def main():
     # the assignment is based on the jaccard similarity of the description of the customer and cluster:
     for row in tqdm(df_clusters.itertuples(), total=df_clusters.shape[0]):
         X_train['Cd_' + str(row.Index)] = X_train['CustomerId'].apply(lambda x: 1 if x in row.ClusterId else 0)
-        X_test['Cd_' + str(row.Index)] = X_test['Description']\
+        X_test['Cd_' + str(row.Index)] = X_test['Description'] \
             .apply(lambda x: 1 if jaccard_similarity(x, row.Description) > similarity_threshold else 0)
 
     # rename the 'Cd_index' columns to 'Cd_0', 'Cd_1', etc.
@@ -130,12 +130,13 @@ def main():
     X_test['DescriptionLength'] = X_test['Description'].apply(lambda x: len(x))
 
     # save the new datasets:
-    X_train.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_train.csv'), index=False)
-    X_test.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_test.csv'), index=False)
-    y_train.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_train_labels.csv'), index=False)
-    y_test.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg_nlp_test_labels.csv'), index=False)
+    X_train.to_csv(Path('data', 'online_sales_dataset_agg_nlp_train.csv'), index=False)
+    X_test.to_csv(Path('data', 'online_sales_dataset_agg_nlp_test.csv'), index=False)
+    y_train.to_csv(Path('data', 'online_sales_dataset_agg_nlp_train_labels.csv'), index=False)
+    y_test.to_csv(Path('data', 'online_sales_dataset_agg_nlp_test_labels.csv'), index=False)
 
     # Unfortunately the clustering does not affect a large number of customers.
+
 
 if __name__ == '__main__':
     main()

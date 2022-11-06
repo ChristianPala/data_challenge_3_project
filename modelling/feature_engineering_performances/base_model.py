@@ -1,17 +1,18 @@
 # Libraries:
 # Data manipulation:
-import pandas as pd
+from pathlib import Path
 
+import pandas as pd
 # Modelling:
 from xgboost import XGBClassifier
-from pathlib import Path
+
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 from modelling.reporting.classifier_report import report_model_results
 
 
 def main():
     # read the aggregated dataset:
-    df_agg = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
+    df_agg = pd.read_csv(Path('data', 'online_sales_dataset_agg.csv'))
 
     # select the features: number of purchases, total price spent, total quantity ordered and country:
     X = df_agg[['NumberOfPurchases', 'NumberOfProducts', 'TotalSpent',

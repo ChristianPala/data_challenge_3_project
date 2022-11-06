@@ -1,10 +1,12 @@
 # Libraries:
-import pandas as pd
 from pathlib import Path
+
+import pandas as pd
+
 
 def main():
     # load the dataset:
-    df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel.csv'))
+    df = pd.read_csv(Path('data', 'online_sales_dataset_tsfel.csv'))
 
     # check how many features we have:
     print(f"Number of features: {df.shape[1]}")
@@ -29,7 +31,7 @@ def main():
     print(f"Number of missing values: {df_dropped.isnull().sum().sum()}")
 
     # get the customer id column from the target label dataset:
-    customer_id = pd.read_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'))['CustomerId']
+    customer_id = pd.read_csv(Path('data', 'online_sales_labels_tsfel.csv'))['CustomerId']
 
     # add the customer id column to the dataset:
     df_dropped['CustomerId'] = customer_id
@@ -38,7 +40,7 @@ def main():
     df_dropped = df_dropped[['CustomerId'] + [col for col in df_dropped.columns if col != 'CustomerId']]
 
     # save the dataset:
-    df_dropped.to_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel_for_fs.csv'), index=False)
+    df_dropped.to_csv(Path('data', 'online_sales_dataset_tsfel_for_fs.csv'), index=False)
 
 
 # Driver:

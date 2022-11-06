@@ -3,9 +3,9 @@
 # Libraries:
 # Data manipulation:
 
-import pandas as pd
 from pathlib import Path
 
+import pandas as pd
 # Dimensionality reduction:
 from sklearn.manifold import TSNE
 from sklearn.preprocessing import StandardScaler
@@ -17,9 +17,10 @@ nr_of_components: int = 3
 initialization = 'pca'
 perplexity: int = 40
 
+
 def main():
     # load the dataset for dimensionality reduction:
-    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_dr.csv'))
+    X = pd.read_csv(Path('data', 'online_sales_dataset_for_dr.csv'))
 
     # save the CustomerId column for later use, drop it from the dataset:
     customer_id = X['CustomerId']
@@ -47,11 +48,11 @@ def main():
 
     if initialization == "warn":
         # save the results:
-        tsne_results_df.to_csv(Path('..', '..', 'data', f'online_sales_dataset_dr_tsne.csv'), index=False)
+        tsne_results_df.to_csv(Path('data', f'online_sales_dataset_dr_tsne.csv'), index=False)
 
     else:
         # save the results:
-        tsne_results_df.to_csv(Path('..', '..', 'data', f'online_sales_dataset_dr_tsne_{initialization}.csv'),
+        tsne_results_df.to_csv(Path('data', f'online_sales_dataset_dr_tsne_{initialization}.csv'),
                                index=False)
 
 

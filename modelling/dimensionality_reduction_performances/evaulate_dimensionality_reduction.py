@@ -1,6 +1,5 @@
 # Libraries:
 # Data manipulation:
-import pandas as pd
 from pathlib import Path
 
 # Modelling:
@@ -9,10 +8,10 @@ from modelling.feature_selection_performances.evaluate_features_selection import
 # Driver:
 if __name__ == '__main__':
     # load the paths:
-    baseline = Path('..', '..', 'data', 'online_sales_dataset_for_dr_fs.csv')
-    pca_fs = Path('..', '..', 'data', 'online_sales_dataset_dr_pca.csv')
-    tsne_fs = Path('..', '..', 'data', 'online_sales_dataset_dr_tsne.csv')
-    tsne_fs_pca = Path('..', '..', 'data', 'online_sales_dataset_dr_tsne_pca.csv')
+    baseline = Path('data', 'online_sales_dataset_for_dr_fs.csv')
+    pca_fs = Path('data', 'online_sales_dataset_dr_pca.csv')
+    tsne_fs = Path('data', 'online_sales_dataset_dr_tsne.csv')
+    tsne_fs_pca = Path('data', 'online_sales_dataset_dr_tsne_pca.csv')
 
     # We checked and the results are much worse if we don't feature select before dimensionality reduction.
     # pca_full = Path('..', '..', 'data', 'online_sales_dataset_dr_pca_full.csv')

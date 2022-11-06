@@ -1,17 +1,19 @@
 # # Libraries:
 # data manipulation:
-import pandas as pd
 from pathlib import Path
 
+import pandas as pd
 # modelling:
 from xgboost import XGBClassifier
+
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
-from modelling.tuning.xgboost_tuner import tuner
 from modelling.reporting.classifier_report import report_model_results
+from modelling.tuning.xgboost_tuner import tuner
+
 
 def main():
     # read the aggregated dataset:
-    df_agg = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
+    df_agg = pd.read_csv(Path('data', 'online_sales_dataset_agg.csv'))
 
     # select the features for the model:
     X = df_agg[['NumberOfPurchases', 'NumberOfProducts', 'TotalSpent', 'TotalQuantity', 'Country']]
@@ -29,7 +31,7 @@ def main():
     print(best_parameters)
 
     # save the best parameters:
-    pd.DataFrame(best_parameters, index=[0]).to_csv(Path('..', '..', 'data', 'best_params', 'base_model.csv'),
+    pd.DataFrame(best_parameters, index=[0]).to_csv(Path('data', 'best_params', 'base_model.csv'),
                                                     index=False)
 
     # train the model with the best parameters:

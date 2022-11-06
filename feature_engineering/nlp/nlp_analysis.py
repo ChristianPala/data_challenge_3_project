@@ -1,7 +1,8 @@
 # analysis on the clusters generate with the nlp approach:
-import pandas as pd
 from pathlib import Path
+
 import matplotlib
+import pandas as pd
 from matplotlib import pyplot as plt
 
 matplotlib.use('TkAgg')
@@ -11,7 +12,7 @@ def main():
     similarity_threshold = 0.8
 
     # read the dataset:
-    df = pd.read_csv(Path('..', '..', 'data', f'online_sales_dataset_clusters_{similarity_threshold}.csv'))
+    df = pd.read_csv(Path('data', f'online_sales_dataset_clusters_{similarity_threshold}.csv'))
 
     # print average purity:
     print(f'Average purity: {df["ClusterPurity"].mean()}')

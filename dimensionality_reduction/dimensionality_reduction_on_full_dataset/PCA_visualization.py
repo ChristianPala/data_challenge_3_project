@@ -1,24 +1,22 @@
 # Data manipulation:
-import matplotlib
-import pandas as pd
-import numpy as np
 from pathlib import Path
 
+import matplotlib
 # Data visualization
 import matplotlib.pyplot as plt
-import matplotlib
-from mpl_toolkits.mplot3d import Axes3D
+import pandas as pd
 import seaborn as sns
 
 matplotlib.use('tkagg')
 
+
 def main():
     # PCA visualizations:
-    pca = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_dr_pca.csv'), index_col=0)
+    pca = pd.read_csv(Path('data', 'online_sales_dataset_dr_pca.csv'), index_col=0)
 
     nr_comp = pca.shape[1]
 
-    target = pd.read_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index_col=0)
+    target = pd.read_csv(Path('data', 'online_sales_labels_tsfel.csv'), index_col=0)
 
     # build the visualization dataframe:
     df_subset = pd.DataFrame()
@@ -54,11 +52,12 @@ def main():
     plt.title(title)
 
     try:
-        plt.savefig(Path('..', '..', 'plots', 'PCA', 'pca_visualization3D.png'))
+        plt.savefig(Path('plots', 'PCA', 'pca_visualization3D.png'))
     except FileNotFoundError:
-        Path('..', '..', 'plots', 'PCA').mkdir(parents=True, exist_ok=True)
-        plt.savefig(Path('..', '..', 'plots', 'PCA', 'pca_visualization3D.png'))
+        Path('plots', 'PCA').mkdir(parents=True, exist_ok=True)
+        plt.savefig(Path('plots', 'PCA', 'pca_visualization3D.png'))
     plt.show()
+
 
 if __name__ == '__main__':
     main()

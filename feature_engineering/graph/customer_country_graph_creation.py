@@ -1,18 +1,17 @@
 # Libraries
 # Data manipulation:
-import pandas as pd
 from pathlib import Path
 
 # Graph:
 import networkx as nx
-
+import pandas as pd
 # Timing:
 from tqdm import tqdm
 
-def main():
 
+def main():
     # import the aggregated dataset:
-    df_agg = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'), index_col=0)
+    df_agg = pd.read_csv(Path('data', 'online_sales_dataset_for_fe.csv'), index_col=0)
 
     # aggregate the dataset by customerId, save the country as a list:
     df_agg = df_agg.groupby('CustomerId').agg({'Country': lambda x: list(x)})
@@ -34,6 +33,7 @@ def main():
 
     # save the graph:
     nx.write_gpickle(G, Path('saved_graphs', 'customer_country_graph.gpickle'))
+
 
 if __name__ == '__main__':
     main()

@@ -1,8 +1,8 @@
 # Library to perform correlation analysis between the engineered features and the target variable.
 # Data manipulation:
-import pandas as pd
 from pathlib import Path
 
+import pandas as pd
 # Feature selection:
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.preprocessing import MinMaxScaler
@@ -12,9 +12,8 @@ threshold = 10 ** -3  # using variance as a proxy for information in the column.
 
 
 def main():
-
     # import the dataset for feature selection:
-    X = pd.read_csv(Path('..', '..', '..', 'data', 'online_sales_dataset_for_fs.csv'), index_col=0)
+    X = pd.read_csv(Path('data', 'online_sales_dataset_for_fs.csv'), index_col=0)
 
     print(f"Number of features incoming: {X.shape[1]}")
 
@@ -34,7 +33,7 @@ def main():
     # restore the feature names:
 
     # save the dataset:
-    pd.DataFrame(X).to_csv(Path('..', '..', '..', 'data',
+    pd.DataFrame(X).to_csv(Path('data',
                                 f'online_sales_dataset_fs_variance_threshold_{threshold}.csv'))
 
     # We removed features which would likely not add information to the model.

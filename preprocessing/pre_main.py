@@ -1,7 +1,7 @@
 # Libraries
-from preprocessing import main as preprocessing
-from churn_analysis import main as churn_analysis
-from exploratory_data_analysis import main as eda
+from preprocessing.churn_analysis import main as churn_analysis
+from preprocessing.exploratory_data_analysis import main as eda
+from preprocessing.preprocessing import main as preprocessing
 
 
 def main(preprocessing_only=True):
@@ -15,4 +15,3 @@ def main(preprocessing_only=True):
 
 if __name__ == '__main__':
     main(preprocessing_only=True)
-

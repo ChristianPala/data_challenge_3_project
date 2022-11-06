@@ -1,8 +1,8 @@
 # Auxiliary library to time the execution of a function or a method:
 # Libraries:
-from functools import wraps
-import time
 import datetime
+import time
+from functools import wraps
 from typing import Callable, Any
 
 
@@ -16,5 +16,5 @@ def measure_time(func: Callable) -> Callable:
         total_time = end_time - start_time
         print(f'Function {func.__name__}{args} {kwargs} Took {str(datetime.timedelta(seconds=total_time))} to complete')
         return result
-    return timeit_wrapper
 
+    return timeit_wrapper

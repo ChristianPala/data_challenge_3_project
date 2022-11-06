@@ -1,16 +1,19 @@
 # libraries
 # Multiprocessing:
+# Warning Handling:
+import warnings
 from concurrent.futures import ProcessPoolExecutor
 # Data manipulation:
 from pathlib import Path
+
 import pandas as pd
 # Time series feature extraction library:
 import tsfel
 # Timing:
 from tqdm import tqdm
+
 from auxiliary.method_timer import measure_time
-# Warning Handling:
-import warnings
+
 # suppress warnings during feature extraction:
 warnings.filterwarnings("ignore")
 
@@ -33,10 +36,9 @@ def feature_extractor(data: pd.DataFrame, features, customer) -> pd.DataFrame:
 
 
 def main():
+    agg = pd.read_csv(Path('data', 'online_sales_dataset_agg.csv'))
 
-    agg = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
-
-    y = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))[["CustomerId", "CustomerChurned"]]
+    y = pd.read_csv(Path('data', 'online_sales_dataset_agg.csv'))[["CustomerId", "CustomerChurned"]]
 
     # create a list of customers that have more than one purchase
     customers = agg[agg['NumberOfPurchases'] > 1]['CustomerId'].unique().tolist()
@@ -45,7 +47,7 @@ def main():
     y = y[y['CustomerId'].isin(customers)]
 
     # import the timeseries dataset:
-    df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
+    df = pd.read_csv(Path('data', 'online_sales_dataset_for_fe.csv'))
     # convert the string date to a datetime
     df['InvoiceDate'] = pd.to_datetime(df.InvoiceDate)
     df = df.sort_values(['CustomerId', 'InvoiceDate'])
@@ -116,8 +118,8 @@ def main():
     print(X.isna().sum())
 
     # save the features:
-    X.to_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel.csv'), index=False)
-    y.to_csv(Path('..', '..', 'data', 'online_sales_labels_tsfel.csv'), index=False)
+    X.to_csv(Path('data', 'online_sales_dataset_tsfel.csv'), index=False)
+    y.to_csv(Path('data', 'online_sales_labels_tsfel.csv'), index=False)
 
 
 if __name__ == '__main__':

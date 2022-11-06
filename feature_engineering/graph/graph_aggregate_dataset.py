@@ -1,19 +1,20 @@
 # library to aggregate the extracted graph features:
-import pandas as pd
 from pathlib import Path
+
 import numpy as np
+import pandas as pd
 
 # Driver:
 if __name__ == '__main__':
     # load the centrality measures:
-    df_customer_centrality = pd.read_csv(Path('..', '..', 'data', 'customer_graph_centrality.csv'), index_col=0)
-    df_product_centrality = pd.read_csv(Path('..', '..', 'data', 'product_graph_centrality.csv'), index_col=0)
-    df_customer_country_centrality = pd.read_csv(Path('..', '..', 'data', 'customer_country_graph_centrality.csv'),
+    df_customer_centrality = pd.read_csv(Path('data', 'customer_graph_centrality.csv'), index_col=0)
+    df_product_centrality = pd.read_csv(Path('data', 'product_graph_centrality.csv'), index_col=0)
+    df_customer_country_centrality = pd.read_csv(Path('data', 'customer_country_graph_centrality.csv'),
                                                  index_col=0)
 
     # load the deepwalk measures:
-    df_customer_deepwalk = pd.read_csv(Path('..', '..', 'data', 'customer_deepwalk_embeddings.csv'), index_col=0)
-    df_customer_country_deepwalk = pd.read_csv(Path('..', '..', 'data', 'customer_country_deepwalk_embeddings.csv'),
+    df_customer_deepwalk = pd.read_csv(Path('data', 'customer_deepwalk_embeddings.csv'), index_col=0)
+    df_customer_country_deepwalk = pd.read_csv(Path('data', 'customer_country_deepwalk_embeddings.csv'),
                                                index_col=0)
     # We do not include the product graph deepwalk, as we found a lot of missing values in the embeddings.
 
@@ -32,7 +33,7 @@ if __name__ == '__main__':
     print(f"Number of missing values in product graph features: {df_product_centrality.isnull().sum().sum()}")
 
     # import the dataset for feature engineering:
-    df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
+    df = pd.read_csv(Path('data', 'online_sales_dataset_for_fe.csv'))
 
     # create a list of customers with their product purchases:
     df = df.groupby('CustomerId').agg({'StockCode': lambda x: list(x)})
@@ -56,4 +57,4 @@ if __name__ == '__main__':
     df.drop('StockCode', axis=1, inplace=True)
 
     # save the dataset:
-    df.to_csv(Path('..', '..', 'data', 'online_sales_dataset_graph_for_fs.csv'))
+    df.to_csv(Path('data', 'online_sales_dataset_graph_for_fs.csv'))

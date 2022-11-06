@@ -1,20 +1,21 @@
 # Libraries:
 # Data manipulation:
-import pandas as pd
 from pathlib import Path
 
-# Modelling:
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import RepeatedStratifiedKFold
-from xgboost import XGBClassifier
+import pandas as pd
 from sklearn.metrics import f1_score
 from sklearn.metrics import make_scorer
+from sklearn.model_selection import RepeatedStratifiedKFold
+# Modelling:
+from sklearn.model_selection import cross_val_score
+from xgboost import XGBClassifier
+
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 
 
 def main():
     # read the aggregated dataset:
-    df_agg = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
+    df_agg = pd.read_csv(Path('data', 'online_sales_dataset_agg.csv'))
 
     # select the features: number of purchases, total price spent, total quantity ordered and country:
     X = df_agg[['NumberOfPurchases', 'NumberOfProducts', 'TotalSpent', 'TotalQuantity', 'Country']]
@@ -44,14 +45,14 @@ def main():
 
     # save the results:
     try:
-        with open(Path('..', '..', 'reports', 'base model cross validation', 'base_model_cross_validation.txt'),
+        with open(Path('reports', 'base model cross validation', 'base_model_cross_validation.txt'),
                   'w') as f:
             f.write(f"f1 score: {scores.mean():.3f}, standard deviation: {scores.std():.3f}")
     except FileNotFoundError:
         # create the reports' folder:
-        Path('..', '..', 'reports', 'base model cross validation').mkdir(parents=True, exist_ok=True)
+        Path('reports', 'base model cross validation').mkdir(parents=True, exist_ok=True)
         # save the results:
-        with open(Path('..', '..', 'reports', 'base model cross validation', 'base_model_cross_validation.txt'),
+        with open(Path('reports', 'base model cross validation', 'base_model_cross_validation.txt'),
                   'w') as f:
             f.write(f"f1 score: {scores.mean():.3f}, standard deviation: {scores.std():.3f}")
 

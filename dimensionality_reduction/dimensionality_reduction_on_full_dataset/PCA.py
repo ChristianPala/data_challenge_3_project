@@ -1,21 +1,21 @@
 # perform PCA on the dataset with the features selected by the wrapper method:
 # Libraries:
 # Data manipulation:
-import pandas as pd
 from pathlib import Path
 
+import pandas as pd
 # Dimensionality reduction:
 from sklearn.decomposition import PCA
-
 # Scaling:
 from sklearn.preprocessing import StandardScaler
 
 # Global variables:
 Threshold: float = 0.9
 
+
 def main():
     # import the dataset for dimensionality reduction:
-    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_dr.csv'), index_col=0)
+    X = pd.read_csv(Path('data', 'online_sales_dataset_for_dr.csv'), index_col=0)
 
     # get the number of features:
     n_features = X.shape[1]
@@ -52,7 +52,7 @@ def main():
     principal_components_df.insert(0, 'CustomerID', X.index)
 
     # save the principal components:
-    principal_components_df.to_csv(Path('../..', 'data', 'online_sales_dataset_dr_pca.csv'), index=False)
+    principal_components_df.to_csv(Path('data', 'online_sales_dataset_dr_pca.csv'), index=False)
 
 
 # Driver:

@@ -1,13 +1,15 @@
 # Libraries:
 # Data manipulation:
-import pandas as pd
-import numpy as np
 from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
 
 def main():
 
     # import the cleaned dataset:
-    df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_for_fe.csv'))
+    df = pd.read_csv(Path('data', 'online_sales_dataset_for_fe.csv'))
 
     # set some thresholds:
     thresholds = np.arange(0, 730, 30)

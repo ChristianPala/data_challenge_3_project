@@ -1,17 +1,15 @@
 # Auxiliary library to perform the exploratory data analysis on the online sales dataset.
 from pathlib import Path
 
+# Plotting:
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
 
 # Libraries:
 # Data manipulation:
-from data_loading import load_and_save_data
-
-# Plotting:
-import matplotlib.pyplot as plt
-import matplotlib
-import seaborn as sns
+from preprocessing.data_loading import load_and_save_data
 
 
 # matplotlib.use('tkagg')

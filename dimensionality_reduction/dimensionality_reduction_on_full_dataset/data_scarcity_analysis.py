@@ -3,12 +3,14 @@
 # reduction methods
 # Libraries:
 # Data Manipulation:
-import pandas as pd
 from pathlib import Path
+
+import pandas as pd
+
 
 def main():
     # import the dataset for dimensionality reduction:
-    df = pd.read_csv(Path('../..', 'data', 'online_sales_dataset_for_fs.csv'),
+    df = pd.read_csv(Path('data', 'online_sales_dataset_for_fs.csv'),
                      index_col=0)
 
     # convert the dataframe to a SparseArray

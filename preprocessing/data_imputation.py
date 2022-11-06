@@ -1,12 +1,13 @@
 # Auxiliary Library to perform data cleaning on the Online Sales dataset
 # Libraries:
 # Data manipulation:
+# Multiprocessing:
+import multiprocessing as mp
+
 import numpy as np
 import pandas as pd
 # Timing:
 from tqdm import tqdm
-# Multiprocessing:
-import multiprocessing as mp
 
 # global variables:
 missing_counter = 0

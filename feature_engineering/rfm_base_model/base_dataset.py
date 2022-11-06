@@ -1,13 +1,14 @@
 # Aggregate the dataset by customer for the base model, use the RFM strategy to select features.
 # Libraries:
-import pandas as pd
-from pathlib import Path
 from datetime import datetime, timedelta
+from pathlib import Path
+
+import pandas as pd
 
 
 def main():
     # import the cleaned dataset:
-    df = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))
+    df = pd.read_csv(Path('data', 'online_sales_dataset_for_fe.csv'))
 
     # create the aggregated costumer dataset for quantities, rename to TotalQuantity:
     df_agg = df.groupby('CustomerId').agg({'Quantity': 'sum'}).rename(columns={'Quantity': 'TotalQuantity'})
@@ -49,17 +50,17 @@ def main():
                      'Description', 'Country', 'CustomerChurned']]
 
     # save the dataset:
-    df_agg.to_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
+    df_agg.to_csv(Path('data', 'online_sales_dataset_agg.csv'))
 
     # save the churned costumers in a separate dataset:
-    df_agg[df_agg['CustomerChurned']]['CustomerChurned'].to_csv(Path('..', '..', 'data',
+    df_agg[df_agg['CustomerChurned']]['CustomerChurned'].to_csv(Path('data',
                                                                      'online_sales_dataset_agg_churned.csv'))
 
     # check for missing values:
     print(df_agg.isnull().sum())
 
     # consistency check between the customer dataset and the dataset for feature engineering:
-    fe_customers = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fe.csv'))['CustomerId'].unique()
+    fe_customers = pd.read_csv(Path('data', 'online_sales_dataset_for_fe.csv'))['CustomerId'].unique()
 
     df_fe_customers = pd.DataFrame(fe_customers, columns=['CustomerId'])
 

@@ -3,7 +3,7 @@ Repository for the first data challenge 3 project, SUPSI DS &amp; AI course.
 
 ### Important notes
 Please check that all the required libraries are installed (requirements.txt). 
-For the correct functioning of this project please copy the file located in the main/mod directory called "features.py"
+For the correct functioning of this project please copy the file located in the ./main/mod directory called "features.py"
 to the source files of the TSFEL library.
 The default TSFEL library path is: 
 

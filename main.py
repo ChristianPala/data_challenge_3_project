@@ -19,12 +19,29 @@ def create_directories():
         os.makedirs(params_path)
 
 
-def main(run_error_analysis=False, run_model=False):
+def main(preprocessing_only=True,
+         run_error_analysis=False,
+         run_model=False,
+         run_wrap_methods=False,
+         run_dr_on_full_dataset=False,
+         run_data_scarcity_analysis=False) -> None:
+    """
+    Method to run the entire project, it automatically downloads nltk dependencies for NLP part.
+    @param preprocessing_only: run only the preprocessing phase, excluding churn analysis and exploratory data analysis
+    @param run_error_analysis: either to run the error analysis done with shap
+    @param run_model: run the models
+    @param run_wrap_methods: run the wrapper feature selection methods
+    @param run_dr_on_full_dataset: run dimensionality reduction also on the full dataset
+    (not only on the one outputted by feature selection methods)
+    @param run_data_scarcity_analysis: run the data scarcity analysis when performing dimensionality reduction
+    @return: None
+    """
+
     create_directories()
-    prepro(preprocessing_only=False)
+    prepro(preprocessing_only=preprocessing_only)
     fe()
-    fs(run_wrappers=False, run_correlation=False)
-    dr(run_full=False, run_dsa=True)
+    fs(run_wrappers=run_wrap_methods, run_correlation=False)
+    dr(run_full=run_dr_on_full_dataset, run_dsa=run_data_scarcity_analysis)
 
     if run_model:
         run_models()
@@ -34,4 +51,9 @@ def main(run_error_analysis=False, run_model=False):
 
 
 if __name__ == '__main__':
-    main(run_error_analysis=False, run_model=False)
+    main(preprocessing_only=True,
+         run_error_analysis=False,
+         run_model=False,
+         run_wrap_methods=False,
+         run_dr_on_full_dataset=False,
+         run_data_scarcity_analysis=False)

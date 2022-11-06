@@ -38,4 +38,5 @@ if __name__ == '__main__':
     # get the features above the threshold:
     df = get_features_above_threshold(Path('..', 'data', file_name), threshold, df)
     # save the dataset:
-    df.to_csv(Path('..', 'data', 'online_sales_dataset_for_dr_automatic_thresholding.csv'))
+    df.to_csv(Path('..', 'data', 'online_sales_dataset_for_dr_automatic_thresholding.csv'), index=False)
+

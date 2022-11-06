@@ -47,5 +47,5 @@ if __name__ == '__main__':
 
     """
     incoming features: 303
-    Outgoing features: 206
+    Outgoing features: 204
     """

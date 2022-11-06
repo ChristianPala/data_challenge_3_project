@@ -16,8 +16,7 @@ from modelling.tuning.xgboost_tuner import tuner
 
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 
-# Driver:
-if __name__ == '__main__':
+def main():
     # load the dataset:
     X = pd.read_csv(Path('..', 'data', 'online_sales_dataset_for_dr.csv'), index_col=0)
 
@@ -113,3 +112,8 @@ if __name__ == '__main__':
         plt.close()
 
     # Conclusions:
+
+
+# Driver:
+if __name__ == '__main__':
+    main()

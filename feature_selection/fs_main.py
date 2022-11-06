@@ -6,6 +6,7 @@ from wrapper.recursive_feature_elimination import main as rfe
 from filtering.supervised.mutual_information import main as mi
 from wrapper.correlation_fs_auto_analysis import main as corr
 from selected_features_merger import main as merger
+from fs_aggregate_datasets import main as fs_aggregator
 
 
 def main(run_wrappers=False, run_correlation=False):
@@ -19,6 +20,7 @@ def main(run_wrappers=False, run_correlation=False):
         efs()
         rfe()
         merger()
+    fs_aggregator()
 
 
 if __name__ == '__main__':

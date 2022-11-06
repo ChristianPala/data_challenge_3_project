@@ -12,8 +12,7 @@ from sklearn.metrics import make_scorer
 from modelling.data_splitting.train_val_test_splitter import train_validation_test_split
 
 
-# Driver:
-if __name__ == '__main__':
+def main():
     # read the aggregated dataset:
     df_agg = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_agg.csv'))
 
@@ -45,7 +44,8 @@ if __name__ == '__main__':
 
     # save the results:
     try:
-        with open(Path('..', '..', 'reports', 'base model cross validation', 'base_model_cross_validation.txt'), 'w') as f:
+        with open(Path('..', '..', 'reports', 'base model cross validation', 'base_model_cross_validation.txt'),
+                  'w') as f:
             f.write(f"f1 score: {scores.mean():.3f}, standard deviation: {scores.std():.3f}")
     except FileNotFoundError:
         # create the reports' folder:
@@ -56,3 +56,6 @@ if __name__ == '__main__':
             f.write(f"f1 score: {scores.mean():.3f}, standard deviation: {scores.std():.3f}")
 
 
+# Driver:
+if __name__ == '__main__':
+    main()

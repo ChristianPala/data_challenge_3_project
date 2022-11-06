@@ -4,7 +4,13 @@ from time_series.missing_values_analysis import main as missing_values
 from nlp import nlp_feature_engineering, nlp_aggregate_datasets
 from graph import customer_graph_creation, customer_country_graph_creation, product_graph_creation, deepwalk, centrality_measures
 from fe_aggregate_datasets import main as fe_aggreagtor
+import nltk
 
+
+def check_nltk():
+    print('checking missing libraries and options')
+    nltk.download('punkt')
+    nltk.download('stopwords')
 
 def embeddings():
     deepwalk.main('customer')
@@ -27,6 +33,7 @@ def graph():
 
 
 def main():
+    check_nltk()
     base()
     graph()
     embeddings()

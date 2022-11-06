@@ -10,7 +10,7 @@ from modelling.tuning.xgboost_tuner import tuner
 from modelling.reporting.classifier_report import report_model_results
 
 
-if __name__ == '__main__':
+def main():
     # import the  tsfel dataset:
     X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_tsfel_for_fs.csv'), index_col=0)
     # import the label dataset:
@@ -34,3 +34,7 @@ if __name__ == '__main__':
 
     # evaluate:
     report_model_results(model, X_train, X_test, y_test, y_pred, "Time series model", save=True)
+
+
+if __name__ == '__main__':
+    main()

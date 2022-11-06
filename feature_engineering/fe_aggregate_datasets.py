@@ -4,8 +4,8 @@
 import pandas as pd
 from pathlib import Path
 
-if __name__ == '__main__':
 
+def main():
     # import the RFM dataset:
     df = pd.read_csv(Path('..', 'data', 'online_sales_dataset_agg.csv'))
 
@@ -48,3 +48,6 @@ if __name__ == '__main__':
     # print the number of features:
     print(f"Number of features: {df.shape[1] -1}")
 
+
+if __name__ == '__main__':
+    main()

@@ -9,8 +9,7 @@ from modelling.data_splitting.train_val_test_splitter import train_validation_te
 from modelling.tuning.xgboost_tuner import tuner
 from modelling.reporting.classifier_report import report_model_results
 
-# Functions:
-if __name__ == '__main__':
+def main():
     # read the graph datasets:
     X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_graph_for_fs.csv'), index_col=0)
 
@@ -38,3 +37,7 @@ if __name__ == '__main__':
 
     # report the results:
     report_model_results(model, X_train, X_test, y_test, y_predicted, "Graph model", save=True)
+
+# Functions:
+if __name__ == '__main__':
+    main()

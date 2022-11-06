@@ -7,8 +7,7 @@
 import pandas as pd
 from pathlib import Path
 
-# Driver:
-if __name__ == '__main__':
+def main():
     # load the dataset for feature selection:
     X = pd.read_csv(Path('..', 'data', 'online_sales_dataset_for_fs.csv'))
 
@@ -39,3 +38,8 @@ CustomerId, index
 
     # save the dataset:
     X.to_csv(Path('..', 'data', 'online_sales_dataset_for_dr.csv'), index=False)
+
+
+# Driver:
+if __name__ == '__main__':
+    main()

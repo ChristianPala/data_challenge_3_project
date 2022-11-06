@@ -44,13 +44,13 @@ def main(preprocessing_only=True,
         print('Please put the "online_sales_dataset.xlsx" file into the "data" folder')
         exit(0)
     print('\n*** PREPROCESSING PHASE ***')
-    # prepro(preprocessing_only=preprocessing_only)
+    prepro(preprocessing_only=preprocessing_only)
     print('\n*** FEATURE ENGINEERING PHASE ***')
-    # fe()
+    fe()
     print('\n*** FEATURE SELECTION PHASE ***')
-    # fs(run_wrappers=run_wrap_methods, run_correlation=False)
+    fs(run_wrappers=run_wrap_methods, run_correlation=False)
     print('\n*** DIMENSIONALITY REDUCTION PHASE ***')
-    # dr(run_full=run_dr_on_full_dataset, run_dsa=run_data_scarcity_analysis)
+    dr(run_full=run_dr_on_full_dataset, run_dsa=run_data_scarcity_analysis)
 
     if run_model:
         print('\n*** MODELLING PHASE ***')

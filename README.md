@@ -27,4 +27,4 @@ Run these commands to install all the required libraries:
 If you have mambaforge installed we recommend to use that, as it is much faster than conda.
 `mamba install scikit-learn xgboost pandas matplotlib seaborn hyperopt tabulate numpy nltk scipy igraph tqdm networkx karateclub shap mlxtend openpyxl`
 Other libraries not available with conda or mamba:
-`pip install tsfel imblearn`
+`pip install tsfel`

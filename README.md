@@ -25,9 +25,15 @@ Linux: `~/anaconda3/envs/<environment name>/lib/python3.10/site-packages/tsfel/f
 Run these commands to install all the required libraries:
 
 If you have mambaforge installed we recommend to use that, as it is much faster than conda.
-
 `mamba install scikit-learn xgboost pandas matplotlib seaborn hyperopt tabulate numpy nltk scipy igraph tqdm networkx karateclub shap mlxtend openpyxl`
-
 Other libraries not available with conda or mamba:
-
 `pip install tsfel imblearn`
+
+## Project structure
+To make sure the project does not run into errors, below are the pictures of how it is structured:
+
+![Alt text](auxiliary/fe.png?raw=true "Feature engineering and dimensionality reduction")
+
+![Alt text](auxiliary/fs.png?raw=true "Feature engineering")
+
+![Alt text](auxiliary/prepro.png?raw=true "Preprocessing")

@@ -7,6 +7,7 @@ from pathlib import Path
 # Libraries:
 # Data manipulation:
 import pandas as pd
+from modelling.feature_selection_performances.evaluate_features_selection import evaluate_csv
 
 
 def main():
@@ -15,28 +16,17 @@ def main():
 
     # In this version we used the result of the forward selection with cross-validation and automatic
     # number of features selected:
-    best_features = \
-        """
-CustomerId, index
-1_Area under the curve,0.37265098
-0_FFT mean coefficient_4,0.05259183
-62,0.05008799
-85,0.04118452
-72,0.03516138
-"""
+    full_features_path = Path('data', 'online_sales_dataset_for_fs.csv')
+    print('> searching for the best features')
+    evaluate_csv(full_features_path, 'all_fe_features', fast=True)
+    find_features = pd.read_csv(Path('data', f'feature_importance_all_fe_features.csv'))
+    best_features = find_features[find_features['importance'] > 0.005]
     # select the features above:
-    features = [x.split(',')[0] for x in best_features.split('\n') if x]
+    features = best_features.loc[:, 'feature'].to_list()
+    features.insert(0, 'CustomerId')
 
     # keep only the features above in X:
     X = X[features]
-
-    # rename the columns:
-    X.rename(columns={'CustomerId': 'CustomerId',
-                      '1_Area under the curve': 'AverageDaysBetweenPurchaseAUC',
-                      '0_FFT mean coefficient_4': 'TotalSpentFFTMeanCoefficient4',
-                      '62': 'CustomerGraphDeepwalkEmbedding62of128',
-                      '85': 'CustomerGraphDeepwalkEmbedding85of128',
-                      '72': 'CustomerGraphDeepwalkEmbedding72of128'}, inplace=True)
 
     # save the dataset:
     X.to_csv(Path('data', 'online_sales_dataset_for_dr.csv'), index=False)

@@ -7,7 +7,7 @@ from modelling.feature_engineering_performances.nlp_model import main as nlp_mod
 
 
 def main():
-    print('\n> Running base model')
+    print('> Running base model')
     base_model()
     print('\n> Running base model with cross validation')
     base_model_cv()

@@ -13,7 +13,7 @@ from dimensionality_reduction.dimensionality_reduction_on_full_dataset.t_sne_vis
 def main(run_dsa=False, run_full=False):
     if run_dsa:
         dsa()
-    print('\n> Running PCA')
+    print('> Running PCA')
     pca()
     print('\n> Running t-SNE')
     tsne()

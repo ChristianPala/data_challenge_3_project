@@ -20,10 +20,10 @@ from modelling.tuning.xgboost_tuner import tuner
 
 def main():
     # load the dataset:
-    X = pd.read_csv(Path('..', 'data', 'online_sales_dataset_for_dr.csv'), index_col=0)
+    X = pd.read_csv(Path('data', 'online_sales_dataset_for_dr.csv'), index_col=0)
 
     # load the labels:
-    y = pd.read_csv(Path('..', 'data', 'online_sales_labels_tsfel.csv'),
+    y = pd.read_csv(Path('data', 'online_sales_labels_tsfel.csv'),
                     index_col=0)['CustomerChurned']
 
     # shorten the column names for readability:

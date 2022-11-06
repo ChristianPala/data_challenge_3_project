@@ -10,7 +10,7 @@ from feature_selection.wrapper.recursive_feature_elimination import main as rfe
 
 
 def main(run_wrappers=False, run_correlation=False):
-    print('\n> creating variance threshold dataset')
+    print('> creating variance threshold dataset')
     variance_t()
     print('\n> creating mutual information dataset')
     mi()
@@ -26,7 +26,7 @@ def main(run_wrappers=False, run_correlation=False):
         print('\n> creating recursive elimination dataset')
         rfe()
         merger()
-    print('\n> aggregating dataset')
+    print('\n> aggregating feature selection dataset')
     fs_aggregator()
 
 

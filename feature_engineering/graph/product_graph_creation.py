@@ -33,7 +33,7 @@ def main():
                     G.add_edge(row.Index, node, weight=len(intersection))
 
     # save the graph:
-    nx.write_gpickle(G, Path('saved_graphs', 'product_graph.gpickle'))
+    nx.write_gpickle(G, Path('feature_engineering', 'graph', 'saved_graphs', 'product_graph.gpickle'))
 
 
 # Driver:

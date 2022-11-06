@@ -14,7 +14,7 @@ matplotlib.use('TkAgg')
 # Driver:
 if __name__ == '__main__':
 
-    G = nx.read_gpickle(Path('saved_graphs', 'customer_country_graph.gpickle'))
+    G = nx.read_gpickle(Path('feature_engineering', 'graph', 'saved_graphs', 'customer_country_graph.gpickle'))
 
     # print the number of nodes and edges:
     print(f'Number of nodes: {G.number_of_nodes()}')

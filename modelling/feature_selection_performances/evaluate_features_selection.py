@@ -65,21 +65,22 @@ def evaluate_csv(file_path: Path, file_name: str, fast: bool = False,
 # Driver:
 if __name__ == '__main__':
     # paths:
-    full_features_path = Path('data', 'online_sales_dataset_for_fs.csv')
-    variance_threshold_path = Path('data',
-                                   f'online_sales_dataset_fs_variance_threshold_{threshold}.csv')
-    mutual_info_path = Path('data',
-                            f'online_sales_dataset_fs_mutual_information_{threshold}.csv')
-    forward_selection_path = Path('data', 'online_sales_dataset_fs_forward_selection.csv')
-    backward_selection_path = Path('data', 'online_sales_dataset_fs_backward_selection.csv')
-    recursive_elimination_path = Path('data', 'online_sales_dataset_fs_rfe.csv')
-    exhaustive_path = Path('data', 'online_sales_dataset_fs_exhaustive.csv')
+    # full_features_path = Path('..', '..', 'data', 'online_sales_dataset_for_fs.csv')
+    # variance_threshold_path = Path('data',
+    #                                f'online_sales_dataset_fs_variance_threshold_{threshold}.csv')
+    # mutual_info_path = Path('data',
+    #                         f'online_sales_dataset_fs_mutual_information_{threshold}.csv')
+    # forward_selection_path = Path('data', 'online_sales_dataset_fs_forward_selection.csv')
+    # backward_selection_path = Path('data', 'online_sales_dataset_fs_backward_selection.csv')
+    # recursive_elimination_path = Path('data', 'online_sales_dataset_fs_rfe.csv')
+    # exhaustive_path = Path('data', 'online_sales_dataset_fs_exhaustive.csv')
 
     # evaluate the models:
     # evaluate_csv(full_features_path, 'all_fe_features', fast=True)
-    evaluate_csv(variance_threshold_path, f'variance_threshold_fs_{threshold}', fast=True)
-    evaluate_csv(mutual_info_path, f'mutual_information_fs_{threshold}', fast=True)
+    # evaluate_csv(variance_threshold_path, f'variance_threshold_fs_{threshold}', fast=True)
+    # evaluate_csv(mutual_info_path, f'mutual_information_fs_{threshold}', fast=True)
     # evaluate_csv(forward_selection_path, 'forward_selection_fs', fast=True)
-    evaluate_csv(backward_selection_path, 'backward_selection_fs', fast=True)
+    # evaluate_csv(backward_selection_path, 'backward_selection_fs', fast=True)
     # evaluate_csv(recursive_elimination_path, 'recursive_elimination_fs', fast=True)
     # evaluate_csv(exhaustive_path, 'exhaustive_fs', fast=True)
+    pass

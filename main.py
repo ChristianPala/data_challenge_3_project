@@ -39,29 +39,33 @@ def main(preprocessing_only=True,
 
     print('\n> creating missing directories')
     create_directories()
-    print('\n> preprocessing phase')
-    prepro(preprocessing_only=preprocessing_only)
-    print('\n> feature extraction phase')
-    fe()
-    print('\n> feature selection phase')
-    fs(run_wrappers=run_wrap_methods, run_correlation=False)
-    print('\n> dimensionality reduction phase')
-    dr(run_full=run_dr_on_full_dataset, run_dsa=run_data_scarcity_analysis)
+    file_path = Path('data', 'online_sales_dataset.xlsx')
+    if not os.path.exists(file_path):
+        print('Please put the "online_sales_dataset.xlsx" file into the "data" folder')
+        exit(0)
+    print('\n*** PREPROCESSING PHASE ***')
+    # prepro(preprocessing_only=preprocessing_only)
+    print('\n*** FEATURE ENGINEERING PHASE ***')
+    # fe()
+    print('\n*** FEATURE SELECTION PHASE ***')
+    # fs(run_wrappers=run_wrap_methods, run_correlation=False)
+    print('\n*** DIMENSIONALITY REDUCTION PHASE ***')
+    # dr(run_full=run_dr_on_full_dataset, run_dsa=run_data_scarcity_analysis)
 
     if run_model:
-        print('\n> Running models')
+        print('\n*** MODELLING PHASE ***')
         run_models()
 
     if run_error_analysis:
-        print('\n> Running error analysis')
+        print('\n*** ERROR ANALYSIS PHASE ***')
         ea()
 
 
 if __name__ == '__main__':
     print('> Starting main procedure')
     main(preprocessing_only=True,
-         run_error_analysis=False,
-         run_model=False,
-         run_wrap_methods=False,
+         run_error_analysis=True,
+         run_model=True,
+         run_wrap_methods=True,
          run_dr_on_full_dataset=False,
          run_data_scarcity_analysis=False)

@@ -83,11 +83,11 @@ def main():
     df = df[['CustomerId', 'TotalSpent', 'AvgDays']]
 
     # extract the features from the dataframe
-    cfg = tsfel.get_features_by_domain(json_path='lib_files/features_mod.json')  # modified the json so that it $
+    cfg = tsfel.get_features_by_domain(json_path='feature_engineering/time_series/lib_files/features_mod.json')  # modified the json so that it $
     # does not calculate irrelevant features, like the ones specific for audio or EEG ... , it also ignores the
     # CustomerId for the extraction, the column is necessary for the grouping.
 
-    print('> execution started')
+    print('> Extracting time series features')
     # execute the feature extraction in parallel
     with ProcessPoolExecutor() as executor:
         futures = [executor.submit(feature_extractor, df, cfg, customer) for customer in tqdm(customers)]
@@ -103,7 +103,6 @@ def main():
                 print(customers[futures.index(future)])
         # concatenate the results as a dataframe
         X = pd.concat(results)
-    print('> task mapped')
 
     # add the customer id as a column
     X['CustomerId'] = customers

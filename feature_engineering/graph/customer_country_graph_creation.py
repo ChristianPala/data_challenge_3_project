@@ -32,7 +32,7 @@ def main():
                     G.add_edge(row.Index, node)
 
     # save the graph:
-    nx.write_gpickle(G, Path('saved_graphs', 'customer_country_graph.gpickle'))
+    nx.write_gpickle(G, Path('feature_engineering', 'graph', 'saved_graphs', 'customer_country_graph.gpickle'))
 
 
 if __name__ == '__main__':

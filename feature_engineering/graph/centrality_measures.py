@@ -20,7 +20,7 @@ def main(graph_type_name: str, only_pagerank: bool = True) -> None:
     d_name: str = f"{graph_type_name}_graph_centrality.csv"
 
     # import the saved graph:
-    G = nx.read_gpickle(Path('saved_graphs', graph_name))
+    G = nx.read_gpickle(Path('feature_engineering', 'graph', 'saved_graphs', graph_name))
 
     if only_pagerank:
         # extract the pagerank centrality measures:

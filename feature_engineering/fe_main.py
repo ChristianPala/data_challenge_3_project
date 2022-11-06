@@ -2,7 +2,7 @@ import nltk
 
 from feature_engineering.fe_aggregate_datasets import main as fe_aggreagtor
 from feature_engineering.graph import customer_graph_creation, customer_country_graph_creation, product_graph_creation, \
-    deepwalk, centrality_measures
+    deepwalk, centrality_measures, graph_aggregate_dataset
 from feature_engineering.nlp import nlp_feature_engineering, nlp_aggregate_datasets
 from feature_engineering.rfm_base_model.base_dataset import main as base
 from feature_engineering.time_series.ats_extractor import main as ats_extr
@@ -10,7 +10,6 @@ from feature_engineering.time_series.missing_values_analysis import main as miss
 
 
 def check_nltk():
-    print('checking missing libraries and options')
     nltk.download('punkt')
     nltk.download('stopwords')
 
@@ -27,16 +26,21 @@ def nlp():
 
 
 def graph():
+    print('> customer graph')
     customer_graph_creation.main()
+    print('> customer_country graph')
     customer_country_graph_creation.main()
+    print('> product graph')
     product_graph_creation.main()
-    centrality_measures.main('product')
-    centrality_measures.main('customer')
-    centrality_measures.main('customer_country')
+    for _type in ['product', 'customer', 'customer_country']:
+        print(f'> calculating centrality for {_type}')
+        centrality_measures.main(_type, only_pagerank=False)
+    print('> aggregating graph datasets')
+    graph_aggregate_dataset.main()
 
 
 def main():
-    print('\n> checking nltk downloadable')
+    print('> checking nltk downloadable')
     check_nltk()
     print('\n> creating base dataset')
     base()
@@ -47,9 +51,11 @@ def main():
     print('\n> creating nlp datasets')
     nlp()
     print('\n> creating time series datasets')
+    print(' /!\\ NOTE: After the first progress bar, the function will print lots of stuff. '
+          'This is the normal behaviour. Please do not stop the process.')
     ats_extr()
     missing_values()
-    print('\n> aggregating datasets')
+    print('\n> aggregating feature engineering datasets')
     fe_aggreagtor()
 
 

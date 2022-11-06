@@ -4,8 +4,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-# Driver:
-if __name__ == '__main__':
+
+def main():
     # load the centrality measures:
     df_customer_centrality = pd.read_csv(Path('data', 'customer_graph_centrality.csv'), index_col=0)
     df_product_centrality = pd.read_csv(Path('data', 'product_graph_centrality.csv'), index_col=0)
@@ -58,3 +58,8 @@ if __name__ == '__main__':
 
     # save the dataset:
     df.to_csv(Path('data', 'online_sales_dataset_graph_for_fs.csv'))
+
+
+# Driver:
+if __name__ == '__main__':
+    main()

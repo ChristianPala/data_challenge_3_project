@@ -17,7 +17,7 @@ def main(graph_type_name: str, walk_length: int = 100, dimensions: int = 128) ->
     :return: None: save the deepwalk features as a csv file.
     """
     # import the customer graph:
-    G = nx.read_gpickle(Path('saved_graphs', f'{graph_type_name}_graph.gpickle'))
+    G = nx.read_gpickle(Path('feature_engineering', 'graph', 'saved_graphs', f'{graph_type_name}_graph.gpickle'))
 
     # make sure the nodes are indexed as integers:
     G = nx.convert_node_labels_to_integers(G)

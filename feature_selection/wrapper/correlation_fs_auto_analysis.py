@@ -8,7 +8,7 @@ import seaborn as sns
 
 def main():
     # load the dataset with the features selected by forward selection:
-    df = pd.read_csv(Path('data', 'online_sales_dataset_for_dr_fs.csv'), index_col=0)
+    df = pd.read_csv(Path('data', 'online_sales_dataset_for_dr.csv'), index_col=0)
 
     # shorten the column names for readability:
     df.columns = [col.replace('DeepwalkEmbedding', 'DWEmb') for col in df.columns]

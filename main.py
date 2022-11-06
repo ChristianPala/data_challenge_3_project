@@ -66,6 +66,6 @@ if __name__ == '__main__':
     main(preprocessing_only=True,
          run_error_analysis=True,
          run_model=True,
-         run_wrap_methods=True,
+         run_wrap_methods=True,  # takes a lot of time
          run_dr_on_full_dataset=False,
          run_data_scarcity_analysis=False)

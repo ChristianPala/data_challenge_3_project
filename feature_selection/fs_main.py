@@ -15,8 +15,6 @@ def main(run_wrappers=False, run_correlation=False):
     print('\n> creating mutual information dataset')
     mi()
     if run_wrappers:
-        if run_correlation:
-            corr()
         print('\n> creating forward dataset')
         forward()
         print('\n> creating backward dataset')
@@ -28,6 +26,8 @@ def main(run_wrappers=False, run_correlation=False):
         merger()
     print('\n> aggregating feature selection dataset')
     fs_aggregator()
+    if run_correlation:
+        corr()
 
 
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-# Data Challenge 3 project 1, SUPSI
+# Data Challenge 3, project 1, SUPSI
 
 Repository for the first data challenge 3, project 1, SUPSI DS &amp; AI course.
 

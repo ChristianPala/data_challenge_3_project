@@ -7,6 +7,7 @@ from pathlib import Path
 # Feature selection:
 # exhaustive feature selection:
 from mlxtend.feature_selection import ExhaustiveFeatureSelector as EFS
+from sklearn.model_selection import RepeatedStratifiedKFold
 
 # Modelling:
 from xgboost import XGBClassifier
@@ -26,9 +27,13 @@ if __name__ == '__main__':
     # create the model:
     model = XGBClassifier(objective="binary:logistic", random_state=42, n_jobs=-1)
 
+    # create the cross validation object:
+    # we did not use this as it took too long, but it's here for reference
+    cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=3, random_state=42)
+
     # create the EFS object:
-    efs = EFS(model, min_features=1, max_features=1, scoring='f1',
-              cv=2, n_jobs=-1, print_progress=True, fixed_features=())
+    efs = EFS(model, min_features=1, max_features=5, scoring='f1',
+              cv=cv, n_jobs=-1, print_progress=True, fixed_features=())
 
     # X.columns.get_loc('1_Area under the curve')
 
@@ -47,12 +52,15 @@ if __name__ == '__main__':
 
     # print the features selected by EFS:
     print(efs.best_feature_names_)
-    # 1 feature: average days between purchases area under the curve.
-
-    # Complementary:
-    # 3 EigenvectorCentrality_country
-    # 4 69
-    # 5 11
-
-    # Similar results to automatic feature selection on the mutual information filtered dataset.
-
+    """
+    f-score for the exhaustive_fs:  0.607
+    precision for the exhaustive_fs:  0.507
+    recall for the exhaustive_fs:  0.757
+        | feature                   |   importance
+    ----+---------------------------+--------------
+      0 | 1_Area under the curve    |     0.277263
+      4 | 1_Spectral variation      |     0.184126
+      1 | 1_Mean absolute deviation |     0.183462
+      3 | 1_Spectral slope          |     0.183268
+      2 | 1_Power bandwidth         |     0.17188    
+    """

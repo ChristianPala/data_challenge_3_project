@@ -14,7 +14,7 @@ mpl.use('tkagg')
 # Driver:
 if __name__ == '__main__':
     # load the t-SNE dataset:
-    t_sne = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_dr_tsne.csv'), index_col=0)
+    t_sne = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_dr_tsne_full.csv'), index_col=0)
 
     nr_of_features = len(t_sne.columns)
 
@@ -40,12 +40,12 @@ if __name__ == '__main__':
 
         # save the figure:
         try:
-            fig.savefig(Path('..', '..', 'plots', 't-SNE-PCA-init', 'online_sales_dataset_dr_tsne_2D.png'))
+            fig.savefig(Path('..', '..', 'plots', 't-SNE-PCA-init', 'online_sales_dataset_full_tsne_2D.png'))
         except FileNotFoundError:
             # create the directory:
             Path('..', '..', 'plots', 't-SNE-PCA-init').mkdir(parents=True, exist_ok=True)
             # save the figure:
-            fig.savefig(Path('..', '..', 'plots', 't-SNE-PCA-init', 'online_sales_dataset_dr_tsne_2D.png'))
+            fig.savefig(Path('..', '..', 'plots', 't-SNE-PCA-init', 'online_sales_dataset_full_tsne_2D.png'))
 
     if nr_of_features == 3:
         # create a figure:
@@ -64,12 +64,12 @@ if __name__ == '__main__':
 
         # save the figure:
         try:
-            fig.savefig(Path('..', '..', 'plots', 't-SNE-PCA-init', 'online_sales_dataset_dr_tsne_3D.png'))
+            fig.savefig(Path('..', '..', 'plots', 't-SNE-PCA-init', 'online_sales_dataset_full_tsne_3D.png'))
         except FileNotFoundError:
             # create the directory:
             Path('..', '..', 'plots', 't-SNE-PCA-init').mkdir(parents=True, exist_ok=True)
             # save the figure:
-            fig.savefig(Path('..', '..', 'plots', 't-SNE', 'online_sales_dataset_dr_tsne_3D.png'))
+            fig.savefig(Path('..', '..', 'plots', 't-SNE', 'online_sales_dataset_full_tsne_3D.png'))
 
     else:
         print('The t-SNE visualization is only available for 2D and 3D plots.')

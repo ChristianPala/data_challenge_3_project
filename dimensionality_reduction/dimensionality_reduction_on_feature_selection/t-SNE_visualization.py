@@ -55,7 +55,7 @@ if __name__ == '__main__':
 
     if nr_of_features == 3:
         # create a figure:
-        fig = plt.figure(figsize=(16, 10))
+        fig = plt.figure(figsize=(12, 8))
 
         # create a 3D scatter plot:
         ax = fig.add_subplot(111, projection='3d')

@@ -50,7 +50,7 @@ if __name__ == '__main__':
         plt.savefig(Path('..', '..', 'plots', 'PCA', 'pca_visualization2D.png'))
 
     # 3D visualization:
-    ax = plt.figure(figsize=(16, 10)).gca(projection='3d')
+    ax = plt.figure(figsize=(10, 8)).gca(projection='3d')
     ax.scatter(
         xs=df_subset['pca-1'],
         ys=df_subset['pca-2'],

@@ -26,10 +26,6 @@ if __name__ == '__main__':
     customer_id = X['CustomerId']
     X.drop('CustomerId', axis=1, inplace=True)
 
-    # scale the data with the standard scaler:
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
-
     # initialize the TSNE, since PCA is performing well. and it's advised in the documentation, we will
     # use the PCA initialization:
     tsne = TSNE(n_components=nr_of_components, init=initialization, verbose=1, perplexity=perplexity,
@@ -38,7 +34,7 @@ if __name__ == '__main__':
     # tried 5, 30, 40 and 50 and N^0.5, where N is the number of samples, 40 gave the best visual results
 
     # fit
-    tsne_results = tsne.fit_transform(X_scaled)
+    tsne_results = tsne.fit_transform(X)
 
     # save the results as a dataframe, add the CustomerID as the first column:
     tsne_results_df = \

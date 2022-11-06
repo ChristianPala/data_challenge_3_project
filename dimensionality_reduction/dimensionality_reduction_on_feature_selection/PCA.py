@@ -41,7 +41,7 @@ if __name__ == '__main__':
     # print the explained variance ratio for each component:
     print(f"Explained variance ratio for each component: {explained_variance_ratio}")
 
-    # keep 112 components to explain more than .8 of the variance:
+    # keep 6 components to explain more than .9 of the variance:
     # initialize the selector:
     pca = PCA(n_components=n_components)
     # fit

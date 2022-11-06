@@ -1,13 +1,10 @@
 # Data manipulation:
-import matplotlib
 import pandas as pd
-import numpy as np
 from pathlib import Path
 
 # Data visualization
 import matplotlib.pyplot as plt
 import matplotlib
-from mpl_toolkits.mplot3d import Axes3D
 import seaborn as sns
 
 matplotlib.use('tkagg')
@@ -31,15 +28,28 @@ if __name__ == '__main__':
     # 2D visualization:
     sns.scatterplot(
         x=f'pca-1', y=f'pca-2',
-        hue='y',
+        # tested combinations, and 1 and 2 are the best:
+        hue='y', hue_order=[1, 0],
         palette=sns.color_palette('hls', 2),
         data=df_subset,
-        legend='full'
+        legend=False,
+        alpha=0.8,
+        s=20,
+        edgecolors='k'
     )
-    plt.title('2D PCA visualization with 80% variance explained')
+    plt.legend(loc='upper left', labels=['Churner', 'Not churner'])
+    plt.title('2D PCA visualization')
+
+    try:
+        plt.savefig(Path('..', '..', 'plots', 'PCA', 'pca_full_dataset_visualization2D.png'))
+    except FileNotFoundError:
+        Path('..', '..', 'plots', 'PCA').mkdir(parents=True, exist_ok=True)
+        plt.savefig(Path('..', '..', 'plots', 'PCA', 'pca_full_dataset_visualization2D.png'))
+
+
 
     # 3D visualization:
-    ax = plt.figure(figsize=(16, 10)).gca(projection='3d')
+    ax = plt.figure(figsize=(10, 8)).gca(projection='3d')
     ax.scatter(
         xs=df_subset['pca-1'],
         ys=df_subset['pca-2'],
@@ -51,12 +61,12 @@ if __name__ == '__main__':
     ax.set_ylabel(f'pca-2')
     ax.set_zlabel(f'pca-3')
     ax.legend(['Churned', 'Not churned'])
-    title = f'3D PCA visualization with 80% variance explained'
+    title = f'3D PCA visualization'
     plt.title(title)
 
     try:
-        plt.savefig(Path('..', '..', 'plots', 'PCA', 'pca_visualization3D.png'))
+        plt.savefig(Path('..', '..', 'plots', 'PCA', 'pca_full_dataset_visualization3D.png'))
     except FileNotFoundError:
         Path('..', '..', 'plots', 'PCA').mkdir(parents=True, exist_ok=True)
-        plt.savefig(Path('..', '..', 'plots', 'PCA', 'pca_visualization3D.png'))
+        plt.savefig(Path('..', '..', 'plots', 'PCA', 'pca_full_dataset_visualization3D.png'))
     plt.show()

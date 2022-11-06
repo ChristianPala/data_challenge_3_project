@@ -16,7 +16,7 @@ Threshold: float = 0.9
 # Driver:
 if __name__ == '__main__':
     # import the dataset for dimensionality reduction:
-    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_dr.csv'), index_col=0)
+    X = pd.read_csv(Path('..', '..', 'data', 'online_sales_dataset_for_fs.csv'), index_col=0)
 
     # get the number of features:
     n_features = X.shape[1]

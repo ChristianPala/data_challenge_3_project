@@ -25,13 +25,6 @@ if __name__ == '__main__':
     y = pd.read_csv(Path('..', 'data', 'online_sales_labels_tsfel.csv'),
                     index_col=0)['CustomerChurned']
 
-    # shorten the column names for readability:
-    X.columns = [col.replace('DeepwalkEmbedding', 'DWEmb') for col in X.columns]
-    X.columns = [col.replace('AverageDaysBetweenPurchase', 'AvgDaysBtwBuy') for col in X.columns]
-    X.columns = [col.replace('TotalSpent', 'TotSpent') for col in X.columns]
-    X.columns = [col.replace('CustomerGraph', 'CIdGrph') for col in X.columns]
-    X.columns = [col.replace('MeanCoefficient', 'MeanCoeff') for col in X.columns]
-
     # split the dataset, since the model has been validated on the validation set, we
     # will use the test set for the error analysis:
     X_train, X_val, X_test, y_train, y_val, y_test = train_validation_test_split(X, y, validation=True)
@@ -107,8 +100,8 @@ if __name__ == '__main__':
                                              base_values=explainer.expected_value, data=X_test.iloc[tn],
                                              feature_names=X.columns), show=False)
         # give more space for the y-axis:
-        plt.subplots_adjust(left=0.4, right=0.9, top=0.9, bottom=0.2)
-        plt.subplots_adjust(left=0.4, right=0.9, top=0.9, bottom=0.2)
+        plt.subplots_adjust(left=0.5, right=0.9, top=0.9, bottom=0.2)
+        plt.subplots_adjust(left=0.5, right=0.9, top=0.9, bottom=0.2)
         plt.savefig(Path('..', 'plots', 'error_analysis', f'tn_{tn}.png'))
         plt.close()
 

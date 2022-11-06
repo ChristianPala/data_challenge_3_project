@@ -28,3 +28,9 @@ If you have mambaforge installed we recommend to use that, as it is much faster 
 `mamba install scikit-learn xgboost pandas matplotlib seaborn hyperopt tabulate numpy nltk scipy igraph tqdm networkx karateclub shap mlxtend openpyxl`
 Other libraries not available with conda or mamba:
 `pip install tsfel imblearn`
+
+Below the project tree structure for refence:
+
+![unknown](https://user-images.githubusercontent.com/78877083/200185290-e3426188-b058-4192-ab3e-f8e3a5a331b1.png)
+![tree_2](https://user-images.githubusercontent.com/78877083/200185297-1eca86b6-f3e9-4e6d-80fd-c74e841bba3f.png)
+![tree_3](https://user-images.githubusercontent.com/78877083/200185326-abe11fef-669d-4630-b6dd-2a32187a4cb3.png)

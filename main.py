@@ -23,6 +23,7 @@ def main(preprocessing_only=True,
          run_error_analysis=False,
          run_model=False,
          run_wrap_methods=False,
+         run_correlation=True,
          run_dr_on_full_dataset=False,
          run_data_scarcity_analysis=False) -> None:
     """
@@ -31,6 +32,7 @@ def main(preprocessing_only=True,
     @param run_error_analysis: either to run the error analysis done with shap
     @param run_model: run the models
     @param run_wrap_methods: run the wrapper feature selection methods
+    @param run_correlation: plot the correlation matrix of the selected features by feature selectors
     @param run_dr_on_full_dataset: run dimensionality reduction also on the full dataset
     (not only on the one outputted by feature selection methods)
     @param run_data_scarcity_analysis: run the data scarcity analysis when performing dimensionality reduction
@@ -48,7 +50,7 @@ def main(preprocessing_only=True,
     print('\n*** FEATURE ENGINEERING PHASE ***')
     fe()
     print('\n*** FEATURE SELECTION PHASE ***')
-    fs(run_wrappers=run_wrap_methods, run_correlation=False)
+    fs(run_wrappers=run_wrap_methods, run_correlation=run_correlation)
     print('\n*** DIMENSIONALITY REDUCTION PHASE ***')
     dr(run_full=run_dr_on_full_dataset, run_dsa=run_data_scarcity_analysis)
 
@@ -67,5 +69,6 @@ if __name__ == '__main__':
          run_error_analysis=True,
          run_model=True,
          run_wrap_methods=True,  # takes a lot of time
+         run_correlation=True,
          run_dr_on_full_dataset=False,
          run_data_scarcity_analysis=False)

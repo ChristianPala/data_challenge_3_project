@@ -25,12 +25,25 @@ if __name__ == '__main__':
     y = pd.read_csv(Path('..', 'data', 'online_sales_labels_tsfel.csv'),
                     index_col=0)['CustomerChurned']
 
+    X.columns = [col.replace('Area under the curve', 'AUC') for col in X.columns]
+
     # split the dataset, since the model has been validated on the validation set, we
     # will use the test set for the error analysis:
     X_train, X_val, X_test, y_train, y_val, y_test = train_validation_test_split(X, y, validation=True)
 
-    # tune the model:
-    best_params = tuner(X_train, y_train, X_val, y_val)
+    # check if the best parameters have already been saved:
+    if Path('..', 'data', 'best_params', 'best_params_dr_model.txt').exists():
+        # load the best parameters from the text file:
+        with open(Path('..', 'data', 'best_params', 'best_params_dr_model.txt'), 'r') as f:
+            best_params = eval(f.read())
+    else:
+        # tune the model:
+        best_params = tuner(X_train, y_train, X_val, y_val, fast=True)
+        # save the best parameters:
+        # check the path exists:
+        Path('..', 'data', 'best_params').mkdir(parents=True, exist_ok=True)
+        # save the best parameters:
+        pd.DataFrame(best_params, index=[0]).to_csv(Path('..', 'data', 'best_params', 'best_params_dr_model.txt'))
 
     # instantiate the model:
     model = XGBClassifier(**best_params, objective="binary:logistic", random_state=42, n_jobs=-1)
@@ -73,7 +86,9 @@ if __name__ == '__main__':
                                              base_values=explainer.expected_value, data=X_test.iloc[i],
                                              feature_names=X.columns), show=False)
         # give more space for the y-axis:
-        plt.subplots_adjust(left=0.4, right=0.9, top=0.9, bottom=0.2)
+        plt.subplots_adjust(left=0.5, right=0.9, top=0.9, bottom=0.2)
+        # increase the size of the plot:
+        plt.gcf().set_size_inches(10, 5)
         plt.savefig(Path('..', 'plots', 'error_analysis', f'fn_{i}.png'))
         plt.close()
 
@@ -86,8 +101,10 @@ if __name__ == '__main__':
                                              base_values=explainer.expected_value, data=X_test.iloc[tp],
                                              feature_names=X.columns), show=False)
         # give more space for the y-axis:
-        plt.subplots_adjust(left=0.4, right=0.9, top=0.9, bottom=0.2)
-        plt.subplots_adjust(left=0.4, right=0.9, top=0.9, bottom=0.2)
+        plt.subplots_adjust(left=0.5, right=0.9, top=0.9, bottom=0.2)
+        plt.subplots_adjust(left=0.5, right=0.9, top=0.9, bottom=0.2)
+        # increase the size of the plot:
+        plt.gcf().set_size_inches(10, 5)
         plt.savefig(Path('..', 'plots', 'error_analysis', f'tp_{tp}.png'))
         plt.close()
 
@@ -102,6 +119,8 @@ if __name__ == '__main__':
         # give more space for the y-axis:
         plt.subplots_adjust(left=0.5, right=0.9, top=0.9, bottom=0.2)
         plt.subplots_adjust(left=0.5, right=0.9, top=0.9, bottom=0.2)
+        # increase the size of the plot:
+        plt.gcf().set_size_inches(10, 5)
         plt.savefig(Path('..', 'plots', 'error_analysis', f'tn_{tn}.png'))
         plt.close()
 

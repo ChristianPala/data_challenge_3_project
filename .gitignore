@@ -1,5 +1,4 @@
 *.csv
-data/
 temp/*
 temp/
 .idea/

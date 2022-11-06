@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pandas as pd
 
-# Driver:
-if __name__ == '__main__':
+
+def main():
     # load the nlp features:
     df_train = pd.read_csv(Path('data', 'online_sales_dataset_agg_nlp_train.csv'), index_col=0)
     df_test = pd.read_csv(Path('data', 'online_sales_dataset_agg_nlp_test.csv'), index_col=0)
@@ -27,3 +27,8 @@ if __name__ == '__main__':
 
     # save the dataset:
     df_final.to_csv(Path('data', 'online_sales_dataset_nlp_for_fs.csv'))
+
+
+# Driver:
+if __name__ == '__main__':
+    main()
